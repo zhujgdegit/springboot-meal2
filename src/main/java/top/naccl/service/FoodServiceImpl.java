@@ -83,7 +83,7 @@ public class FoodServiceImpl implements FoodService {
 				if (typeId != null && typeId != 0) {
 					predicates.add(criteriaBuilder.equal(root.<Type>get("type").get("id"), typeId));
 				}
-				if (!StringUtils.isEmpty(state)) {
+				if (!StringUtils.isEmpty(state) && !"全部".equals(state)) {
 					predicates.add(criteriaBuilder.like(root.<String>get("state"), state));
 				}
 				//拼接SQL

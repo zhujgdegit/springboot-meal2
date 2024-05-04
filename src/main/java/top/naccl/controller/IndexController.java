@@ -112,7 +112,8 @@ public class IndexController {
      */
     @PostMapping("/search")
     public String search(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                         @RequestParam Integer typeId, @RequestParam String name, @RequestParam String state,
+                         @RequestParam(required = false) Integer typeId, @RequestParam(required = false) String name,
+                         @RequestParam(required = false) String state,
                          Model model, HttpSession session) {
 		/*User user = (User) session.getAttribute("user");
 		List<Food> foods = diningCarService.getUserFoods(user.getId());*/
@@ -133,8 +134,8 @@ public class IndexController {
 			userfoodDTO.add(dto);
 		}*/
         model.addAttribute("foods", userfoodDTO);
-        if (name != null && !"".equals(name)) {
-            Page<Food> foodPage = foodService.listFood(pageable, name, typeId,state);
+        if ((name != null && !"".equals(name)) || (state != null && !"".equals(state))) {
+            Page<Food> foodPage = foodService.listFood(pageable, name, typeId, state);
             List<FoodDTO> dtoList = foodPage.stream().map(food -> {
                 FoodDTO dto = new FoodDTO();
                 BeanUtils.copyProperties(food, dto);
@@ -152,7 +153,7 @@ public class IndexController {
             Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
             model.addAttribute("page", dtos);
 
-            return "user/index :: foodList";
+            return "index :: foodList";
         }
         if (typeId != null && typeId != 0) {
             Page<Food> foodPage = foodService.listFood(pageable, typeId);
