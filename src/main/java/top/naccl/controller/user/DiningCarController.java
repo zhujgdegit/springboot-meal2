@@ -1,5 +1,6 @@
 package top.naccl.controller.user;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,11 +97,14 @@ public class DiningCarController {
         return "user/diningcar";
     }
 
-    @RequestMapping("/getAddr")
-    public List<Map<Integer, String>> DiningCar(HttpSession session, HttpServletRequest request) {
+    @GetMapping("/getAddr")
+    @ResponseBody
+    public JSONArray getAddr(HttpSession session, HttpServletRequest request) {
         User user = (User) session.getAttribute("user");
         user = userService.getUser(user.getId());
-        return addressList(user);
+        List<Map<Integer, String>> maps = addressList(user);
+        JSONArray jsonArray = (JSONArray) JSONArray.toJSON(maps);
+        return jsonArray;
     }
 
     private List<Map<Integer, String>> addressList(User user) {
