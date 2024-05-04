@@ -46,4 +46,23 @@ public class User {
 
 	@OneToMany(mappedBy = "user")//一个用户对应多个点餐车，User作为被维护端，通过Diningcar的user建立关联
 	private List<DiningCar> diningCars;
+
+	@Transient
+	private String address1;
+	@Transient
+	private String address2;
+	@Transient
+	private String address3;
+	@Transient
+	private String address4;
+	@Transient
+	private String address5;
+	@Transient
+	private String address6;
+	@Transient
+	private String address7;
+	@Transient
+	private String address8;
+	@Transient
+	private String address9;
 }
