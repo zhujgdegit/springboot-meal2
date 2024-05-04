@@ -32,10 +32,11 @@
       <div class="ui container user">
 
         <div id="table-container" th:fragment="foodList">
-          <table class="ui celled teal table m-text" style="text-align:center;">
+          <table id="myTable" class="ui celled teal table m-text" style="text-align:center;">
             <thead>
             <th colspan="10"><h1 class="ui header" align="center">FOOD CARTS</h1></th>
             <tr>
+              <th>CHOOSE</th>
               <th>NO</th>
               <th>DISHNAME</th>
               <th>TOPPINGS</th>
@@ -54,6 +55,7 @@
 
             <tbody>
             <tr th:each="food,iterStat : ${page.content}">
+              <td><input type="checkbox" name="row" class="myCheckbox"/></td>
               <td th:text="${iterStat.count}">1</td>
               <td th:text="${food.name}" width="100px;" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">韭菜炒鸡蛋</td>
               <td th:text="${food.toppings}">工艺：炒 口味：清香型</td>
@@ -107,7 +109,11 @@
         <form class="ui form" id="orderForm">
           <div class="field">
             <label>配送地址</label>
-            <input type="text" name="address" placeholder="请输入配送地址">
+              <select class="ui dropdown" name="address" id="selectElement">
+                  <option value="">请选择配送地址</option>
+<!--                  <option value="cash">  </option>-->
+              </select>
+<!--            <input type="text" name="address" placeholder="请输入配送地址">-->
           </div>
           <div class="field">
             <label>配送方式</label>
@@ -121,7 +127,7 @@
             <label>支付方式</label>
             <select class="ui dropdown" name="paymentMethod">
               <option value="">请选择支付方式</option>
-              <optison value="zfb">支付宝</optison>
+              <option value="zfb">支付宝</option>
               <option value="wx">微信</option>
               <option value="cash">现金</option>
             </select>
@@ -229,7 +235,22 @@
     //     });
     //   });
     // });
+    $(document).ready(function() {
+        $.get("/user/getAddr", function (result) {
+            console.log(result,'输出')
+            if (result.success) {
+               var options = result.data;
+               var selectOpions = "";
+               for(var i=0; i<options.length;i++){
+                   selectOpions+='<option value="'+options[i].value+'">'+options[i].label+'</option>>';
+               }
+               $('#selectElement').append(selectOpions)
+            } else {
+                alert(result.message);
+            }
+        }, "json");
 
+    })
 
     function add(obj) {
       // objId = $(obj).attr('data-id');
@@ -246,7 +267,13 @@
       }
     function calculateTotalAmount() {
       let total = 0;
-      $('#table-container table tbody tr').each(function() {
+        // $('#table-container table .myCheckbox:checked').each(function() {
+        //     const price = parseFloat($(this).find('td:nth-last-child(4)').text())
+        //     total += price;
+        //     console.log(price)
+        // })
+
+        $('#table-container table tbody tr').each(function() {
         const price = parseFloat($(this).find('td:nth-last-child(4)').text()); // 假设总价在倒数第三列
         total += price;
       });
