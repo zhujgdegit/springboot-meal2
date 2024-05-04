@@ -238,15 +238,15 @@
     $(document).ready(function() {
         $.get("/user/getAddr", function (result) {
             console.log(result,'输出')
-            if (result.success) {
-               var options = result.data;
+            if (result) {
+               var options = result;
                var selectOpions = "";
                for(var i=0; i<options.length;i++){
-                   selectOpions+='<option value="'+options[i].value+'">'+options[i].label+'</option>>';
+                   selectOpions+='<option value="'+options[i][i]+'">'+options[i][i]+'</option>>';
                }
                $('#selectElement').append(selectOpions)
             } else {
-                alert(result.message);
+                alert("稍后试试！");
             }
         }, "json");
 
