@@ -113,6 +113,7 @@
               <th>IMAGE</th>
               <th>ORDER-RATE:TIMES</th>
               <th>REMARKS</th>
+              <th>STATE</th>
               <th>SELECT</th>
             </tr>
             </thead>
@@ -132,6 +133,7 @@
                 <th:block th:case="0">厨师推荐</th:block>
                 <th:block th:case="*">今日特价</th:block>
               </td>
+              <td th:text="${food.state}">22</td>
               <td width="150px;">
 
                 <!--                <a onclick="add(this)" th:data-id="${food.id}" class="ui teal basic add button"-->
@@ -251,8 +253,7 @@
       $("[name='page']").val(0);
       name = $("[name='name']").val();
       typeId = $("[name='typeId']").val();
-      typeId = $("[state='state']").val();
-      stateId = $("[name='stateId']").val();
+      state = $("[name='state']").val();
       loadData();
     });
 
@@ -260,7 +261,7 @@
       $("#table-container").load(/*[[@{/search}]]*/"/search", {
         name: name,
         typeId: typeId,
-        state:stateId,
+        state:state,
         page: $("[name='page']").val()
       });
     }
