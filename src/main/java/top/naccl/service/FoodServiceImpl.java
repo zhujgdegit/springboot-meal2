@@ -78,7 +78,9 @@ public class FoodServiceImpl implements FoodService {
 			public Predicate toPredicate(Root<Food> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
 				List<Predicate> predicates = new ArrayList<>();
 				//模糊查找名称
-				predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + name + "%"));
+				if (name != null && !"".equals(name)){
+					predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + name + "%"));
+				}
 				//查找分类
 				if (typeId != null && typeId != 0) {
 					predicates.add(criteriaBuilder.equal(root.<Type>get("type").get("id"), typeId));
