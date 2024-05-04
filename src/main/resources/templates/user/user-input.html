@@ -33,7 +33,7 @@
       <div class="ui container">
 
         <!-- 有id传来时为编辑，否则为添加 -->
-        <form method="post" action="#" th:object="${user}" th:action="@{/user/input}" class="ui form">
+        <form id="infoForm" method="post" action="#" th:object="${user}" th:action="@{/user/input}" class="ui form">
           <div class="ui segment">
 
             <div class="required field">
@@ -51,7 +51,7 @@
 
             <div class="required field">
               <div class="ui left icon input">
-                <i class="user icon"></i>
+                <i class="time icon"></i>
                 <input type="text" name="birthday" placeholder="生日" th:value="*{birthday}">
               </div>
             </div>
@@ -76,15 +76,17 @@
                 <input type="tel" name="telephone" placeholder="电话" th:value="*{telephone}">
               </div>
             </div>
-
-            <div class="required field">
-              <div class="ui left icon input">
+              <div class="required field">
+                  <button id="addAddress" class="ui add button teal basic">新增地址</button>
+              </div>
+            <div class="required field addressList">
+              <div class="ui left icon input" style="margin-bottom: 10px">
                 <i class="home icon"></i>
-                <input type="text" name="address" placeholder="地址" th:value="*{address}">
+                <input type="text" id="addAddress1" name="address" placeholder="地址" th:value="*{address}">
               </div>
             </div>
 
-            <button class="ui fluid large teal submit button">修 改</button>
+            <button class="ui fluid large teal submit button">保 存</button>
           </div>
 
           <!-- 表单验证提示 -->
@@ -116,6 +118,24 @@
   <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
   <!--/*/</th:block>/*/-->
   <script>
+      // $(document).ready(function() {
+      let addressCount = 0;
+      $('#addAddress').click(function(e) {
+          e.preventDefault();
+          addressCount++;
+          const addressGroup = $(`
+            <div class="required field">
+              <div class="ui left icon input">
+                <i class="home icon"></i>
+                <input type="text" id="address${addressCount}" name="address${addressCount}" placeholder="地址" th:value="*{address+addressCount}">
+              <button class='ui delete button teal basic'><i class='fa fa-trash'></i>删除</button>
+              </div>
+            </div>`);
+          $('.addressList').append(addressGroup);
+      });
+      $(document).on('click','.delete',function(){
+          $(this).parent().remove();
+      })
       $('.message .close').on('click', function () {
           $(this).closest('.message').transition('fade');
       });
@@ -177,8 +197,25 @@
                       }
                   ]
               },
-              address: {
-                  identifier: 'address',
+              address1: {
+                  identifier: 'address1',
+                  rules: [
+                      {
+                          type: 'empty',
+                          prompt: '请输入地址'
+                      },
+                      {
+                          type: 'minLength[5]',
+                          prompt: '地址至少5个字符'
+                      },
+                      {
+                          type: 'maxLength[50]',
+                          prompt: '地址最多50个字符'
+                      }
+                  ]
+              },
+              address2: {
+                  identifier: 'address2',
                   rules: [
                       {
                           type: 'empty',
