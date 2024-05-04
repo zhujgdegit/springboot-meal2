@@ -1,0 +1,160 @@
+ <!--
+                ___           ___           ___           ___           ___
+               /\__\         /\  \         /\  \         /\  \         /\__\
+              /::|  |       /::\  \       /::\  \       /::\  \       /:/  /
+             /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/  /
+            /:/|:|  |__   /::\~\:\  \   /:/  \:\  \   /:/  \:\  \   /:/  /
+           /:/ |:| /\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/
+           \/__|:|/:/  / \/__\:\/:/  / \:\  \  \/__/ \:\  \  \/__/ \:\  \
+               |:/:/  /       \::/  /   \:\  \        \:\  \        \:\  \
+               |::/  /        /:/  /     \:\  \        \:\  \        \:\  \
+               /:/  /        /:/  /       \:\__\        \:\__\        \:\__\
+               \/__/         \/__/         \/__/         \/__/         \/__/
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>菜品详情</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/github-badge.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+</head>
+<body class="site">
+
+  <!--导航-->
+  <nav th:replace="_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+  </nav>
+
+  <div class="site-content m-container-small">
+
+    <!--中间内容-->
+    <div class="m-padded-tb-big">
+      <div class="ui container">
+
+        <!--Popular dishes-->
+        <table th:fragment="blogList" class="ui celled teal table m-text" style="text-align:center;">
+          <thead>
+          <th colspan="2"><h1 class="ui header" align="center">菜品详情</h1></th>
+          </thead>
+          <tbody>
+          <tr>
+            <th>菜名</th>
+            <td th:text="${food.name}">四川酸辣粉</td>
+          </tr>
+          <tr>
+            <th>特色</th>
+            <td th:text="${food.feature}">暂无</td>
+          </tr>
+          <tr>
+            <th>食材</th>
+            <td th:text="${food.material}">粉条，葱末，姜末，蒜泥等</td>
+          </tr>
+          <tr>
+            <th>价格</th>
+            <td th:text="${food.comment}>0 ? ${food.comment} : ${food.price}">28元</td>
+          </tr>
+          <tr>
+            <th>类型</th>
+            <td th:text="${food.type.name}">主食</td>
+          </tr>
+          <tr>
+            <th>图片</th>
+            <td><img src="../static/images2/jiachang/01.jpg" th:src="@{${food.picture}}" style="width: 150px;"></td>
+          </tr>
+          <tr>
+            <th>点餐率</th>
+            <td th:text="${food.hits}">3次</td>
+          </tr>
+          <tr>
+            <th>备注</th>
+            <td th:switch="${food.comment}">
+              <th:block th:case="-1">Popular dishes</th:block>
+              <th:block th:case="0">厨师推荐</th:block>
+              <th:block th:case="*">今日特价</th:block>
+            </td>
+          </tr>
+
+          <!-- 添加显示平均评分 -->
+<!--          <tr>-->
+<!--            <th>评分(0-4)</th>-->
+<!--            <td th:text="${averageRating}">4.5</td>-->
+<!--          </tr>-->
+
+          <tr>
+            <th>评分(0-4)</th>
+            <td class="star-rating">
+              <span th:each="i : ${#numbers.sequence(1, averageRating)}">&#9733;</span>
+              <span th:each="i : ${#numbers.sequence(averageRating + 1, 4)}">&#9734;</span>
+            </td>
+          </tr>
+
+          <!-- 添加显示评论列表 -->
+          <tr>
+            <th>评论</th>
+            <td>
+              <table class="ui very basic collapsing celled table" style="width: 100%;">
+                <th:block th:each="comment : ${comments}">
+                  <tr style="border-bottom: 1px dashed #ccc;">
+                    <td style="text-align: left; font-weight: bold; width: 20%;" th:classappend="'comment-time'" th:text="'User' + ${comment.userId-1}">User1</td>
+                    <td style="text-align: left;" th:text="${comment.comment}">这是一条评论。</td>
+                  </tr>
+                </th:block>
+              </table>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!--底部footer-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
+  </footer>
+  <script>
+    $(document).ready(function() {
+      // $('.ui.rating').rating('disable'); // 初始化评分并设置为只读
+      // $('#averageRatingDisplay').rating('set rating', 2).rating('disable');
+
+    });
+  </script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener('DOMContentLoaded', function () {
+      var comments = document.querySelectorAll('.comment-time');
+      comments.forEach(function(comment) {
+        var twoDaysAgo = new Date();
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2); // 设置为两天前的日期
+        var now = new Date();
+        var randomTime = new Date(twoDaysAgo.getTime() + Math.random() * (now.getTime() - twoDaysAgo.getTime()));
+        var formattedTime = randomTime.getFullYear() + '-' +
+                ('0' + (randomTime.getMonth() + 1)).slice(-2) + '-' +
+                ('0' + randomTime.getDate()).slice(-2) + ' ' +
+                ('0' + randomTime.getHours()).slice(-2) + ':' +
+                ('0' + randomTime.getMinutes()).slice(-2) + ':' +
+                ('0' + randomTime.getSeconds()).slice(-2);
+        comment.innerHTML += ' <span style="font-size: 0.85em; color: gray;">@ ' + formattedTime + '</span>';
+      });
+    });
+    /*]]>*/
+  </script>
+
+  <style>
+    .star-rating span {
+      color: gold;
+      font-size: 1.5em;
+    }
+  </style>
+
+  <!--/*/<th:block th:replace="_fragments :: myScript">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+</body>
+</html>
