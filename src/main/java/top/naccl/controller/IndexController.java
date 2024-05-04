@@ -24,6 +24,7 @@ import top.naccl.service.TypeService;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,12 +37,12 @@ import java.util.stream.Collectors;
 @Controller
 @CrossOrigin(origins = "http://127.0.0.1:63343/springboot-meal/templates/index_n.html")
 public class IndexController {
-	@Autowired
-	private FoodService foodService;
+    @Autowired
+    private FoodService foodService;
 
-	/**
-	 * Home展示 普通、特价、推荐
-	 */
+    /**
+     * Home展示 普通、特价、推荐
+     */
 	/*@GetMapping("/")
 	public String index(Model model) {
 		model.addAttribute("common",foodService.listFoodByComment(-1,5));//普通
@@ -50,22 +51,23 @@ public class IndexController {
 		return "index";
 	}*/
 
-	@Autowired
-	TypeService typeService;
-	@Autowired
-	DiningCarService diningCarService;
+    @Autowired
+    TypeService typeService;
+    @Autowired
+    DiningCarService diningCarService;
 
-	@Autowired
-	OrderRepository orderRepository;
-	/**
-	 * 查看菜品列表
-	 */
-	@GetMapping("/")
-	public String index(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-						Model model, HttpSession session) {
+    @Autowired
+    OrderRepository orderRepository;
+
+    /**
+     * 查看菜品列表
+     */
+    @GetMapping("/")
+    public String index(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                        Model model, HttpSession session) {
 		/*User user = (User) session.getAttribute("user");
 		List<Food> userFoods = diningCarService.getUserFoods(user.getId());*/
-		List<FoodDTO> userfoodDTO = new ArrayList<>();
+        List<FoodDTO> userfoodDTO = new ArrayList<>();
 		/*for (Food food : userFoods) {
 			FoodDTO dto = new FoodDTO();
 			BeanUtils.copyProperties(food, dto);
@@ -81,39 +83,40 @@ public class IndexController {
 			}
 			userfoodDTO.add(dto);
 		}*/
-		model.addAttribute("foods", userfoodDTO);
-		model.addAttribute("types", typeService.listType());
-		Page<Food> foodPage = foodService.listFood(pageable);
-		List<FoodDTO> dtoList = foodPage.stream().map(food -> {
-			FoodDTO dto = new FoodDTO();
-			BeanUtils.copyProperties(food, dto);
+        model.addAttribute("foods", userfoodDTO);
+        model.addAttribute("types", typeService.listType());
+        model.addAttribute("states", Arrays.asList("上架", "下架", "售空"));
+        Page<Food> foodPage = foodService.listFood(pageable);
+        List<FoodDTO> dtoList = foodPage.stream().map(food -> {
+            FoodDTO dto = new FoodDTO();
+            BeanUtils.copyProperties(food, dto);
 
-			// Find the corresponding DiningCar for the user
+            // Find the corresponding DiningCar for the user
 			/*food.getDiningCars().stream()
 					.filter(dc -> dc.getUser().getId() == user.getId())
 					.findFirst()
 					.ifPresent(diningCar -> dto.setCartId(diningCar.getId()));*/
 
-			return dto;
-		}).collect(Collectors.toList());
+            return dto;
+        }).collect(Collectors.toList());
 
-		// Create a PageImpl with the DTO list while retaining original page information
-		Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
+        // Create a PageImpl with the DTO list while retaining original page information
+        Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
 
-		model.addAttribute("page",dtos);
-		return "index";
-	}
+        model.addAttribute("page", dtos);
+        return "index";
+    }
 
-	/**
-	 * 查询菜品
-	 */
-	@PostMapping("/search")
-	public String search(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-						 @RequestParam Integer typeId, @RequestParam String name,
-						 Model model, HttpSession session) {
+    /**
+     * 查询菜品
+     */
+    @PostMapping("/search")
+    public String search(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                         @RequestParam Integer typeId, @RequestParam String name, @RequestParam String state,
+                         Model model, HttpSession session) {
 		/*User user = (User) session.getAttribute("user");
 		List<Food> foods = diningCarService.getUserFoods(user.getId());*/
-		List<FoodDTO> userfoodDTO = new ArrayList<>();
+        List<FoodDTO> userfoodDTO = new ArrayList<>();
 		/*for (Food food : foods) {
 			FoodDTO dto = new FoodDTO();
 			BeanUtils.copyProperties(food, dto);
@@ -129,69 +132,68 @@ public class IndexController {
 			}
 			userfoodDTO.add(dto);
 		}*/
-		model.addAttribute("foods", userfoodDTO);
-		if (name != null && !"".equals(name)) {
-			Page<Food> foodPage = foodService.listFood(pageable, name, typeId);
-			List<FoodDTO> dtoList = foodPage.stream().map(food -> {
-				FoodDTO dto = new FoodDTO();
-				BeanUtils.copyProperties(food, dto);
+        model.addAttribute("foods", userfoodDTO);
+        if (name != null && !"".equals(name)) {
+            Page<Food> foodPage = foodService.listFood(pageable, name, typeId,state);
+            List<FoodDTO> dtoList = foodPage.stream().map(food -> {
+                FoodDTO dto = new FoodDTO();
+                BeanUtils.copyProperties(food, dto);
 
-				// Find the corresponding DiningCar for the user
+                // Find the corresponding DiningCar for the user
 				/*food.getDiningCars().stream()
 						.filter(dc -> dc.getUser().getId() == user.getId())
 						.findFirst()
 						.ifPresent(diningCar -> dto.setCartId(diningCar.getId()));*/
 
-				return dto;
-			}).collect(Collectors.toList());
+                return dto;
+            }).collect(Collectors.toList());
 
-			// Create a PageImpl with the DTO list while retaining original page information
-			Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
-			model.addAttribute("page", dtos);
+            // Create a PageImpl with the DTO list while retaining original page information
+            Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
+            model.addAttribute("page", dtos);
 
-			return "user/index :: foodList";
-		}
-		if (typeId != null && typeId != 0) {
-			Page<Food> foodPage = foodService.listFood(pageable, typeId);
-			List<FoodDTO> dtoList = foodPage.stream().map(food -> {
-				FoodDTO dto = new FoodDTO();
-				BeanUtils.copyProperties(food, dto);
+            return "user/index :: foodList";
+        }
+        if (typeId != null && typeId != 0) {
+            Page<Food> foodPage = foodService.listFood(pageable, typeId);
+            List<FoodDTO> dtoList = foodPage.stream().map(food -> {
+                FoodDTO dto = new FoodDTO();
+                BeanUtils.copyProperties(food, dto);
 
-				// Find the corresponding DiningCar for the user
+                // Find the corresponding DiningCar for the user
 				/*food.getDiningCars().stream()
 						.filter(dc -> dc.getUser().getId() == user.getId())
 						.findFirst()
 						.ifPresent(diningCar -> dto.setCartId(diningCar.getId()));*/
 
-				return dto;
-			}).collect(Collectors.toList());
+                return dto;
+            }).collect(Collectors.toList());
 
-			// Create a PageImpl with the DTO list while retaining original page information
-			Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
-			model.addAttribute("page", dtos);
-		} else {
-			Page<Food> foodPage = foodService.listFood(pageable);
-			List<FoodDTO> dtoList = foodPage.stream().map(food -> {
-				FoodDTO dto = new FoodDTO();
-				BeanUtils.copyProperties(food, dto);
+            // Create a PageImpl with the DTO list while retaining original page information
+            Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
+            model.addAttribute("page", dtos);
+        } else {
+            Page<Food> foodPage = foodService.listFood(pageable);
+            List<FoodDTO> dtoList = foodPage.stream().map(food -> {
+                FoodDTO dto = new FoodDTO();
+                BeanUtils.copyProperties(food, dto);
 
-				// Find the corresponding DiningCar for the user
+                // Find the corresponding DiningCar for the user
 				/*food.getDiningCars().stream()
 						.filter(dc -> dc.getUser().getId() == user.getId())
 						.findFirst()
 						.ifPresent(diningCar -> dto.setCartId(diningCar.getId()));*/
 
-				return dto;
-			}).collect(Collectors.toList());
+                return dto;
+            }).collect(Collectors.toList());
 
-			// Create a PageImpl with the DTO list while retaining original page information
-			Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
-			model.addAttribute("page", dtos);
-		}
+            // Create a PageImpl with the DTO list while retaining original page information
+            Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
+            model.addAttribute("page", dtos);
+        }
 
-		return "index :: foodList";
-	}
-
+        return "index :: foodList";
+    }
 
 
 }

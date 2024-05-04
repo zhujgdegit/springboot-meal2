@@ -28,6 +28,8 @@ public class Food {
 	private String feature;//特色
 	private String material;//材料
 
+	private String state;//状态：上架、下架、售空
+
 	@Column(nullable = false)
 	@NotNull(message = "价格不能为空")
 	private Integer price;//价格

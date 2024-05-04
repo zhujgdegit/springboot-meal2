@@ -98,7 +98,7 @@ public class UserIndexController {
 	 */
 	@PostMapping("/index/search")
 	public String search(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-						 @RequestParam Integer typeId, @RequestParam String name,
+						 @RequestParam Integer typeId, @RequestParam String name, @RequestParam String state,
 						 Model model, HttpSession session) {
 		User user = (User) session.getAttribute("user");
 		List<Food> foods =  diningCarService.getUserFoods(user.getId());
@@ -120,7 +120,7 @@ public class UserIndexController {
 		}
 		model.addAttribute("foods", userfoodDTO);
 		if (name != null && !"".equals(name)) {
-			Page<Food> foodPage = foodService.listFood(pageable, name, typeId);
+			Page<Food> foodPage = foodService.listFood(pageable, name, typeId,state);
 			List<FoodDTO> dtoList = foodPage.stream().map(food -> {
 				FoodDTO dto = new FoodDTO();
 				BeanUtils.copyProperties(food, dto);

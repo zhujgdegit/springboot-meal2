@@ -17,6 +17,7 @@ public class FoodDTO {
 	private String material;//材料
 
 	private Integer price;//价格
+	private String state;//状态：上架、下架、售空
 
 	private Type type;//1家常 2凉菜 3主食 4饮品
 

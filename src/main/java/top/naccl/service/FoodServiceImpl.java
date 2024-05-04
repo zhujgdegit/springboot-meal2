@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import top.naccl.exception.NotFoundException;
 import top.naccl.dao.FoodRepository;
 import top.naccl.bean.Food;
@@ -71,7 +72,7 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public Page<Food> listFood(Pageable pageable, String name, Integer typeId) {
+	public Page<Food> listFood(Pageable pageable, String name, Integer typeId, String state) {
 		return foodRepository.findAll(new Specification<Food>() {
 			@Override
 			public Predicate toPredicate(Root<Food> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -81,6 +82,9 @@ public class FoodServiceImpl implements FoodService {
 				//查找分类
 				if (typeId != null && typeId != 0) {
 					predicates.add(criteriaBuilder.equal(root.<Type>get("type").get("id"), typeId));
+				}
+				if (!StringUtils.isEmpty(state)) {
+					predicates.add(criteriaBuilder.like(root.<String>get("state"), state));
 				}
 				//拼接SQL
 				criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
