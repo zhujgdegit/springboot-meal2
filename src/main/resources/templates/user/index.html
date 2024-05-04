@@ -66,7 +66,7 @@
             <div class="field">
               <div class="ui labeled action input">
                 <div class="ui type selection dropdown">
-                  <input type="hidden" name="typeId" value="0">
+                  <input type="hidden" name="state" value="全部">
 
                   <i class="dropdown icon"></i>
                     <div class="default text">商品状态</div>
@@ -102,6 +102,7 @@
               <th>IMAGE</th>
               <th>ORDER-RATE:TIMES</th>
               <th>REMARKS</th>
+              <th>STATE</th>
               <th>SELECT</th>
             </tr>
             </thead>
@@ -121,6 +122,7 @@
                 <th:block th:case="0">厨师推荐</th:block>
                 <th:block th:case="*">今日特价</th:block>
               </td>
+              <td th:text="${food.state}">22</td>
               <td width="150px;">
 
 <!--                <a onclick="add(this)" th:data-id="${food.id}" class="ui teal basic add button"-->
@@ -228,7 +230,7 @@
 
       var typeId = 0;
       var name = '';
-      var stateId = 0;
+      var state = '';
       function page(obj) {
           $("[name='page']").val($(obj).data("page"));
           loadData();
@@ -238,7 +240,7 @@
           $("[name='page']").val(0);
           name = $("[name='name']").val();
           typeId = $("[name='typeId']").val();
-          stateId = $("[name='stateId']").val();
+          state = $("[name='state']").val();
           loadData();
       });
 
@@ -246,7 +248,7 @@
           $("#table-container").load(/*[[@{/user/index/search}]]*/"/user/index/search", {
               name: name,
               typeId: typeId,
-              state:stateId,
+              state:state,
               page: $("[name='page']").val()
           });
       }
