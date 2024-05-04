@@ -86,6 +86,7 @@
               <th>TYPE</th>
               <th>ORDER RATE: TIMES</th>
               <th>REMARKS</th>
+              <th>STATE</th>
               <th>OPERATE</th>
             </tr>
             </thead>
@@ -102,9 +103,12 @@
                 <th:block th:case="0">厨师推荐</th:block>
                 <th:block th:case="*">今日特价</th:block>
               </td>
-              <td>
-                <a href="#" th:href="@{/admin/foods/{id}/input(id=${food.id})}" class="ui mini teal basic button">修改</a>
-                <a onclick="del(this)" th:data-href="@{/admin/foods/{id}/delete(id=${food.id})}" class="ui mini red basic button">删除</a>
+                <td th:text="${food.state}">3</td>
+              <td style="padding:5px">
+                <a href="#" th:href="@{/admin/foods/{id}/input(id=${food.id})}" class="ui mini teal basic button" style="padding:8px 10px">修改</a>
+                <a onclick="del(this)" th:data-href="@{/admin/foods/{id}/delete(id=${food.id})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+                <a onclick="offShelf(this)" th:data-id="${food.id}" class="ui mini yellow basic button" style="padding:8px 10px">下架</a>
+                <a onclick="selling(this)" th:data-id="${food.id}" class="ui mini green basic button" style="padding:8px 10px">售空</a>
               </td>
             </tr>
             </tbody>
@@ -165,6 +169,34 @@
       function del(obj){
           url = $(obj).attr('data-href');
           $('.ui.basic.modal').modal('show');
+      }
+      function offShelf(obj){
+          $.post("/admin/updateState", {
+              "foodId": $(obj).attr('data-id'),
+              "state":"下架"
+          }, function (result) {
+              console.log(result,"result---")
+              if (result.success) {
+                  alert(result.message);
+                  loadData();
+              } else {
+                  alert(result.message);
+              }
+          }, "json");
+      }
+      function selling(obj){
+          $.post("/admin/updateState", {
+              "foodId": $(obj).attr('data-id'),
+              "state":"售空"
+          }, function (result) {
+              console.log(result,"result---")
+              if (result.success) {
+                  alert(result.message);
+                  loadData();
+              } else {
+                  alert(result.message);
+              }
+          }, "json");
       }
 
       $('#ok').click(function () {
