@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity(name = "user")
@@ -21,6 +22,15 @@ public class User {
 
 	@Column(nullable = false)
 	private String username;
+
+	@Column(nullable = false)
+	private String nackname;
+
+	@Column(nullable = false)
+	private String birthday;
+
+	@Column(nullable = false)
+	private String introduction;
 
 	@Column(nullable = false)
 	private String password;

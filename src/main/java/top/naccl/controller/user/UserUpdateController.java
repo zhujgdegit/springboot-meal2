@@ -31,6 +31,7 @@ public class UserUpdateController {
 	@GetMapping("/input")
 	public String input(Model model, HttpSession session) {
 		User user = (User) session.getAttribute("user");
+		user = userService.getUser(user.getId());
 		model.addAttribute("user", user);
 		return "user/user-input";
 	}
@@ -51,6 +52,9 @@ public class UserUpdateController {
 		u.setPassword(user.getPassword());
 		u.setTelephone(user.getTelephone());
 		u.setAddress(user.getAddress());
+		u.setBirthday(user.getBirthday());
+		u.setNackname(user.getNackname());
+		u.setIntroduction(user.getIntroduction());
 		User user2 = userService.updateUser(u.getId(), u);
 		u.setPassword(null);
 		if (user2 == null) {//没保存成功
