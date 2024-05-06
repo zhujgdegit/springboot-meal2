@@ -41,6 +41,7 @@
 <!--            <th>菜品名称</th>-->
             <th>USER NAME</th>
             <th>DISH NAME</th>
+            <th>STATE</th>
               <th>APPRAISE</th>
           </tr>
           </thead>
@@ -51,7 +52,8 @@
           <tr th:each="item : ${orderMap}">
             <td th:text="${item[0]}"></td> <!-- 第一个字段是用户名 -->
             <td th:text="${item[1]}"></td> <!-- 第二个字段是菜品名称 -->
-              <td th:text="${item[2]}"></td> <!-- 菜品评价 -->
+            <td th:text="${item[2]}"></td> <!-- 第二个字段是订单状态 -->
+              <td th:text="${item[3]}"></td> <!-- 菜品评价 -->
           </tr>
           </tbody>
         </table>
