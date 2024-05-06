@@ -57,9 +57,10 @@ public class FoodController {
     public JSONObject updateState(@RequestParam Integer foodId, @RequestParam String state) {
         JSONObject result = new JSONObject();
         Food food = foodService.getFood(foodId);
+        food.setState(state);
         Food food1 = foodService.updateFood(foodId, food);
         result.put("success", true);
-        result.put("message", "移出点餐车成功！");
+        result.put("message", state + "成功！");
         return result;
     }
 
