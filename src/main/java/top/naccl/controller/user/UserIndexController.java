@@ -85,8 +85,7 @@ public class UserIndexController {
                     .ifPresent(diningCar -> dto.setCartId(diningCar.getId()));
 
             return dto;
-        }).collect(Collectors.toList());
-
+        }).filter(foodDTO -> !"下架".equals(foodDTO.getState())).collect(Collectors.toList());
         // Create a PageImpl with the DTO list while retaining original page information
         Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
 
@@ -134,7 +133,7 @@ public class UserIndexController {
                     .ifPresent(diningCar -> dto.setCartId(diningCar.getId()));
 
             return dto;
-        }).collect(Collectors.toList());
+        }).filter(foodDTO -> !"下架".equals(foodDTO.getState())).collect(Collectors.toList());
 
         // Create a PageImpl with the DTO list while retaining original page information
         Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
@@ -228,6 +227,12 @@ public class UserIndexController {
             diningCar.setToppings(toppings);
             diningCar.setQuantity(quantity);
             diningCar.setUser(user);
+            Food food = foodService.getFood(id);
+            if ("售空".equals(food.getState())) {
+                result.put("success", false);
+                result.put("message", "该商品已售空！");
+                return result;
+            }
             diningCar.setFood(foodService.getFood(id));
             foodService.updateViews(id);
             DiningCar d = diningCarService.saveDiningCar(diningCar);
