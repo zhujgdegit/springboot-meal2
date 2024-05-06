@@ -152,10 +152,14 @@
       <div class="header">填写订单信息</div>
       <div class="content">
         <form class="ui form" id="allOrdersForm">
-          <div class="field">
-            <label>配送地址</label>
-            <input type="text" name="address" placeholder="请输入配送地址">
-          </div>
+            <div class="field">
+                <label>配送地址</label>
+                <select class="ui dropdown" name="address" id="selectElementAll">
+                    <option value="">请选择配送地址</option>
+                    <!--                  <option value="cash">  </option>-->
+                </select>
+                <!--            <input type="text" name="address" placeholder="请输入配送地址">-->
+            </div>
           <div class="field">
             <label>配送方式</label>
             <select class="ui dropdown" name="deliveryMethod">
@@ -284,7 +288,19 @@
       // 初始化模态框
       $('.ui.modal').modal();
       calculateTotalAmount(); // 初始页面加载时计算总金额
-
+        $.get("/user/getAddr", function (result) {
+            console.log(result,'输出')
+            if (result) {
+                var options = result;
+                var selectOpions = "";
+                for(var i=0; i<options.length;i++){
+                    selectOpions+='<option value="'+options[i][i]+'">'+options[i][i]+'</option>>';
+                }
+                $('#selectElementAll').append(selectOpions)
+            } else {
+                alert("稍后试试！");
+            }
+        }, "json");
       // 表单提交事件
       $('#orderForm').submit(function(event) {
         event.preventDefault(); // 阻止表单默认提交行为

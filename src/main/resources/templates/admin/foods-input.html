@@ -110,7 +110,20 @@
               <span onclick="uploadImage()" style="border: 1px solid black;text-align: center">上传图片</span>
             </div>
           </div>
-
+            <div class="required field">
+                <div class="ui left labeled action input">
+                    <label class="ui compact teal basic label">状态</label>
+                    <div class="ui fluid selection dropdown">
+                        <input type="hidden" name="state" th:value="*{state}">
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item" data-value="上架">上架</div>
+                            <div class="item" data-value="下架">下架</div>
+                            <div class="item" data-value="售空">售空</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
           <div class="required field">
             <div class="ui left labeled input">
               <label class="ui teal basic label">调料</label>
@@ -253,6 +266,13 @@
                   rules: [{
                       type: 'empty',
                       prompt: '请输入菜品图片'
+                  }]
+              },
+              state: {
+                  identifier: 'state',
+                  rules: [{
+                      type: 'empty',
+                      prompt: '请输入菜品状态'
                   }]
               },
              seasoning: {
