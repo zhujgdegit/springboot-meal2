@@ -1,5 +1,6 @@
 package top.naccl.controller.user;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,8 +38,10 @@ public class UserUpdateController {
     public String input(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         user = userService.getUser(user.getId());
-        splitAddresses(user);
-        model.addAttribute("user", user);
+        User user1 = new User();
+        BeanUtils.copyProperties(user, user1);
+        splitAddresses(user1);
+        model.addAttribute("user", user1);
         return "user/user-input";
     }
 
@@ -76,6 +79,7 @@ public class UserUpdateController {
 
     /**
      * 拆分地址
+     *
      * @param user
      * @return
      */
@@ -84,17 +88,26 @@ public class UserUpdateController {
             String[] split = user.getAddress().split(",");
             user.setAddress(split[0]);
             for (int i = 1; i < split.length; i++) {
-                setFieldValue(user, "address" + (i + 1), split[i]);
+                setFieldValue(user, "address" + (i), split[i]);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public static void setFieldValue(Object obj, String fieldName, String value) throws Exception {
-        Field field = obj.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true); // 设置为可访问，即使是私有字段也可以访问
-        field.set(obj, value); // 设置字段的值
+        Field field1 = obj.getClass().getDeclaredField(fieldName);
+//        field.setAccessible(true); // 设置为可访问，即使是私有字段也可以访问
+//        field.set(obj, value); // 设置字段的值
+        Field[] fields = obj.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (field.getName().equals(fieldName)) {
+                field.setAccessible(true); // 设置为可访问，即使是私有字段也可以访问
+                field.set(obj, value); // 设置字段的值
+                return;
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
     }
 
 
