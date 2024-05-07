@@ -130,7 +130,7 @@
 <!--                th:text="${#lists.contains(foods, food)} ? 'update' : 'add cart'">-->
 <!--                  加入点餐车</a>-->
 
-                <a onclick="handleCartAction(this)" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui teal basic button">
+                <a onclick="handleCartAction(this)" th:data-state="${food.state}" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui teal basic button">
                   <span th:text="${#lists.contains(foods, food)} ? 'Update' : 'Add to Cart'">Add to Cart</span>
                 </a>
 
@@ -262,8 +262,12 @@
         var isInCart = $(obj).attr('data-in-cart') === 'true';
         var cartId = $(obj).attr('data-cart-id'); // Get the cart ID
         objId = $(obj).attr('data-id');  // Assuming objId is globally defined for simplicity
-
-        if (isInCart) {
+          var state = $(obj).attr('data-state')
+          if(state=='售空'){
+              alert('该商品已售空')
+              return;
+          }
+          if (isInCart) {
           // Logic to handle update
           // Assuming modal is pre-filled with existing item details for update
           // // Fetch existing cart data
