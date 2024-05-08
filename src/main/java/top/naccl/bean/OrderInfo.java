@@ -57,7 +57,7 @@ public class OrderInfo {
     private String status;
 
     //下单时间
-    @JsonFormat(pattern = "yyyy-MMM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm:ss")
     @Column(name = "creat_time")
     private Date creatTime;
 
