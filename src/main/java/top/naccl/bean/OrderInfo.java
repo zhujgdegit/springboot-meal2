@@ -15,6 +15,10 @@ public class OrderInfo {
     @Column(name = "id")
     private Integer id;
 
+    //订单编号
+    @Column(name = "ordcode")
+    private String ordCode;
+
     @Column(name = "deliveryMethod")
     private String deliveryMethod;
 

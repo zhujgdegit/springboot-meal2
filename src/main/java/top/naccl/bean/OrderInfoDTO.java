@@ -11,6 +11,8 @@ import javax.persistence.Id;
 @Data
 public class OrderInfoDTO {
 
+    private String ordCode;
+
     private String deliveryMethod;
 
     private String paymentMethod;
