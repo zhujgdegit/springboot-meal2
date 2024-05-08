@@ -309,6 +309,8 @@ public class UserIndexController {
             orderInfo.setToppings(driverCarByFoodId.getToppings());
             //生成订单编号
             orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber());
+            //设置下单时间
+            orderInfo.setCreatTime(new Date());
             OrderInfo order = orderRepository.save(orderInfo);
             if (order == null) {
                 result.put("success", false);

@@ -1,9 +1,11 @@
 package top.naccl.bean;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -53,5 +55,10 @@ public class OrderInfo {
     private String comment;
     @Column(name = "status")
     private String status;
+
+    //下单时间
+    @JsonFormat(pattern = "yyyy-MMM-dd HH:mm:ss")
+    @Column(name = "creat_time")
+    private Date creatTime;
 
 }

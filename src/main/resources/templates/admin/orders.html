@@ -74,9 +74,13 @@
                       <!--            <th>用户名</th>-->
                       <!--            <th>菜品名称</th>-->
                       <th>USER NAME</th>
+                      <th>PHONE</th><!--用户电话号码-->
                       <th>DISH NAME</th>
+                      <th>ORDER CODE</th><!--订单号-->
+                      <th>CREAT TIME</th><!--下单时间-->
                       <th>STATE</th>
                       <th>APPRAISE</th>
+                      <th>OPERATE</th>
                   </tr>
                   </thead>
 
@@ -85,9 +89,15 @@
                   <tbody>
                   <tr th:each="item : ${orderMap}">
                       <td th:text="${item[0]}"></td> <!-- 第一个字段是用户名 -->
-                      <td th:text="${item[1]}"></td> <!-- 第二个字段是菜品名称 -->
-                      <td th:text="${item[2]}"></td> <!-- 第二个字段是订单状态 -->
-                      <td th:text="${item[3]}"></td> <!-- 菜品评价 -->
+                      <td th:text="${item[1]}"></td> <!-- 用户电话 -->
+                      <td th:text="${item[2]}"></td> <!-- 第二个字段是菜品名称 -->
+                      <td th:text="${item[3]}"></td> <!-- 订单号 -->
+                      <td th:text="${item[4]}"></td> <!-- 下单时间 -->
+                      <td th:text="${item[5]}"></td> <!-- 第二个字段是订单状态 -->
+                      <td th:text="${item[6]}"></td> <!-- 菜品评价 -->
+                      <td style="padding:5px">
+                        <a onclick="del(this)" th:data-href="@{/admin/foods/{ordCode}/delete(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+                      </td>
                   </tr>
                   </tbody>
               </table>
