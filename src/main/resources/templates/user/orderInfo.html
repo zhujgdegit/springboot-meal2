@@ -31,7 +31,38 @@
     <div class="m-padded-tb-big">
       <div class="ui container user">
 
-        <div id="table-container" th:fragment="foodList">
+        <!-- message不为空时显示 -->
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+          <i class="close icon"></i>
+          <div class="header">提示：</div>
+          <p th:text="${message}">操作成功！</p>
+        </div>
+        <!-- 搜索 -->
+        <div class="ui secondary segment form">
+          <!-- 用于上一页下一页传递page -->
+          <input type="hidden" name="page">
+
+          <div class="inline fields">
+            <div class="field">
+              <div class="ui labeled action input">
+                <input type="hidden" name="code" value="0"></div>
+
+              <!--<i class="dropdown icon"></i>
+              <div class="default text">全部</div>
+              <div class="menu">
+                  <div class="item" data-value="0">全部</div>
+                  <div class="item" data-value="1" th:each="type:${types}" th:data-value="${type.id}" th:text="${type.name}">全部</div>
+              </div>-->
+            </div>
+          </div>
+
+          <div class="field">
+            <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>搜索</button>
+          </div>
+        </div>
+      </div>
+
+        <div id="table-container" th:fragment="orderList">
           <table class="ui celled teal table m-text" style="text-align:center;">
             <thead>
             <th colspan="11"><h1 class="ui header" align="center">HISTORICAL ORDERS</h1></th>
@@ -69,8 +100,9 @@
               <td th:text="${order.quantity}" width="70px;"></td>
               <td th:text="${order.price}"></td>
               <td th:text="${order.status}">Status</td>
-              <td width="150px;">
+              <td width="250px;">
                 <a onclick="opens(this)" th:data-id="${order.id}"  id="openModal_${order.id}" class="ui teal button">评价</a>
+                <a onclick="opens(this)" th:data-id="${order.id}"  id="openModal_1111${order.id}" class="ui teal button">删除——待完善</a>
               </td>
             </tr>
             </tbody>
