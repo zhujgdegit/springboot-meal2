@@ -22,8 +22,10 @@ import top.naccl.dao.OrderRepository;
 import top.naccl.service.DiningCarService;
 import top.naccl.service.FoodService;
 import top.naccl.service.TypeService;
+import top.naccl.util.OrderNumberUtil;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -286,6 +288,8 @@ public class UserIndexController {
         return result;
     }
 
+    @Autowired
+    private OrderNumberUtil orderNumberUtil;
 
     /**
      * 用户提交订单
@@ -303,6 +307,10 @@ public class UserIndexController {
             orderInfo.setQuantity(Integer.valueOf(driverCarByFoodId.getQuantity()));
             orderInfo.setSize(driverCarByFoodId.getSize());
             orderInfo.setToppings(driverCarByFoodId.getToppings());
+            //生成订单编号
+            orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber());
+            //设置下单时间
+            orderInfo.setCreatTime(new Date());
             OrderInfo order = orderRepository.save(orderInfo);
             if (order == null) {
                 result.put("success", false);

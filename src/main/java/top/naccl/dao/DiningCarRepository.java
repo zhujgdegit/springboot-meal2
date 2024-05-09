@@ -23,7 +23,7 @@ public interface DiningCarRepository extends JpaRepository<DiningCar, Integer> {
 	List<String[]> findGroupUser();
 
 
-	@Query("SELECT u.username as userName,fo.name as foodName ,o.status AS status, o.comment as comments FROM OrderInfo o left JOIN user u on u.id = o.userId LEFT JOIN food fo on fo.id = o.foodId ")
+	@Query("SELECT u.nackname as nackName,u.telephone as telephone, fo.name as foodName, o.ordCode as ordCode, DATE_FORMAT(o.creatTime, '%Y年%m月%d日 %H:%i') as creatTime, o.status AS status, o.comment as comments FROM OrderInfo o left JOIN user u on u.id = o.userId LEFT JOIN food fo on fo.id = o.foodId ")
 	List<String[]> findOrderUser();
 
 

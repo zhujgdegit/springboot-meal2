@@ -28,54 +28,80 @@
   </nav>
 
   <div class="site-content">
-      <div class="ui secondary segment form">
-      <div class="inline fields" style="margin-left: 22%">
-          <div class="field">
-              <input type="text" name="orderNo" placeholder="请输入订单号">
-          </div>
-          <div class="field">
-              <input type="text" name="state" placeholder="请输入订单状态">
-          </div>
-          <div class="field">
-              <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>搜索</button>
-          </div>
-      </div>
-      </div>
+
     <!--中间内容-->
     <div class="m-container-small m-padded-tb-big">
       <div class="ui container">
 
-        <table class="ui teal table m-text" style="text-align:center;">
-          <thead>
-<!--          <th colspan="2"><h1 class="ui header" align="center" th:text="${item.key.username}">user1</h1></th>-->
-          <tr>
-            <th>NO</th>
-<!--            <th>菜品名称</th>-->
-            <th>USER NAME</th>
-            <th>DISH NAME</th>
-            <th>STATE</th>
-              <th>TIME</th>
-              <th>TEL</th>
+          <!-- message不为空时显示 -->
+          <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+              <i class="close icon"></i>
+              <div class="header">提示：</div>
+              <p th:text="${message}">操作成功！</p>
+          </div>
+          <!-- 搜索 -->
+          <div class="ui secondary segment form">
+              <!-- 用于上一页下一页传递page -->
+              <input type="hidden" name="page">
 
-              <th>APPRAISE</th>
-          </tr>
-          </thead>
+              <div class="inline fields">
+                  <div class="field">
+                      <div class="ui labeled action input">
+                          <div class="ui type selection dropdown">
+                              <input type="hidden" name="typeId" value="0">
+
+                              <i class="dropdown icon"></i>
+                              <div class="default text">全部</div>
+                              <div class="menu">
+                                  <div class="item" data-value="0">全部</div>
+                                  <div class="item" data-value="1" th:each="type:${types}" th:data-value="${type.id}" th:text="${type.name}">全部</div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="field">
+                      <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>按分类查询</button>
+                  </div>
+              </div>
+          </div>
+
+          <dev id="table-container" th:fragment="orderList">
+              <table class="ui teal table m-text" style="text-align:center;">
+                  <thead>
+                  <!--          <th colspan="2"><h1 class="ui header" align="center" th:text="${item.key.username}">user1</h1></th>-->
+                  <tr>
+                      <!--            <th>用户名</th>-->
+                      <!--            <th>菜品名称</th>-->
+                      <th>USER NAME</th>
+                      <th>PHONE</th><!--用户电话号码-->
+                      <th>DISH NAME</th>
+                      <th>ORDER CODE</th><!--订单号-->
+                      <th>CREAT TIME</th><!--下单时间-->
+                      <th>STATE</th>
+                      <th>APPRAISE</th>
+                      <th>OPERATE</th>
+                  </tr>
+                  </thead>
 
 
-          </tbody>
-          <tbody>
-          <tr th:each="item : ${orderMap}">
-              <td>1</td>
-              <td th:text="${item[0]}"></td> <!-- 第一个字段是用户名 -->
-            <td th:text="${item[1]}"></td> <!-- 第二个字段是菜品名称 -->
-            <td th:text="${item[2]}"></td> <!-- 第二个字段是订单状态 -->
-              <td>1</td>
-              <td>1</td>
-              <td th:text="${item[3]}"></td> <!-- 菜品评价 -->
-          </tr>
-          </tbody>
-        </table>
-
+                  </tbody>
+                  <tbody>
+                  <tr th:each="item : ${orderMap}">
+                      <td th:text="${item[0]}"></td> <!-- 第一个字段是用户名 -->
+                      <td th:text="${item[1]}"></td> <!-- 用户电话 -->
+                      <td th:text="${item[2]}"></td> <!-- 第二个字段是菜品名称 -->
+                      <td th:text="${item[3]}"></td> <!-- 订单号 -->
+                      <td th:text="${item[4]}"></td> <!-- 下单时间 -->
+                      <td th:text="${item[5]}"></td> <!-- 第二个字段是订单状态 -->
+                      <td th:text="${item[6]}"></td> <!-- 菜品评价 -->
+                      <td style="padding:5px">
+                        <a onclick="del(this)" th:data-href="@{/admin/foods/{ordCode}/delete(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+                      </td>
+                  </tr>
+                  </tbody>
+              </table>
+          </dev>
       </div>
     </div>
 
