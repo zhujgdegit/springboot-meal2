@@ -19,9 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import top.naccl.annotation.OnlyUser;
 import top.naccl.bean.*;
 import top.naccl.dao.OrderRepository;
-import top.naccl.service.DiningCarService;
-import top.naccl.service.FoodService;
-import top.naccl.service.TypeService;
+import top.naccl.service.*;
 import top.naccl.util.OrderNumberUtil;
 
 import javax.servlet.http.HttpSession;
@@ -366,15 +364,22 @@ public class UserIndexController {
         }
     }
 
+    @Autowired
+    private OrderReviewsService orderReviewsService;
+
+    @Autowired
+    private UserService userService;
+
 
     /**
-     * 用户提交订单
+     * 用户提交评价
      */
     @PostMapping("/rating")
     @ResponseBody
     public JSONObject rating(@RequestParam("rating") String rating,
                              @RequestParam("comment") String comment,
-                             @RequestParam("orderId") Integer orderId
+                             @RequestParam("orderId") Integer orderId,
+                             @RequestParam(value = "reviewsId", required = false) Integer reviewsId
             , HttpSession session) {
         JSONObject result = new JSONObject();
         User user = (User) session.getAttribute("user");
@@ -382,8 +387,13 @@ public class UserIndexController {
             result.put("success", false);
             result.put("message", "登录已失效，请重新登录！");
         } else {
-            Integer i = orderRepository.updateById(rating, comment, orderId);
-            if (i <= 0) {
+            //原有功能弃用
+//            Integer i = orderRepository.updateById(rating, comment, orderId);
+
+            //功能扩展
+            user = userService.getUser(user.getId());
+            Integer res = orderReviewsService.addReviews( user, rating, comment, orderId,reviewsId);
+            if (res <= 0) {
                 result.put("success", false);
                 result.put("message", "评价失败！");
             } else {

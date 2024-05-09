@@ -13,4 +13,11 @@ public interface OrderService {
      * @param ordCode 订单编码
      */
     void deleteByCode(String ordCode);
+
+    /**
+     * 获取订单信息
+     * @param orderId
+     * @return
+     */
+    OrderInfo getOrderInfoById(Integer orderId);
 }

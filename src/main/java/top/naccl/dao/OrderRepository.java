@@ -33,4 +33,7 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
 
     @Query("select o from OrderInfo o  where o.ordCode = ?1")
     OrderInfo getOrderInfoByCode(@Param("ordCode") String ordCode);
+
+    @Query("select o from OrderInfo o  where o.id = ?1")
+    OrderInfo getOrderInfoById(@Param("id") Integer orderId);
 }

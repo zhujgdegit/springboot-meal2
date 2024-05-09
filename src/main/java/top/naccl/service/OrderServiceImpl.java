@@ -56,6 +56,11 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(info);
     }
 
+    @Override
+    public OrderInfo getOrderInfoById(Integer orderId) {
+        return orderRepository.getOrderInfoById(orderId);
+    }
+
     private static final String[] STATUSES = {"PENDING", "ACCEPTED", "PREPARING", "SHIPPING", "DELIVERED", "COMPLETED"};
 
     @Scheduled(fixedRate = 10000) // 每20秒执行一次
