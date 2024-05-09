@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import top.naccl.annotation.OnlyAdmin;
 import top.naccl.bean.User;
@@ -24,17 +25,17 @@ import java.util.List;
 @RequestMapping("/admin")
 @OnlyAdmin
 public class OrderController {
-	@Autowired
-	DiningCarService diningCarService;
+    @Autowired
+    DiningCarService diningCarService;
 
-	@Autowired
-	private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-	/**
-	 * 查看用户点餐情况
-	 */
-	@GetMapping("/orders")
-	public String orders(Model model) {
+    /**
+     * 查看用户点餐情况
+     */
+    @GetMapping("/orders")
+    public String orders(Model model) {
 		/*List<String[]> ordersV2 = diningCarService.getOrdersV2();
 
 		List<List<String>> orders = new ArrayList<>();
@@ -42,39 +43,43 @@ public class OrderController {
 			orders.add(Arrays.asList(array));
 		}*/
 
-		model.addAttribute("orderMap", diningCarService.getOrdersV2());
+        model.addAttribute("orderMap", diningCarService.getOrdersV2());
 
-		//model.addAttribute("orderMap", diningCarService.getOrders());
-		return "admin/orders";
-	}
+        //model.addAttribute("orderMap", diningCarService.getOrders());
+        return "admin/orders";
+    }
 
-	/**
-	 * 按分类查询菜品
-	 */
-	@PostMapping("/orders/search")
-	public String search(@RequestParam String ordCode, Model model) {
+    /**
+     * 按分类查询菜品
+     */
+    @PostMapping("/orders/search")
+    public String search(@RequestParam String ordCode, Model model) {
 
-			model.addAttribute("orderMap", diningCarService.getOrdersV2BYCode(ordCode));
-		return "admin/orders :: orderList";
-	}
+        if (StringUtils.isEmpty(ordCode)) {
+            model.addAttribute("orderMap", diningCarService.getOrdersV2());
+        } else {
+            model.addAttribute("orderMap", diningCarService.getOrdersV2BYCode(ordCode));
+        }
+        return "admin/orders :: orderList";
+    }
 
-	/**
-	 * 按分类查询菜品
-	 */
-	@GetMapping("/orders/deleteByCode")
-	@ResponseBody
-	public JSONObject deleteByCode(@RequestParam String ordCode, HttpSession session) {
+    /**
+     * 按分类查询菜品
+     */
+    @GetMapping("/orders/deleteByCode")
+    @ResponseBody
+    public JSONObject deleteByCode(@RequestParam String ordCode, HttpSession session) {
 
-		JSONObject result = new JSONObject();
-		User user = (User) session.getAttribute("user");
-		if (user == null) {
-			result.put("success", false);
-			result.put("message", "登录已失效，请重新登录！");
-		} else {
-			orderService.deleteByCode(ordCode);
-			result.put("success", true);
-			result.put("message", "订单删除成功");
-		}
-		return result;
-	}
+        JSONObject result = new JSONObject();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            result.put("success", false);
+            result.put("message", "登录已失效，请重新登录！");
+        } else {
+            orderService.deleteByCode(ordCode);
+            result.put("success", true);
+            result.put("message", "订单删除成功");
+        }
+        return result;
+    }
 }
