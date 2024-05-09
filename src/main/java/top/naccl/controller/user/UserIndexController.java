@@ -3,10 +3,7 @@ package top.naccl.controller.user;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -305,8 +302,15 @@ public class UserIndexController {
             orderInfo.setQuantity(Integer.valueOf(driverCarByFoodId.getQuantity()));
             orderInfo.setSize(driverCarByFoodId.getSize());
             orderInfo.setToppings(driverCarByFoodId.getToppings());
+            //查询订单
+            List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
+            long l = 0;
+            if (!Objects.isNull(select.get(0))) {
+                l = orderNumberUtil.splitCode(select.get(0).getOrdCode());
+            }
+
             //生成订单编号
-            orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber());
+            orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber(l, "insert"));
             //设置下单时间
             orderInfo.setCreatTime(new Date());
             OrderInfo order = orderRepository.save(orderInfo);
@@ -392,7 +396,7 @@ public class UserIndexController {
 
             //功能扩展
             user = userService.getUser(user.getId());
-            Integer res = orderReviewsService.addReviews( user, rating, comment, orderId,reviewsId);
+            Integer res = orderReviewsService.addReviews(user, rating, comment, orderId, reviewsId);
             if (res <= 0) {
                 result.put("success", false);
                 result.put("message", "评价失败！");
