@@ -97,7 +97,7 @@
                       <td th:text="${item[5]}"></td> <!-- 第二个字段是订单状态 -->
                       <td th:text="${item[6]}"></td> <!-- 菜品评价 -->
                       <td style="padding:5px">
-                        <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode/{ordCode}/delete(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+                        <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
                       </td>
                   </tr>
                   </tbody>
