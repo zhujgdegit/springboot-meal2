@@ -1,0 +1,34 @@
+package top.naccl.service;
+
+import top.naccl.bean.OrderReviews;
+import top.naccl.bean.User;
+
+import java.util.List;
+
+/**
+ * 订单评价相关接口
+ */
+public interface OrderReviewsService {
+
+    /**
+     * 添加评论
+     * @param user
+     * @param rating
+     * @param comment
+     * @param orderId
+     * @return
+     */
+    Integer addReviews(User user, String rating, String comment, Integer orderId, Integer reviewsId);
+
+
+    /**
+     * 查询订单评价信息
+     * @param Id
+     * @return
+     */
+    OrderReviews getReviewsInfo(Integer Id);
+
+    List<OrderReviews> getReviewsInfos(OrderReviews reviews);
+
+
+}
