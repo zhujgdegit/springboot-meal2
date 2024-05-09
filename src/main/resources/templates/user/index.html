@@ -110,7 +110,7 @@
             <tbody>
             <tr th:each="food,iterStat : ${page.content}" >
               <td th:text="${iterStat.count}">1</td>
-              <td th:text="${food.name}" width="100px;" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">韭菜炒鸡蛋</td>
+              <td th:text="${food.name}" width="100px;" style="cursor:pointer">韭菜炒鸡蛋</td>
               <td th:text="${food.feature}">工艺：炒 口味：清香型</td>
               <td th:text="${food.material}">主料：韭菜4两（约160克）</td>
               <td th:text="${food.price}">8</td>
@@ -130,8 +130,11 @@
 <!--                th:text="${#lists.contains(foods, food)} ? 'update' : 'add cart'">-->
 <!--                  加入点餐车</a>-->
 
-                <a onclick="handleCartAction(this)" th:data-state="${food.state}" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui teal basic button">
+                <a onclick="handleCartAction(this)" th:data-state="${food.state}" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui mini teal basic button">
                   <span th:text="${#lists.contains(foods, food)} ? 'Update' : 'Add to Cart'">Add to Cart</span>
+                </a>
+                <a onclick="window.location.href=this.getAttribute('data-href')"  th:data-href="@{/detail/{id}(id=${food.id})}" class="ui mini teal basic button">
+                  <span>Check</span>
                 </a>
 
               </td>

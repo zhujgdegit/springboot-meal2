@@ -121,7 +121,7 @@
             <tbody>
             <tr th:each="food,iterStat : ${page.content}" >
               <td th:text="${iterStat.count}">1</td>
-              <td th:text="${food.name}" width="100px;" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">韭菜炒鸡蛋</td>
+              <td th:text="${food.name}" width="100px;" style="cursor:pointer">韭菜炒鸡蛋</td>
               <td th:text="${food.feature}">工艺：炒 口味：清香型</td>
               <td th:text="${food.material}">主料：韭菜4两（约160克）</td>
               <td th:text="${food.price}">8</td>
@@ -141,9 +141,13 @@
                 <!--                th:text="${#lists.contains(foods, food)} ? 'update' : 'add cart'">-->
                 <!--                  加入点餐车</a>-->
 
-                <a onclick="handleCartAction(this)" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui teal basic button">
+                <a onclick="handleCartAction(this)" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui mini teal basic button">
                   <span th:text="${#lists.contains(foods, food)} ? 'Update' : 'Add to Cart'">Add to Cart</span>
                 </a>
+                <a onclick="handleCartAction(this)"  th:data-href="@{/detail/{id}(id=${food.id})}" class="ui mini teal basic button">
+                  <span>Check</span>
+                </a>
+
 
               </td>
 
@@ -273,35 +277,63 @@
     // }
     function handleCartAction(obj) {
       window.location.href = '/login';
-      var isInCart = $(obj).attr('data-in-cart') === 'true';
-      var cartId = $(obj).attr('data-cart-id'); // Get the cart ID
-      objId = $(obj).attr('data-id');  // Assuming objId is globally defined for simplicity
-
-      if (isInCart) {
-        // Logic to handle update
-        // Assuming modal is pre-filled with existing item details for update
-        // // Fetch existing cart data
-        $.post("/user/getCartDetails", {
-          "cartId": cartId
-        }, function (result) {
-          alert(result.message);
-
-          $('#quantity').val(result.quantity);  // Reset quantity to 1 or default
-          $('#size').val(result.size);  // Reset size to 'Small' or default
-          $('#toppings').val(result.toppings);  // Clear toppings
-        }, "json");
-        $('#myModal').data('action', 'update');
-        $('#myModal').data('cartId', cartId);
-        $('#myModal').modal('show');
-      } else {
-        // Logic to handle add
-        // Clear existing data in modal or set defaults
-        $('#quantity').val(1);  // Reset quantity to 1 or default
-        $('#size').val('Small');  // Reset size to 'Small' or default
-        $('#toppings').val('');  // Clear toppings
-        $('#myModal').data('action', 'add');
-        $('#myModal').modal('show');
-      }
+      // var isInCart = $(obj).attr('data-in-cart') === 'true';
+      // var cartId = $(obj).attr('data-cart-id'); // Get the cart ID
+      // objId = $(obj).attr('data-id');  // Assuming objId is globally defined for simplicity
+      //
+      // if (isInCart) {
+      //   // Logic to handle update
+      //   // Assuming modal is pre-filled with existing item details for update
+      //   // // Fetch existing cart data
+      //   $.post("/user/getCartDetails", {
+      //     "cartId": cartId
+      //   }, function (result) {
+      //     alert(result.message);
+      //
+      //     $('#quantity').val(result.quantity);  // Reset quantity to 1 or default
+      //     $('#size').val(result.size);  // Reset size to 'Small' or default
+      //     $('#toppings').val(result.toppings);  // Clear toppings
+      //   }, "json");
+      //   $('#myModal').data('action', 'update');
+      //   $('#myModal').data('cartId', cartId);
+      //   $('#myModal').modal('show');
+      // } else {
+      //   // Logic to handle add
+      //   // Clear existing data in modal or set defaults
+      //   $('#quantity').val(1);  // Reset quantity to 1 or default
+      //   $('#size').val('Small');  // Reset size to 'Small' or default
+      //   $('#toppings').val('');  // Clear toppings
+      //   $('#myModal').data('action', 'add');
+      //   $('#myModal').modal('show');
+      // }var isInCart = $(obj).attr('data-in-cart') === 'true';
+      // var cartId = $(obj).attr('data-cart-id'); // Get the cart ID
+      // objId = $(obj).attr('data-id');  // Assuming objId is globally defined for simplicity
+      //
+      // if (isInCart) {
+      //   // Logic to handle update
+      //   // Assuming modal is pre-filled with existing item details for update
+      //   // // Fetch existing cart data
+      //   $.post("/user/getCartDetails", {
+      //     "cartId": cartId
+      //   }, function (result) {
+      //     alert(result.message);
+      //
+      //     $('#quantity').val(result.quantity);  // Reset quantity to 1 or default
+      //     $('#size').val(result.size);  // Reset size to 'Small' or default
+      //     $('#toppings').val(result.toppings);  // Clear toppings
+      //   }, "json");
+      //   $('#myModal').data('action', 'update');
+      //   $('#myModal').data('cartId', cartId);
+      //   $('#myModal').modal('show');
+      // } else {
+      //   // Logic to handle add
+      //   // Clear existing data in modal or set defaults
+      //   $('#quantity').val(1);  // Reset quantity to 1 or default
+      //   $('#size').val('Small');  // Reset size to 'Small' or default
+      //   $('#toppings').val('');  // Clear toppings
+      //   $('#myModal').data('action', 'add');
+      //   $('#myModal').modal('show');
+      // }
     }
 
     function submitData() {

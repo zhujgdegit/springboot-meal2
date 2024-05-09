@@ -94,7 +94,7 @@
             <tbody>
             <tr th:each="food,iterStat : ${page.content}" >
               <td th:text="${iterStat.count}">1</td>
-              <td th:text="${food.name}" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">菠菜炒鸡蛋</td>
+              <td th:text="${food.name}" style="cursor:pointer">菠菜炒鸡蛋</td>
               <td th:text="${food.price}">9</td>
               <td th:text="${food.type.name}">家常</td>
               <td th:text="${food.hits}">3</td>
@@ -105,6 +105,9 @@
               </td>
                 <td th:text="${food.state}">3</td>
               <td style="padding:5px">
+                <a onclick="window.location.href=this.getAttribute('data-href')" th:data-href="@{/detail/{id}(id=${food.id})}" class="ui mini blue basic button" style="padding:8px 10px">
+                  <span>查看</span>
+                </a>
                 <a href="#" th:href="@{/admin/foods/{id}/input(id=${food.id})}" class="ui mini teal basic button" style="padding:8px 10px">修改</a>
                 <a onclick="del(this)" th:data-href="@{/admin/foods/{id}/delete(id=${food.id})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
                 <a onclick="offShelf(this)" th:data-id="${food.id}" class="ui mini yellow basic button" style="padding:8px 10px">下架</a>
