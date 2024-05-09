@@ -43,4 +43,10 @@ public class OrderReviews {
     @Column(name = "creat_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date creatTime;  //创建时间
+
+    /**
+     * 判断是否可以删除，true可以删除
+     */
+    @Transient
+    private Boolean  isDelete;
 }

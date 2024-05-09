@@ -28,7 +28,27 @@ public interface OrderReviewsService {
      */
     OrderReviews getReviewsInfo(Integer Id);
 
+
+    /**
+     * 订单评价条件查询
+     * @param reviews
+     * @return
+     */
     List<OrderReviews> getReviewsInfos(OrderReviews reviews);
 
 
+    /**
+     * 删除
+     * @param id
+     * @return
+     */
+    Integer deleteInfo(Integer id);
+
+
+    /**
+     * 根据商品ID查询评论
+     * @param foodId
+     * @return
+     */
+    List<OrderReviews> getReviewsInfosByFoodId(Integer foodId);
 }

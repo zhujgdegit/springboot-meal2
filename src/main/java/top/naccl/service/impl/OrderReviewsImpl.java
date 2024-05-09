@@ -59,4 +59,15 @@ public class OrderReviewsImpl implements OrderReviewsService {
     public List<OrderReviews> getReviewsInfos(OrderReviews reviews) {
         return null;
     }
+
+    @Override
+    public Integer deleteInfo(Integer id) {
+        orderReviewsRepository.deleteById(id);
+        return 1;
+    }
+
+    @Override
+    public List<OrderReviews> getReviewsInfosByFoodId(Integer foodId) {
+        return orderReviewsRepository.getReviewsInfosByFoodId(foodId);
+    }
 }
