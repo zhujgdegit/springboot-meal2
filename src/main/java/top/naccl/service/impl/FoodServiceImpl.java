@@ -1,4 +1,4 @@
-package top.naccl.service;
+package top.naccl.service.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +10,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import top.naccl.exception.NotFoundException;
-import top.naccl.dao.FoodRepository;
 import top.naccl.bean.Food;
 import top.naccl.bean.Type;
+import top.naccl.dao.FoodRepository;
+import top.naccl.exception.NotFoundException;
+import top.naccl.service.FoodService;
 import top.naccl.util.MyBeanUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;

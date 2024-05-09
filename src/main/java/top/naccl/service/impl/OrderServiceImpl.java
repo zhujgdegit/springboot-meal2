@@ -1,29 +1,14 @@
-package top.naccl.service;
+package top.naccl.service.impl;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import top.naccl.bean.OrderInfo;
-import top.naccl.dao.OrderRepository;
-import top.naccl.exception.NotFoundException;
-import top.naccl.dao.FoodRepository;
-import top.naccl.bean.Food;
-import top.naccl.bean.Type;
-import top.naccl.util.MyBeanUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import top.naccl.bean.OrderInfo;
+import top.naccl.dao.OrderRepository;
+import top.naccl.service.OrderService;
+import top.naccl.service.UserService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

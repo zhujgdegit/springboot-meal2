@@ -1,17 +1,16 @@
-package top.naccl.service;
+package top.naccl.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import top.naccl.bean.DiningCarDTO;
-import top.naccl.dao.DiningCarRepository;
 import top.naccl.bean.DiningCar;
 import top.naccl.bean.Food;
 import top.naccl.bean.User;
+import top.naccl.dao.DiningCarRepository;
+import top.naccl.service.DiningCarService;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
