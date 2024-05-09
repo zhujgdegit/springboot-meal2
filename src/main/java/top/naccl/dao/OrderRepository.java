@@ -24,6 +24,9 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
     @Query("select o from OrderInfo o  where o.userId = ?1")
     List<OrderInfo> getOrderInfoAll(Integer id);
 
+    @Query("select o from OrderInfo o  where o.userId = ?1 and o.ordCode = ?2")
+    List<OrderInfo> getOrderInfoAll(Integer id,String ordCode);
+
 
     @Query("SELECT COALESCE(AVG(o.rating), 0) FROM OrderInfo o WHERE o.foodId = :foodId")
     Double findAverageRatingByFoodId(@Param("foodId") Integer foodId);
