@@ -29,7 +29,7 @@
   <div class="site-content">
     <!--中间内容-->
     <div class="m-padded-tb-big">
-      <div class="ui container user">
+      <div class="ui container user" style="width:100%!important">
 
         <!-- message不为空时显示 -->
         <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
@@ -38,14 +38,16 @@
           <p th:text="${message}">操作成功！</p>
         </div>
         <!-- 搜索 -->
-        <div class="ui secondary segment form">
+        <div class="ui secondary segment form" style="width:100%!important;display: flex">
           <!-- 用于上一页下一页传递page -->
           <input type="hidden" name="page">
 
           <div class="inline fields">
             <div class="field">
-              <div class="ui labeled action input">
-                <input type="hidden" name="code" value="0"></div>
+               <input type="text" name="ordCode" placeholder="请输入订单编号">
+
+              <!--              <div class="ui labeled action input">-->
+<!--                <input type="hidden" name="code" value="0"></div>-->
 
               <!--<i class="dropdown icon"></i>
               <div class="default text">全部</div>
@@ -102,7 +104,7 @@
               <td th:text="${order.status}">Status</td>
               <td width="250px;">
                 <a onclick="opens(this)" th:data-id="${order.id}"  id="openModal_${order.id}" class="ui teal button">评价</a>
-                <a onclick="opens(this)" th:data-id="${order.id}"  id="openModal_1111${order.id}" class="ui teal button">删除——待完善</a>
+                <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode(ordCode=${order.ordCode})}" class="ui teal basic button">删除</a>
               </td>
             </tr>
             </tbody>
@@ -151,7 +153,15 @@
       <button class="ui button" onclick="$('#ratingModal').modal('hide');">取消</button>
     </div>
   </div>
-
+  <!-- 确认框 -->
+  <div class="ui basic modal">
+    <div class="ui icon header"><i class="trash alternate outline icon"></i>删除</div>
+    <div class="content"><h1>确定要删除该订单吗？</h1></div>
+    <div class="actions">
+      <div class="ui basic cancel inverted button"><i class="remove icon"></i>取消</div>
+      <div id="ok" class="ui red ok inverted button"><i class="checkmark icon"></i>删除</div>
+    </div>
+  </div>
 
   <!--底部footer-->
   <footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
@@ -209,13 +219,33 @@
       // 设置orderId，以便提交评价时使用
       $('#submitRating').attr('data-order-id', orderId);
       // 显示模态框
-      $('.ui.modal').modal('show');
+      $('#ratingModal').modal('show');
     }
       function page(obj) {
           $("#table-container").load(/*[[@{/user/diningcar}]]*/"/user/diningcar", {
               page: $(obj).data("page")
           });
       }
+
+    var ordCode = "";
+    var url;
+    $("#search-btn").click(function () {
+      ordCode = $("[name='ordCode']").val();
+      loadData();
+    });
+
+    function loadData() {
+      $("#table-container").load(/*[[@{/search}]]*/"/admin/orders/search", {
+        ordCode: ordCode
+      });
+    }
+    function del(obj){
+      url = $(obj).attr('data-href');
+      $('.ui.basic.modal').modal('show');
+    }
+    $('#ok').click(function () {
+      window.location.href = url;
+    });
   </script>
 
 </body>
