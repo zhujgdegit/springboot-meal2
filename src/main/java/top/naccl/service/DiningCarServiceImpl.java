@@ -72,6 +72,12 @@ public class DiningCarServiceImpl implements DiningCarService {
 		return result;
 	}
 
+	@Override
+	public List<String[]> getOrdersV2BYCode(String ordCode) {
+		List<String[]> result = diningCarRepository.findOrderUserByCode(ordCode);
+		return result;
+	}
+
 	@Transactional
 	@Override
 	public DiningCar saveDiningCar(DiningCar diningCar) {

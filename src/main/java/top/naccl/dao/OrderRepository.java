@@ -30,4 +30,7 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
 
     @Query("SELECT o FROM OrderInfo o WHERE o.foodId = :foodId AND o.comment IS NOT NULL ORDER BY o.id DESC")
     List<OrderInfo> findTopCommentsByFoodId(@Param("foodId") Integer foodId, Pageable pageable);
+
+    @Query("select o from OrderInfo o  where o.ordCode = ?1")
+    OrderInfo getOrderInfoByCode(@Param("ordCode") String ordCode);
 }

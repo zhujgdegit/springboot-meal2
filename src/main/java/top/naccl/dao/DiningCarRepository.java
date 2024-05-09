@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.jpa.repository.Query;
 import top.naccl.bean.DiningCar;
@@ -25,6 +26,9 @@ public interface DiningCarRepository extends JpaRepository<DiningCar, Integer> {
 
 	@Query("SELECT u.nackname as nackName,u.telephone as telephone, fo.name as foodName, o.ordCode as ordCode, DATE_FORMAT(o.creatTime, '%Y年%m月%d日 %H:%i') as creatTime, o.status AS status, o.comment as comments FROM OrderInfo o left JOIN user u on u.id = o.userId LEFT JOIN food fo on fo.id = o.foodId ")
 	List<String[]> findOrderUser();
+
+	@Query("SELECT u.nackname as nackName,u.telephone as telephone, fo.name as foodName, o.ordCode as ordCode, DATE_FORMAT(o.creatTime, '%Y年%m月%d日 %H:%i') as creatTime, o.status AS status, o.comment as comments FROM OrderInfo o left JOIN user u on u.id = o.userId LEFT JOIN food fo on fo.id = o.foodId where o.ordCode=?1")
+	List<String[]> findOrderUserByCode(@Param("ordCode") String ordCode);
 
 
 	@Query("select d.food from diningcar d where d.user.id = ?1 order by d.food.id desc")

@@ -22,6 +22,8 @@ public interface DiningCarService {
 
 	List<String[]> getOrdersV2();
 
+	List<String[]> getOrdersV2BYCode(String ordCode);
+
 	DiningCar saveDiningCar(DiningCar diningCar);
 
 	void deleteDiningCarByUserIdAndFoodId(Integer userId, Integer foodId);

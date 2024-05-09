@@ -1,4 +1,5 @@
 package top.naccl.service;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import top.naccl.bean.Type;
 import top.naccl.util.MyBeanUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
@@ -24,6 +26,8 @@ import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -43,6 +47,14 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findTopCommentsByFoodId(foodId, PageRequest.of(0, limit));
     }
 
+    @Override
+    public void deleteByCode(String ordCode) {
+        OrderInfo info = orderRepository.getOrderInfoByCode(ordCode);
+        if (Objects.isNull(info)) {
+            throw new RuntimeException("删除订单信息不存在：订单编号：" + ordCode);
+        }
+        orderRepository.delete(info);
+    }
 
     private static final String[] STATUSES = {"PENDING", "ACCEPTED", "PREPARING", "SHIPPING", "DELIVERED", "COMPLETED"};
 
@@ -57,4 +69,5 @@ public class OrderServiceImpl implements OrderService {
                 orderRepository.save(order);
             }
         }
-    }}
+    }
+}
