@@ -103,8 +103,10 @@
               <td th:text="${order.price}"></td>
               <td th:text="${order.status}">Status</td>
               <td width="250px;">
-                <a onclick="opens(this)" th:data-id="${order.id}"  id="openModal_${order.id}" class="ui teal button">评价</a>
-                <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode(ordCode=${order.ordCode})}" class="ui teal basic button">删除</a>
+                <a onclick="opens(this)" th:data-id="${order.id}" id="openModal_${order.id}" class="ui teal button">
+                  <span>去评价</span>
+                </a>
+                <a onclick="del(this)" th:data-href="@{/user/orders/deleteByCode(ordCode=${order.ordCode})}" class="ui teal basic button">删除</a>
               </td>
             </tr>
             </tbody>
@@ -235,7 +237,7 @@
     });
 
     function loadData() {
-      $("#table-container").load(/*[[@{/search}]]*/"/admin/orders/search", {
+      $("#table-container").load(/*[[@{/search}]]*/"/user/orders/search", {
         ordCode: ordCode
       });
     }
