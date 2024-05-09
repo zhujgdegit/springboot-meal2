@@ -17,7 +17,7 @@ public class OrderNumberUtil {
      *
      * @return
      */
-    public String generateOrderNumber(long l, String action) {
+    public static String generateOrderNumber(long l, String action) {
         // 获取当前日期
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String date = dateFormat.format(new Date());
@@ -34,6 +34,11 @@ public class OrderNumberUtil {
             return "ORD" + date;
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        String s = generateOrderNumber(0, "insert");
+        System.out.println(s);
     }
 
     public long splitCode(String ordCode) {
