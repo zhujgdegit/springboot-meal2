@@ -67,7 +67,7 @@ public class OrderReviewsImpl implements OrderReviewsService {
     }
 
     @Override
-    public List<OrderReviews> getReviewsInfosByFoodId(Integer foodId) {
-        return orderReviewsRepository.getReviewsInfosByFoodId(foodId);
+    public List<OrderReviews> getReviewsInfosByFoodId(Integer orderId) {
+        return orderReviewsRepository.getReviewsInfosByFoodId(orderId);
     }
 }

@@ -27,11 +27,11 @@ public class UserOrderReviewsController {
     private OrderReviewsService orderReviewsService;
 
     @GetMapping("/getReviewsList")
-    public String getReviewsList(@RequestParam("foodId") Integer foodId, Model model, HttpSession session) {
+    public String getReviewsList(@RequestParam("orderId") Integer orderId, Model model, HttpSession session) {
 
         User user = (User) session.getAttribute("user");
         Integer userId = user.getId();
-        List<OrderReviews> reviewss = orderReviewsService.getReviewsInfosByFoodId(foodId);
+        List<OrderReviews> reviewss = orderReviewsService.getReviewsInfosByFoodId(orderId);
         reviewss.forEach(re -> {
             if ((int) userId == re.getUserId()) {
                 re.setIsDelete(true);
