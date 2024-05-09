@@ -97,7 +97,7 @@
                       <td th:text="${item[5]}"></td> <!-- 第二个字段是订单状态 -->
                       <td th:text="${item[6]}"></td> <!-- 菜品评价 -->
                       <td style="padding:5px">
-                        <a onclick="del(this)" th:data-href="@{/admin/foods/{ordCode}/delete(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+                        <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode/{ordCode}/delete(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
                       </td>
                   </tr>
                   </tbody>
@@ -105,7 +105,15 @@
           </dev>
       </div>
     </div>
-
+      <!-- 确认框 -->
+      <div class="ui basic modal">
+          <div class="ui icon header"><i class="trash alternate outline icon"></i>删除</div>
+          <div class="content"><h1>确定要删除该订单吗？</h1></div>
+          <div class="actions">
+              <div class="ui basic cancel inverted button"><i class="remove icon"></i>取消</div>
+              <div id="ok" class="ui red ok inverted button"><i class="checkmark icon"></i>删除</div>
+          </div>
+      </div>
   </div>
 
   <!--底部footer-->
@@ -118,6 +126,7 @@
   <!--/*/</th:block>/*/-->
   <script>
       var ordCode = "";
+      var url;
       $("#search-btn").click(function () {
           ordCode = $("[name='ordCode']").val();
           loadData();
@@ -128,6 +137,13 @@
               ordCode: ordCode
           });
       }
+      function del(obj){
+          url = $(obj).attr('data-href');
+          $('.ui.basic.modal').modal('show');
+      }
+      $('#ok').click(function () {
+          window.location.href = url;
+      });
   </script>
 </body>
 </html>
