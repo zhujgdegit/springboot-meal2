@@ -5,8 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import top.naccl.bean.OrderReviews;
+import top.naccl.bean.User;
 import top.naccl.service.FoodService;
+import top.naccl.service.OrderReviewsService;
 import top.naccl.service.OrderService;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @Description: 菜品详情
@@ -21,14 +28,33 @@ public class DetailController {
 
 	@Autowired
 	OrderService orderService;
+
+	@Autowired
+	private OrderReviewsService orderReviewsService;
+
+
 	/**
 	 * 菜品详情页
 	 */
 	@GetMapping("/detail/{id}")
-	public String detail(@PathVariable Integer id, Model model) {
+	public String detail(@PathVariable Integer id, Model model, HttpSession session) {
+		User user = (User) session.getAttribute("user");
+
 		model.addAttribute("food", foodService.getFood(id));
 		model.addAttribute("averageRating", orderService.getAverageRatingByFoodId(id).intValue()); // 将平均评分取整后传递
 		model.addAttribute("comments", orderService.getTopCommentsByFoodId(id, 5)); // 获取最多5条评论
+
+
+		List<OrderReviews> reviewss = orderReviewsService.getReviewsInfosByFoodId(id);
+		if (Objects.nonNull(user)) {
+			Integer userId = user.getId();
+			reviewss.forEach(re -> {
+				if ((int) userId == re.getUserId()) {
+					re.setIsDelete(true);
+				}
+			});
+		}
+		model.addAttribute("reviewsLst", reviewss); // 获取最多5条评论
 		return "detail";
 	}
 }

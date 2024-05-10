@@ -48,5 +48,5 @@ public class OrderReviews {
      * 判断是否可以删除，true可以删除
      */
     @Transient
-    private Boolean  isDelete;
+    private Boolean  isDelete = false;
 }
