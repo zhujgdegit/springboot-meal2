@@ -67,7 +67,7 @@
         <div id="table-container" th:fragment="orderList">
           <table class="ui celled teal table m-text" style="text-align:center;">
             <thead>
-            <th colspan="11"><h1 class="ui header" align="center">HISTORICAL ORDERS</h1></th>
+            <th colspan="13"><h1 class="ui header" align="center">HISTORICAL ORDERS</h1></th>
             <tr>
               <th>NO</th>
               <th>ORDER CODE</th>
@@ -77,6 +77,8 @@
               <th>SHIPPING ADDRESS</th>
               <th>DELIVERY FEES</th>
               <th>NUMBER ORDERED</th>
+              <th>DELIVERY TIME</th>
+              <th>ARRIVAL TIME</th>
               <th>PRICE：YUAN</th>
               <th>STATUS</th>
               <th>OPERATE</th>
@@ -90,7 +92,7 @@
               <td th:text="${order.foodName}" width="100px;" th:data-href="@{/detail/{id}(id=${order.foodId})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')"></td>
               <td th:switch="${order.paymentMethod}">
                 <th:block th:case="cash">现金</th:block>
-                <th:block th:case="alipay">支付宝</th:block>
+                <th:block th:case="zfb">支付宝</th:block>
                 <th:block th:case="wx">微信</th:block>
               </td>
               <td th:switch="${order.deliveryMethod}">
@@ -98,6 +100,8 @@
                 <th:block th:case="pickup">自取</th:block>
               </td>
               <td th:text="${order.address}"></td>
+              <td th:text="${order.deliveryTime}"></td>
+              <td th:text="${order.arrivalTime}"></td>
               <td th:text="${order.deliveryFee}"></td>
               <td th:text="${order.quantity}" width="70px;"></td>
               <td th:text="${order.price}"></td>

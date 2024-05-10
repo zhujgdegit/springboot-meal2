@@ -327,6 +327,12 @@ public class UserIndexController {
         return "redirect:/user/index";
     }
 
+    /**
+     * 批量下单
+     * @param orderDetails
+     * @param session
+     * @return
+     */
     @PostMapping("/submitAllOrders")
     public ResponseEntity<?> submitAllOrders(@RequestBody OrderSubmissionDTO orderDetails, HttpSession session) {
         User user = (User) session.getAttribute("user");

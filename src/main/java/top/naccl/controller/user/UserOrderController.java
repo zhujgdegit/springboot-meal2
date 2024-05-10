@@ -86,7 +86,8 @@ public class UserOrderController {
             BeanUtils.copyProperties(orderInfo, orderInfoDTO);
             dtoList.add(orderInfoDTO);
         }
-        Collections.sort(dtoList, Comparator.comparing(OrderInfoDTO::getFoodName));
+        //Collections.sort(dtoList, Comparator.comparing(OrderInfoDTO::getFoodName));
+        Collections.sort(dtoList, Comparator.comparingInt(OrderInfoDTO::getId).reversed());
         Page<OrderInfoDTO> page = new PageImpl<>(dtoList);
         model.addAttribute("page", page);
         if ("POST".equals(request.getMethod())) {

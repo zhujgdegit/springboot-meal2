@@ -33,6 +33,12 @@ public class OrderInfo {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "delivery_time")
+    private String deliveryTime;
+
+    @Column(name = "arrival_time")
+    private String arrivalTime;
+
     @Column(name = "foodId")
     private Integer foodId;
 
@@ -49,6 +55,7 @@ public class OrderInfo {
     private String toppings;
 
     // 评价等级
+    @Column(name = "rating")
     private String rating;
 
     // 评价内容
@@ -60,5 +67,8 @@ public class OrderInfo {
     @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm:ss")
     @Column(name = "creat_time")
     private Date creatTime;
+
+    @Column(name = "remark")
+    private String remark;
 
 }

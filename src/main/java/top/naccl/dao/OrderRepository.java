@@ -24,8 +24,8 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
     @Query("select o from OrderInfo o left join food f on f.id = o.foodId where f.id is NOT NULL and o.userId = ?1")
     List<OrderInfo> getOrderInfoAll(Integer id);
 
-    @Query("select o from OrderInfo o  where o.userId = ?1 and o.ordCode = ?2")
-    List<OrderInfo> getOrderInfoAll(Integer id,String ordCode);
+    @Query("select o from OrderInfo o  where o.userId = :id and o.ordCode like %:ordCode%")
+    List<OrderInfo> getOrderInfoAll(@Param("id") Integer id, @Param("ordCode") String ordCode);
 
 
     @Query("SELECT COALESCE(AVG(o.rating), 0) FROM OrderInfo o WHERE o.foodId = :foodId")
@@ -41,5 +41,5 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
     OrderInfo getOrderInfoById(@Param("id") Integer orderId);
 
     @Query("select o from OrderInfo o  where o.ordCode like  %:code% order by o.ordCode desc")
-    List<OrderInfo> getNumByCodeLike(@Param("code") String code,Pageable pageable);
+    List<OrderInfo> getNumByCodeLike(@Param("code") String code, Pageable pageable);
 }
