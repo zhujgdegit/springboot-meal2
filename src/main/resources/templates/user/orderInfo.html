@@ -175,9 +175,9 @@
   <!--/*/</th:block>/*/-->
   <script>
     // 设置定时刷新页面，这里是每20秒刷新一次页面
-    setTimeout(function() {
-      window.location.reload(1);
-    }, 20000);
+    // setTimeout(function() {
+    //   window.location.reload(1);
+    // }, 20000);
   </script>
 
   <script>
@@ -238,7 +238,7 @@
 
     function loadData() {
       $("#table-container").load(/*[[@{/search}]]*/"/user/orders/search", {
-        ordCode: ordCode
+        ordCode: ordCode,
       });
     }
     function del(obj){
@@ -246,7 +246,16 @@
       $('.ui.basic.modal').modal('show');
     }
     $('#ok').click(function () {
-      window.location.href = url;
+      console.log(url,"shanchu")
+      $.post(url, function (result) {
+        if (result) {
+          alert("删除成功");
+        } else {
+          alert("删除失败，请重试");
+        }
+      }, "json");
+      // alert("删除成功");
+      // window.location.href = url;
     });
   </script>
 
