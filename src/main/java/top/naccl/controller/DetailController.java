@@ -5,6 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import top.naccl.bean.OrderReviews;
 import top.naccl.bean.User;
 import top.naccl.service.FoodService;
@@ -56,5 +59,17 @@ public class DetailController {
 		}
 		model.addAttribute("reviewsLst", reviewss); // 获取最多5条评论
 		return "detail";
+	}
+
+	/**
+	 * 评论删除
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping("/deleteInfo")
+	public String deleteInfo(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
+		Integer i = orderReviewsService.deleteInfo(id);
+		redirectAttributes.addFlashAttribute("message", "删除成功");
+		return "redirect:/detail";
 	}
 }
