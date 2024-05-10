@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -305,7 +306,7 @@ public class UserIndexController {
             //查询订单
             List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
             long l = 0;
-            if (!Objects.isNull(select.get(0))) {
+            if (!CollectionUtils.isEmpty(select) && !Objects.isNull(select.get(0))) {
                 l = orderNumberUtil.splitCode(select.get(0).getOrdCode());
             }
 

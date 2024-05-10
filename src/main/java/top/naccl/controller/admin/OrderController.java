@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import top.naccl.annotation.OnlyAdmin;
 import top.naccl.bean.User;
 import top.naccl.service.DiningCarService;
@@ -64,22 +65,12 @@ public class OrderController {
     }
 
     /**
-     * 按分类查询菜品
+     * 订单删除
      */
-    @GetMapping("/orders/deleteByCode")
-    @ResponseBody
-    public JSONObject deleteByCode(@RequestParam String ordCode, HttpSession session) {
-
-        JSONObject result = new JSONObject();
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
-        } else {
-            orderService.deleteByCode(ordCode);
-            result.put("success", true);
-            result.put("message", "订单删除成功");
-        }
-        return result;
+    @PostMapping("/orders/deleteByCode")
+    public String deleteByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
+        orderService.deleteByCode(ordCode);
+        redirectAttributes.addFlashAttribute("message", "删除成功");
+        return "redirect:/admin/orderInfo";
     }
 }
