@@ -98,7 +98,7 @@ public class UserOrderController {
     /**
      * 订单删除
      */
-    @PostMapping("/orders/deleteByCode")
+    @RequestMapping("/orders/deleteByCode")
     public String deleteByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
         orderService.deleteByCode(ordCode);
         redirectAttributes.addFlashAttribute("message", "删除成功");
