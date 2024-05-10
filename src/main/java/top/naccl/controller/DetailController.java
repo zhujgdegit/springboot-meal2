@@ -26,50 +26,51 @@ import java.util.Objects;
 
 @Controller
 public class DetailController {
-	@Autowired
-	FoodService foodService;
+    @Autowired
+    FoodService foodService;
 
-	@Autowired
-	OrderService orderService;
+    @Autowired
+    OrderService orderService;
 
-	@Autowired
-	private OrderReviewsService orderReviewsService;
-
-
-	/**
-	 * 菜品详情页
-	 */
-	@GetMapping("/detail/{id}")
-	public String detail(@PathVariable Integer id, Model model, HttpSession session) {
-		User user = (User) session.getAttribute("user");
-
-		model.addAttribute("food", foodService.getFood(id));
-		model.addAttribute("averageRating", orderService.getAverageRatingByFoodId(id).intValue()); // 将平均评分取整后传递
-		model.addAttribute("comments", orderService.getTopCommentsByFoodId(id, 5)); // 获取最多5条评论
+    @Autowired
+    private OrderReviewsService orderReviewsService;
 
 
-		List<OrderReviews> reviewss = orderReviewsService.getReviewsInfosByFoodId(id);
-		if (Objects.nonNull(user)) {
-			Integer userId = user.getId();
-			reviewss.forEach(re -> {
-				if ((int) userId == re.getUserId()) {
-					re.setIsDelete(true);
-				}
-			});
-		}
-		model.addAttribute("reviewsLst", reviewss); // 获取最多5条评论
-		return "detail";
-	}
+    /**
+     * 菜品详情页
+     */
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable Integer id, Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
 
-	/**
-	 * 评论删除
-	 * @param id
-	 * @return
-	 */
-	@RequestMapping("/deleteInfo")
-	public String deleteInfo(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
-		Integer i = orderReviewsService.deleteInfo(id);
-		redirectAttributes.addFlashAttribute("message", "删除成功");
-		return "redirect:/detail";
-	}
+        model.addAttribute("food", foodService.getFood(id));
+        model.addAttribute("averageRating", orderService.getAverageRatingByFoodId(id).intValue()); // 将平均评分取整后传递
+        model.addAttribute("comments", orderService.getTopCommentsByFoodId(id, 5)); // 获取最多5条评论
+
+
+        List<OrderReviews> reviewss = orderReviewsService.getReviewsInfosByFoodId(id);
+        if (Objects.nonNull(user)) {
+            Integer userId = user.getId();
+            reviewss.forEach(re -> {
+                if ((int) userId == re.getUserId()) {
+                    re.setIsDelete(true);
+                }
+            });
+        }
+        model.addAttribute("reviewsLst", reviewss); // 获取最多5条评论
+        return "detail";
+    }
+
+    /**
+     * 评论删除
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteInfo")
+    public String deleteInfo(@RequestParam("id") Integer id, @RequestParam("foodId") Integer foodId, RedirectAttributes redirectAttributes) {
+        Integer i = orderReviewsService.deleteInfo(id);
+        redirectAttributes.addFlashAttribute("message", "删除成功");
+        return "redirect:/detail/" + foodId;
+    }
 }
