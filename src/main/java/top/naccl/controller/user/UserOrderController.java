@@ -89,7 +89,7 @@ public class UserOrderController {
         Page<OrderInfoDTO> page = new PageImpl<>(dtoList);
         model.addAttribute("page", page);
         if ("POST".equals(request.getMethod())) {
-            return "user/diningcar :: foodList";
+            return "user/orderInfo :: orderList";
         }
         return "user/orderInfo :: orderList";
     }
