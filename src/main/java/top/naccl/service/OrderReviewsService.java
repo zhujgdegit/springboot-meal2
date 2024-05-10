@@ -47,8 +47,8 @@ public interface OrderReviewsService {
 
     /**
      * 根据商品ID查询评论
-     * @param orderId
+     * @param foodId
      * @return
      */
-    List<OrderReviews> getReviewsInfosByFoodId(Integer orderId);
+    List<OrderReviews> getReviewsInfosByFoodId(Integer foodId);
 }

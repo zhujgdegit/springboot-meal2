@@ -11,6 +11,6 @@ import java.util.List;
 @Repository
 public interface OrderReviewsRepository extends JpaRepository<OrderReviews, Integer> {
 
-    @Query("select r from OrderReviews r where r.diningcarId = ?1 order by r.creatTime desc ")
-    List<OrderReviews> getReviewsInfosByFoodId(@Param("orderId") Integer orderId);
+    @Query("select r from OrderReviews r where r.foodId = ?1 order by r.creatTime desc ")
+    List<OrderReviews> getReviewsInfosByFoodId(@Param("foodId") Integer foodId);
 }
