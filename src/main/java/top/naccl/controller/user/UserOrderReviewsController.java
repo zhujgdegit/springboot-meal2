@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import top.naccl.bean.OrderReviews;
 import top.naccl.bean.User;
 import top.naccl.service.OrderReviewsService;
@@ -42,18 +43,16 @@ public class UserOrderReviewsController {
         return "user/orderReviews::reviewsList";
     }
 
-    @GetMapping("/deleteInfo")
-    public JSONObject deleteInfo(@RequestParam("id") Integer id) {
+    /**
+     * 评论删除
+     * @param id
+     * @return
+     */
+    @RequestMapping("/deleteInfo")
+    public String deleteInfo(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
         Integer i = orderReviewsService.deleteInfo(id);
-        JSONObject result = new JSONObject();
-        if (i > 0) {
-            result.put("success", true);
-            result.put("message", "评论删除成功！");
-        } else {
-            result.put("success", false);
-            result.put("message", "评论删除失败！");
-        }
-        return result;
+        redirectAttributes.addFlashAttribute("message", "删除成功");
+        return "redirect:/user/orderReviews";
     }
 
 }
