@@ -21,7 +21,7 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
     int updateById(@Param("rating") String rating, @Param("comment") String comment, @Param("id") Integer id);
 
 
-    @Query("select o from OrderInfo o  where o.userId = ?1")
+    @Query("select o from OrderInfo o left join food f on f.id = o.foodId where f.id is NOT NULL and o.userId = ?1")
     List<OrderInfo> getOrderInfoAll(Integer id);
 
     @Query("select o from OrderInfo o  where o.userId = ?1 and o.ordCode = ?2")
