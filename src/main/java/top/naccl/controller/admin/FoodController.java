@@ -104,7 +104,7 @@ public class FoodController {
     @PostMapping("/foods")
     public String post(@Valid Food food, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (food.getType().getId() == null) {
-            bindingResult.rejectValue("name", "nameError", "分类不能为空");
+            bindingResult.rejectValue("name", "nameError", "Type cannot be empty");
         }
 
         if (bindingResult.hasErrors()) {

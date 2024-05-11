@@ -138,9 +138,62 @@ public class DiningCarController {
         }
         //Collections.sort(dtoList, Comparator.comparing(OrderInfoDTO::getFoodName));
         Collections.sort(dtoList, Comparator.comparingInt(OrderInfoDTO::getId).reversed());
-
-
         model.addAttribute("page", dtoList);
+        if ("POST".equals(request.getMethod())) {
+            return "user/diningcar :: foodList";
+        }
+        return "user/orderInfo";
+    }
+
+    @RequestMapping("/orderInfoNew")
+    public String OrderNew(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                        Model model, HttpSession session, HttpServletRequest request) {
+        User user = (User) session.getAttribute("user");
+        List<OrderInfo> orderInfoAll = orderRepository.getOrderInfoAll(user.getId());
+        List<List<OrderInfoDTO>> groupedOrders = new ArrayList<>();
+
+        List<OrderInfoDTO> currentGroup = new ArrayList<>();
+        Date lastOrderTime = null;
+
+        for (OrderInfo orderInfo : orderInfoAll) {
+            Food food = foodService.getFood(orderInfo.getFoodId());
+            OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+            orderInfoDTO.setFoodName(food.getName());
+            orderInfoDTO.setFoodId(food.getId());
+            BeanUtils.copyProperties(orderInfo, orderInfoDTO);
+
+            int price = orderInfo.getQuantity() * food.getPrice();
+            if (!StringUtils.isEmpty(orderInfo.getToppings())) {
+                price += 1;
+            }
+            if ("Medium".equals(orderInfo.getSize())) {
+                price += 1;
+            }
+            if ("Large".equals(orderInfo.getSize())) {
+                price += 2;
+            }
+            if ("pickup".equals(orderInfoDTO.getDeliveryMethod())) {
+                orderInfo.setDeliveryFee("0");
+                orderInfoDTO.setDeliveryFee("0");
+            }
+            price += Integer.parseInt(orderInfo.getDeliveryFee());
+            orderInfoDTO.setPrice(price);
+
+            //todo: 为什么要这么做？因爲需要在數據庫增加字段，暫時注釋掉
+            /*if (lastOrderTime != null && Math.abs(orderInfo.getCreatedAt().getTime() - lastOrderTime.getTime()) > 5000) {
+                groupedOrders.add(new ArrayList<>(currentGroup));
+                currentGroup.clear();
+            }
+
+            currentGroup.add(orderInfoDTO);
+            lastOrderTime = orderInfo.getCreatedAt();*/
+        }
+
+        if (!currentGroup.isEmpty()) {
+            groupedOrders.add(currentGroup);
+        }
+
+        model.addAttribute("groupedOrders", groupedOrders);
         if ("POST".equals(request.getMethod())) {
             return "user/diningcar :: foodList";
         }

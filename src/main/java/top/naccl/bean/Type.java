@@ -28,7 +28,7 @@ public class Type {
 	private Integer id;
 
 	@Column(nullable = false)
-	@NotBlank(message = "分类名称不能为空")
+	@NotBlank(message = "The type name cannot be empty")
 	private String name;
 
 	@OneToMany(mappedBy = "type")//一个分类对应多个食品，Foodtype作为被维护端，通过Food的type建立关联
