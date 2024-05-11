@@ -72,6 +72,9 @@ CREATE TABLE `food` (
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+
+
 --
 -- Dumping data for table `food`
 --
