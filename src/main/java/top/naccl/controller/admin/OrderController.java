@@ -85,7 +85,7 @@ public class OrderController {
     @RequestMapping("/orders/deleteByCode")
     public String deleteByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
         orderService.deleteByCode(ordCode);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Delete successfully.");
         return "redirect:/admin/orders";
     }
 
@@ -95,7 +95,7 @@ public class OrderController {
     @RequestMapping("/orders/updateByCode")
     public String updateByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
         orderService.updateByCode(ordCode);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Delete successfully.");
         return "redirect:/admin/orders";
     }
 }

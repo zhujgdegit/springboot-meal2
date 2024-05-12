@@ -267,6 +267,19 @@
     // });
 
 
+    function add(obj) {
+        // objId = $(obj).attr('data-id');
+
+        console.log(objId)
+        // 显示模态框
+        $('#myModal').modal('show');
+    }
+
+    function page(obj) {
+        $("#table-container").load(/*[[@{/user/diningcar}]]*/"/user/diningcar", {
+            page: $(obj).data("page")
+        });
+    }
 
     $(document).ready(function () {
         $.get("/user/getAddr", function (result) {
@@ -333,20 +346,6 @@
         }
     }
 
-    function add(obj) {
-        // objId = $(obj).attr('data-id');
-        console.log(objId)
-        // 显示模态框
-        $('#myModal').modal('show');
-    }
-
-    function page(obj) {
-        $("#table-container").load(/*[[@{/user/diningcar}]]*/"/user/diningcar", {
-            page: $(obj).data("page")
-        });
-    }
-
-
 
     $(document).ready(function () {
         // 初始化模态框
@@ -370,7 +369,19 @@
             event.preventDefault(); // 阻止表单默认提交行为
             // 获取表单数据
             var formDataArray = $(this).serializeArray();
-            formDataArray.push({name: 'foodId', value: foodId});
+            var formData = {};
+            formDataArray.forEach(function(item) {
+                formData[item.name] = item.value.trim();  // Trim spaces and store each item in an object
+            });
+
+            // Check if all required fields are filled
+            if (!formData.address || !formData.deliveryMethod || !formData.paymentMethod || formData.deliveryFee === '') {
+                alert('Please fill in all required fields.');
+                return;  // Stop the function if validation fails
+            }
+
+            // 获取表单数据
+            formDataArray.push({ name: 'foodId', value: foodId});
             var formData = $.param(formDataArray);
             // 发送 AJAX 请求
             $.ajax({
@@ -391,7 +402,6 @@
         });
     });
     var foodId = "";
-
     function opens(obj) {
         // 获取点击按钮对应的food id
         foodId = $(obj).attr('data-id');

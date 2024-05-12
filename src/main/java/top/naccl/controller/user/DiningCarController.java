@@ -44,7 +44,7 @@ public class DiningCarController {
     UserService userService;
 
     /**
-     * 查看点餐车，接收GET和POST(分页load方法需要POST)
+     * View Dining Car, accept GET and POST (paging load method needs POST)
      */
     @RequestMapping("/diningcar")
     public String DiningCar(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -113,7 +113,7 @@ public class DiningCarController {
 
         for (int i = 0; i < split.length; i++) {
             Map<Integer, String> addressMap = new HashMap<>();
-            addressMap.put(i, split[i].trim()); // 去除空格并存储地址部分
+            addressMap.put(i, split[i].trim()); // Remove spaces and store address parts
             addressList.add(addressMap);
         }
 
@@ -147,7 +147,7 @@ public class DiningCarController {
 
     @RequestMapping("/orderInfoNew")
     public String OrderNew(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
-                        Model model, HttpSession session, HttpServletRequest request) {
+                           Model model, HttpSession session, HttpServletRequest request) {
         User user = (User) session.getAttribute("user");
         List<OrderInfo> orderInfoAll = orderRepository.getOrderInfoAll(user.getId());
         List<List<OrderInfoDTO>> groupedOrders = new ArrayList<>();
@@ -179,7 +179,7 @@ public class DiningCarController {
             price += Integer.parseInt(orderInfo.getDeliveryFee());
             orderInfoDTO.setPrice(price);
 
-            //todo: 为什么要这么做？因爲需要在數據庫增加字段，暫時注釋掉
+            //todo: Why do this? Because we need to add fields to the database, temporarily commented out
             /*if (lastOrderTime != null && Math.abs(orderInfo.getCreatedAt().getTime() - lastOrderTime.getTime()) > 5000) {
                 groupedOrders.add(new ArrayList<>(currentGroup));
                 currentGroup.clear();
@@ -195,14 +195,14 @@ public class DiningCarController {
 
         model.addAttribute("groupedOrders", groupedOrders);
         if ("POST".equals(request.getMethod())) {
-            return "user/diningcar :: foodList";
+            return "user/diningcar :: food List";
         }
         return "user/orderInfo";
     }
 
 
     /**
-     * 从点餐车删除菜品
+     * Remove dishes from the dining car
      */
     @PostMapping("/del")
     @ResponseBody
@@ -211,11 +211,11 @@ public class DiningCarController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login expired, please log in again!");
         } else {
             diningCarService.deleteDiningCarByUserIdAndFoodId(user.getId(), id);
             result.put("success", true);
-            result.put("message", "移出点餐车成功！");
+            result.put("message", "Successfully removed from dining car!");
         }
         return result;
     }

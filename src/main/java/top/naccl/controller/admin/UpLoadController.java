@@ -31,10 +31,10 @@ public class UpLoadController {
             String filePath = uploadPath + "/" + fileName;
             // 保存文件到本地
             file.transferTo(new File(filePath));
-            return "上传成功";
+            return "Upload successfully";
         } catch (IOException e) {
             e.printStackTrace();
-            return "上传失败";
+            return "Fail to upload";
         }
     }
 }

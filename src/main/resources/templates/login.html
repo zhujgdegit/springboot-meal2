@@ -11,81 +11,82 @@
                /:/  /        /:/  /       \:\__\        \:\__\        \:\__\
                \/__/         \/__/         \/__/         \/__/         \/__/
 -->
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="_fragments :: head(~{::title})">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>登录</title>
+  <title>Login</title>
   <link rel="stylesheet" href="../static/css/semantic.min.css" th:href="@{/css/semantic.min.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
 </head>
 <body class="site">
 
-  <div class="site-content">
+<div class="site-content">
 
-    <div class="m-login-in-center">
-      <div class="ur container">
-        <div class="ui middle aligned center aligned grid">
-          <div class="column">
-            <h2 class="ui teal image header content">USERLOGIN</h2>
-            <form class="ui large form" method="post" action="#" th:action="@{/login}">
-              <div class="ui segment">
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="user icon"></i>
-                    <input type="text" name="username" placeholder="用户名">
-                  </div>
+  <div class="m-login-in-center">
+    <div class="ur container">
+      <div class="ui middle aligned center aligned grid">
+        <div class="column">
+          <h2 class="ui teal image header content">User Login</h2>
+          <form class="ui large form" method="post" action="#" th:action="@{/login}">
+            <div class="ui segment">
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="user icon"></i>
+                  <input type="text" name="username" placeholder="Username">
                 </div>
-                <div class="field">
-                  <div class="ui left icon input">
-                    <i class="lock icon"></i>
-                    <input type="password" name="password" placeholder="密码">
-                  </div>
+              </div>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="lock icon"></i>
+                  <input type="password" name="password" placeholder="Password">
                 </div>
-                <button class="ui fluid large teal submit button">LOGIN</button>
               </div>
+              <button class="ui fluid large teal submit button">Login</button>
+            </div>
 
-              <div class="ui message">
-                NEWUSER？ <a href="#" th:href="@{/register}">REGISTER</a>
-              </div>
+            <div class="ui message">
+              New user? <a href="#" th:href="@{/register}">Register</a>
+            </div>
 
-              <!-- 表单验证提示 -->
-              <div class="ui error message"></div>
-              <!-- 后台验证错误提示 -->
-              <div class="ui negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
-            </form>
+            <!-- Form validation prompt -->
+            <div class="ui error message"></div>
+            <!-- Backend validation error prompt -->
+            <div class="ui negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
+          </form>
 
-          </div>
         </div>
       </div>
     </div>
-
   </div>
 
-  <!--/*/<th:block th:replace="_fragments :: myScript">/*/-->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-  <script src="../static/js/semantic.min.js"></script>
-  <!--/*/</th:block>/*/-->
-  <script>
-      $('.ui.form').form({
-          fields: {
-              username: {
-                  identifier: 'username',
-                  rules: [{
-                      type: 'empty',
-                      prompt: '请输入用户名'
-                  }]
-              },
-              password: {
-                  identifier: 'password',
-                  rules: [{
-                      type: 'empty',
-                      prompt: '请输入密码'
-                  }]
-              }
-          }
-      });
-  </script>
+</div>
+
+<!--/*/<th:block th:replace="_fragments :: myScript">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="../static/js/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script>
+  $('.ui.form').form({
+    fields: {
+      username: {
+        identifier: 'username',
+        rules: [{
+          type: 'empty',
+          prompt: 'Please enter your username'
+        }]
+      },
+      password: {
+        identifier: 'password',
+        rules: [{
+          type: 'empty',
+          prompt: 'Please enter your password'
+        }]
+      }
+    }
+  });
+</script>
 </body>
 </html>

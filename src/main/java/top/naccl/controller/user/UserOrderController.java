@@ -102,7 +102,7 @@ public class UserOrderController {
     @RequestMapping("/orders/deleteByCode")
     public String deleteByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
         orderService.deleteByCode(ordCode);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Delete Successfully");
         return "redirect:/user/orderInfo";
     }
 }

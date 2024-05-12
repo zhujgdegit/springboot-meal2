@@ -68,34 +68,34 @@ public class UserController {
 		}
 
 		if (user.getIdent() == null) {
-			bindingResult.rejectValue("username", "nameError", "请选择身份");
+			bindingResult.rejectValue("username", "nameError", "Please select identity");
 			return "admin/users-input";
 		}
 
 		User user1 = userService.getUserByUsername(user.getUsername());
 		if (user.getId() == null) {//添加
 			if (user1 != null) {//不能添加同名用户
-				bindingResult.rejectValue("username", "nameError", "用户已存在");
+				bindingResult.rejectValue("username", "nameError", "User already exists");
 				return "admin/users-input";
 			}
 
 			User u = userService.saveUser(user);
 			if (u == null) {//没保存成功
-				redirectAttributes.addFlashAttribute("message", "添加失败");
+				redirectAttributes.addFlashAttribute("message", "Fail to add");
 			} else {//保存成功
-				redirectAttributes.addFlashAttribute("message", "添加成功");
+				redirectAttributes.addFlashAttribute("message", "Add successfully");
 			}
 		} else {//修改
 			if (user1 != null && user1.getId() != user.getId()) {//不能修改成已存在的同名用户
-				bindingResult.rejectValue("username", "nameError", "用户已存在");
+				bindingResult.rejectValue("username", "nameError", "User already exists");
 				return "admin/users-input";
 			}
 
 			User u = userService.updateUser(user.getId(), user);
 			if (u == null) {//没保存成功
-				redirectAttributes.addFlashAttribute("message", "修改失败");
+				redirectAttributes.addFlashAttribute("message", "Fail to modify");
 			} else {//保存成功
-				redirectAttributes.addFlashAttribute("message", "修改成功");
+				redirectAttributes.addFlashAttribute("message", "Modify successfully");
 			}
 		}
 		return "redirect:/admin/users";
@@ -107,7 +107,7 @@ public class UserController {
 	@GetMapping("/users/{id}/delete")
 	public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
 		userService.deleteUser(id);
-		redirectAttributes.addFlashAttribute("message", "删除成功");
+		redirectAttributes.addFlashAttribute("message", "Delete successfully");
 		return "redirect:/admin/users";
 	}
 
