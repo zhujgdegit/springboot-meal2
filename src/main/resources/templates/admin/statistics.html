@@ -1,3 +1,4 @@
+
 <!--
                 ___           ___           ___           ___           ___
                /\__\         /\  \         /\  \         /\  \         /\__\
@@ -22,92 +23,92 @@
 </head>
 <body class="site">
 
-<!--导航-->
+<!--Navigation-->
 <nav th:replace="admin/_fragments :: menu(5)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
 </nav>
 
-  <div class="ui container">
-    <h2 class="ui header">Statistics Dashboard</h2>
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
-      <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
-        <canvas id="salesChart"></canvas>
-      </div>
-      <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
-        <canvas id="userChart"></canvas>
-      </div>
-      <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
-        <canvas id="foodChart"></canvas>
-      </div>
-      <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
-        <canvas id="cartChart"></canvas>
-      </div>
+<div class="ui container">
+  <h2 class="ui header">Statistics Dashboard</h2>
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
+    <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
+      <canvas id="salesChart"></canvas>
     </div>
-    <table class="ui celled table">
-      <thead>
-      <tr><th>Data Type</th><th>Value</th></tr>
-      </thead>
-      <tbody>
-      <tr><td>Total Sales</td><td id="totalSales">$0</td></tr>
-      <tr><td>New Users This Month</td><td id="newUsers">0</td></tr>
-      <tr><td>Total Food Items Sold</td><td id="totalFoodItems">0</td></tr>
-      </tbody>
-    </table>
+    <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
+      <canvas id="userChart"></canvas>
+    </div>
+    <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
+      <canvas id="foodChart"></canvas>
+    </div>
+    <div style="flex: 1 1 48%; margin: 10px; min-width: 300px;">
+      <canvas id="cartChart"></canvas>
+    </div>
   </div>
+  <table class="ui celled table">
+    <thead>
+    <tr><th>Data Type</th><th>Value</th></tr>
+    </thead>
+    <tbody>
+    <tr><td>Total Sales</td><td id="totalSales">$0</td></tr>
+    <tr><td>New Users This Month</td><td id="newUsers">0</td></tr>
+    <tr><td>Total Food Items Sold</td><td id="totalFoodItems">0</td></tr>
+    </tbody>
+  </table>
+</div>
 
-  <script>
-    function setupCharts() {
-      const months = ['January', 'February', 'March', 'April', 'May', 'June'];
-      const salesData = months.map(() => Math.floor(Math.random() * 100));
-      const userData = months.map(() => Math.floor(Math.random() * 10));
-      const foodData = [10, 20, 30, 40];
-      const cartData = months.map(() => Math.floor(Math.random() * 50));
+<script>
+  function setupCharts() {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June'];
+    const salesData = months.map(() => Math.floor(Math.random() * 100));
+    const userData = months.map(() => Math.floor(Math.random() * 10));
+    const foodData = [10, 20, 30, 40];
+    const cartData = months.map(() => Math.floor(Math.random() * 50));
 
-      const ctxSales = document.getElementById('salesChart').getContext('2d');
-      const salesChart = new Chart(ctxSales, {
-        type: 'line',
-        data: {
-          labels: months,
-          datasets: [{ label: 'Monthly Sales', data: salesData, borderColor: 'rgb(255, 99, 132)', backgroundColor: 'rgba(255, 99, 132, 0.5)' }]
-        }
-      });
+    const ctxSales = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctxSales, {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{ label: 'Monthly Sales', data: salesData, borderColor: 'rgb(255, 99, 132)', backgroundColor: 'rgba(255, 99, 132, 0.5)' }]
+      }
+    });
 
-      const ctxUsers = document.getElementById('userChart').getContext('2d');
-      const userChart = new Chart(ctxUsers, {
-        type: 'bar',
-        data: {
-          labels: months,
-          datasets: [{ label: 'New Users', data: userData, backgroundColor: 'rgba(54, 162, 235, 0.5)', borderColor: 'rgb(54, 162, 235)' }]
-        }
-      });
+    const ctxUsers = document.getElementById('userChart').getContext('2d');
+    const userChart = new Chart(ctxUsers, {
+      type: 'bar',
+      data: {
+        labels: months,
+        datasets: [{ label: 'New Users', data: userData, backgroundColor: 'rgba(54, 162, 235, 0.5)', borderColor: 'rgb(54, 162, 235)' }]
+      }
+    });
 
-      const ctxFoods = document.getElementById('foodChart').getContext('2d');
-      const foodChart = new Chart(ctxFoods, {
-        type: 'pie',
-        data: {
-          labels: ['Vegetables', 'Fruits', 'Meats', 'Sweets'],
-          datasets: [{ label: 'Food Categories', data: foodData, backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)'], hoverOffset: 4 }]
-        }
-      });
+    const ctxFoods = document.getElementById('foodChart').getContext('2d');
+    const foodChart = new Chart(ctxFoods, {
+      type: 'pie',
+      data: {
+        labels: ['Vegetables', 'Fruits', 'Meats', 'Sweets'],
+        datasets: [{ label: 'Food Categories', data: foodData, backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)'], hoverOffset: 4 }]
+      }
+    });
 
-      const ctxCarts = document.getElementById('cartChart').getContext('2d');
-      const cartChart = new Chart(ctxCarts, {
-        type: 'radar',
-        data: {
-          labels: ['Vegetables', 'Fruits', 'Meats', 'Sweets'],
-          datasets: [{ label: 'Cart Additions', data: cartData, borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.5)' }]
-        }
-      });
+    const ctxCarts = document.getElementById('cartChart').getContext('2d');
+    const cartChart = new Chart(ctxCarts, {
+      type: 'radar',
+      data: {
+        labels: ['Vegetables', 'Fruits', 'Meats', 'Sweets'],
+        datasets: [{ label: 'Cart Additions', data: cartData, borderColor: 'rgb(75, 192, 192)', backgroundColor: 'rgba(75, 192, 192, 0.5)' }]
+      }
+    });
 
-      document.getElementById('totalSales').textContent = '$' + salesData.reduce((a, b) => a + b, 0);
-      document.getElementById('newUsers').textContent = userData.reduce((a, b) => a + b, 0);
-      document.getElementById('totalFoodItems').textContent = foodData.reduce((a, b) => a + b, 0);
-    }
+    document.getElementById('totalSales').textContent = '$' + salesData.reduce((a, b) => a + b, 0);
+    document.getElementById('newUsers').textContent = userData.reduce((a, b) => a + b, 0);
+    document.getElementById('totalFoodItems').textContent = foodData.reduce((a, b) => a + b, 0);
+  }
 
 
-    document.addEventListener("DOMContentLoaded", setupCharts);
-  </script>
+  document.addEventListener("DOMContentLoaded", setupCharts);
+</script>
 
-<!--底部footer-->
+<!--Footer-->
 <footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
 </footer>
 

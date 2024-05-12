@@ -27,7 +27,7 @@
   <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
     <div class="ui container">
       <div class="ui inverted secondary stackable menu">
-        <h2 class="ui teal header item">后台管理</h2>
+        <h2 class="ui teal header item">back-stage management</h2>
         <a href="#" th:href="@{/admin/foods}" class="item m-mobile-hide m-item" th:classappend="${n==1}?'active'"><i class="shopping cart icon"></i>DISH</a>
         <a href="#" th:href="@{/admin/types}" class="item m-mobile-hide m-item" th:classappend="${n==2}?'active'"><i class="idea icon"></i>CATEGORICAL</a>
         <a href="#" th:href="@{/admin/users}" class="item m-mobile-hide m-item" th:classappend="${n==3}?'active'"><i class="user plus icon"></i>USER</a>

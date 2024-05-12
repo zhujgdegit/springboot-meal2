@@ -267,19 +267,6 @@
     // });
 
 
-    function add(obj) {
-        // objId = $(obj).attr('data-id');
-
-        console.log(objId)
-        // 显示模态框
-        $('#myModal').modal('show');
-    }
-
-    function page(obj) {
-        $("#table-container").load(/*[[@{/user/diningcar}]]*/"/user/diningcar", {
-            page: $(obj).data("page")
-        });
-    }
 
     $(document).ready(function () {
         $.get("/user/getAddr", function (result) {
@@ -346,52 +333,65 @@
         }
     }
 
+    function add(obj) {
+        // objId = $(obj).attr('data-id');
+        console.log(objId)
+        // 显示模态框
+        $('#myModal').modal('show');
+    }
 
-    $(document).ready(function() {
+    function page(obj) {
+        $("#table-container").load(/*[[@{/user/diningcar}]]*/"/user/diningcar", {
+            page: $(obj).data("page")
+        });
+    }
+
+
+
+    $(document).ready(function () {
         // 初始化模态框
         $('.ui.modal').modal();
         calculateTotalAmount(); // 初始页面加载时计算总金额
-
-        // 表单提交事件
-        $('#orderForm').submit(function(event) {
-            event.preventDefault(); // 阻止表单默认提交行为
-            event.preventDefault(); // Prevent the default form submission
-
-            // Get form data as an array of objects
-            var formDataArray = $(this).serializeArray();
-            var formData = {};
-            formDataArray.forEach(function(item) {
-                formData[item.name] = item.value.trim();  // Trim spaces and store each item in an object
-            });
-
-            // Check if all required fields are filled
-            if (!formData.deliveryMethod || !formData.paymentMethod ) {
-                alert('Please fill in all required fields.');
-                return;  // Stop the function if validation fails
+        $.get("/user/getAddr", function (result) {
+            console.log(result, '输出')
+            if (result) {
+                var options = result;
+                var selectOpions = "";
+                for (var i = 0; i < options.length; i++) {
+                    selectOpions += '<option value="' + options[i][i] + '">' + options[i][i] + '</option>>';
+                }
+                $('#selectElementAll').append(selectOpions)
+            } else {
+                alert("稍后试试！");
             }
-
+        }, "json");
+        // 表单提交事件
+        $('#orderForm').submit(function (event) {
+            event.preventDefault(); // 阻止表单默认提交行为
             // 获取表单数据
-            formDataArray.push({ name: 'foodId', value: foodId});
+            var formDataArray = $(this).serializeArray();
+            formDataArray.push({name: 'foodId', value: foodId});
             var formData = $.param(formDataArray);
             // 发送 AJAX 请求
             $.ajax({
                 url: '/user/order', // 替换为实际的后台接口地址
                 method: 'POST',
                 data: formData,
-                success: function(response) {
-                    alert("Successful order")
+                success: function (response) {
+                    alert("下单成功")
                     $('.ui.modal').modal('hide');
                     // 重新加载页面
                     location.reload();
                 },
-                error: function(xhr, status, error) {
-                    console.error('Request error:', error);
-                    alert('Order submission failed, please try again!');
+                error: function (xhr, status, error) {
+                    console.error('请求出错:', error);
+                    alert('订单提交失败，请重试！');
                 }
             });
         });
     });
-    var foodId="";
+    var foodId = "";
+
     function opens(obj) {
         // 获取点击按钮对应的food id
         foodId = $(obj).attr('data-id');
