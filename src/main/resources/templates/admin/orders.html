@@ -98,6 +98,7 @@
                       <td th:text="${item[6]}"></td> <!-- 菜品评价 -->
                       <td style="padding:5px">
                         <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+                        <a th:if="${item[5] == 'PENDING'}" onclick="update(this)" th:data-href="@{/admin/orders/updateByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">接单</a>
                       </td>
                   </tr>
                   </tbody>
@@ -144,6 +145,14 @@
       $('#ok').click(function () {
           window.location.href = url;
       });
+      function update(obj){
+          url = $(obj).attr('data-href');
+          // $('.ui.basic.modal').modal('show');
+      }
+      $('#ok').click(function () {
+          window.location.href = url;
+      });
+
   </script>
 </body>
 </html>

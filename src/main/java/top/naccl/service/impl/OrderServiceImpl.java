@@ -46,6 +46,12 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getOrderInfoById(orderId);
     }
 
+    @Override
+    public void updateByCode(String ordCode) {
+        OrderInfo orderInfoByCode = orderRepository.getOrderInfoByCode(ordCode);
+        orderInfoByCode.setStatus("ACCEPTED");
+    }
+
     private static final String[] STATUSES = {"PENDING", "ACCEPTED", "PREPARING", "SHIPPING", "DELIVERED", "COMPLETED"};
 
     @Scheduled(fixedRate = 10000) // 每20秒执行一次

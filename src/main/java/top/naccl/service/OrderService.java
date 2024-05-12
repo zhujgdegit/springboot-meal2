@@ -20,4 +20,10 @@ public interface OrderService {
      * @return
      */
     OrderInfo getOrderInfoById(Integer orderId);
+
+    /**
+     * 接单
+     * @param ordCode
+     */
+    void updateByCode(String ordCode);
 }

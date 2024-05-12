@@ -88,4 +88,14 @@ public class OrderController {
         redirectAttributes.addFlashAttribute("message", "删除成功");
         return "redirect:/admin/orders";
     }
+
+    /**
+     * 订单删除
+     */
+    @RequestMapping("/orders/updateByCode")
+    public String updateByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
+        orderService.updateByCode(ordCode);
+        redirectAttributes.addFlashAttribute("message", "删除成功");
+        return "redirect:/admin/orders";
+    }
 }
