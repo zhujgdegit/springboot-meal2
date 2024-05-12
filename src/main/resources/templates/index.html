@@ -1,375 +1,99 @@
 <!DOCTYPE html>
-<!--<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">-->
-<html class="smart-design-mode js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers no-applicationcache svg inlinesvg smil svgclippaths"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <head th:replace="_fragments :: head(~{::title})">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <meta charset="UTF-8">
+<head th:replace="_fragments :: head(~{::title})">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Web ordering system</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/github-badge.min.css">
-
-    <style>
-      /* 移除 body 的默认边距 */
-      body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%; /* 确保 body 高度为视口高度 */
-        overflow: hidden; /* 防止页面出现滚动条 */
-      }
-      iframe {
-        width: 100vw; /* 视口宽度的 100% */
-        height: 100vh; /* 视口高度的 100% */
-        border: none; /* 移除 iframe 默认边框 */
-      }
-    </style>
 </head>
-<body class="site">S
 
-  <!--导航-->
-  <nav th:replace="_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
-  </nav>
-  <!--<iframe src="http://localhost:8081/user/index" frameborder="0" height="1000"></iframe>-->
-  <!--<div th:insert="&#126;{index_n :: html}")></div>-->
+<body class="site">
 
-  <!--底部footer-->
-  <!--<footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
-  </footer>-->
-  <div class="site-content">
-    <!--中间内容-->
-    <div class="m-padded-tb-big">
-      <div class="ui container user">
+<!--Navigation-->
+<nav th:replace="_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+</nav>
 
-        <!-- message不为空时显示 -->
-        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
-          <i class="close icon"></i>
-          <div class="header">提示：</div>
-          <p th:text="${message}">操作成功！</p>
-        </div>
+<div class="site-content m-container-small">
 
-        <!-- 搜索 -->
-        <div class="ui secondary segment form">
-          <!-- 用于上一页下一页传递page -->
-          <input type="hidden" name="page">
+  <!--Middle Content-->
+  <div class="m-padded-tb-big">
+    <div class="ui container">
 
-          <div class="inline fields">
-
-            <div class="field">
-              <input type="text" name="name" placeholder="请输入菜品名称">
+      <!--Popular dishes-->
+      <center><h1>Popular dishes</h1></center>
+      <br>
+      <br>
+      <div class="ui three stackable cards">
+        <div class="card" th:each="common:${common}" th:data-href="@{/detail/{id}(id=${common.id})}" style="cursor:pointer">
+          <div class="image">
+            <img src="../static/images/jiachang/01.jpg" th:src="@{${common.picture}}">
+          </div>
+          <div class="content">
+            <div class="header" th:text="${common.name}">Sichuan Hot and Sour Noodles</div>
+            <div class="meta">
+              <span class="price" th:text="${common.price+' ¥'}">¥28</span>
             </div>
-
-            <div class="field">
-              <div class="ui labeled action input">
-                <div class="ui type selection dropdown">
-                  <input type="hidden" name="typeId" value="0">
-
-                  <i class="dropdown icon"></i>
-                  <div class="default text">商品类型</div>
-                  <div class="menu">
-                    <div class="item" data-value="0">全部</div>
-                    <div class="item" data-value="1" th:each="type:${types}" th:data-value="${type.id}" th:text="${type.name}">全部</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="ui labeled action input">
-                <div class="ui type selection dropdown">
-                  <input type="hidden" name="state" value="全部">
-
-                  <i class="dropdown icon"></i>
-                    <div class="default text">商品状态</div>
-                    <div class="menu">
-                        <div class="item" data-value="全部">全部</div>
-                        <div class="item" data-value="上架">上架</div>
-                        <div class="item" data-value="下架">下架</div>
-                        <div class="item" data-value="售空">售空</div>
-                        <!--<div class="item" data-value="1" th:each="state:${states}" th:data-value="${state.id}" th:text="${state.name}">全部</div>-->
-                    </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="field">
-              <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>搜索</button>
-            </div>
-
           </div>
         </div>
-
-        <div id="table-container" th:fragment="foodList">
-          <table class="ui celled teal table m-text" style="text-align:center;">
-            <thead>
-            <th colspan="10"><h1 class="ui header" align="center">DISHLIST</h1></th>
-            <tr>
-              <th>NUMBER</th>
-              <th>DISHNAME</th>
-              <th>FEATURES</th>
-              <th>INGREDIENT</th>
-              <th>PRICE:YUAN</th>
-              <th>TYPE</th>
-              <th>IMAGE</th>
-              <th>ORDER-RATE:TIMES</th>
-              <th>REMARKS</th>
-              <th>STATE</th>
-              <th>SELECT</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:each="food,iterStat : ${page.content}" >
-              <td th:text="${iterStat.count}">1</td>
-              <td th:text="${food.name}" width="100px;" style="cursor:pointer">韭菜炒鸡蛋</td>
-              <td th:text="${food.feature}">工艺：炒 口味：清香型</td>
-              <td th:text="${food.material}">主料：韭菜4两（约160克）</td>
-              <td th:text="${food.price}">8</td>
-              <td th:text="${food.type.name}" width="70px;">家常</td>
-              <td><img src="../../static/images2/jiachang/01.jpg" th:src="@{${food.picture}}" style="width: 150px;"></td>
-              <td th:text="${food.hits}">2</td>
-              <td th:switch="${food.comment}">
-                <th:block th:case="-1">Popular dishes</th:block>
-                <th:block th:case="0">厨师推荐</th:block>
-                <th:block th:case="*">今日特价</th:block>
-              </td>
-              <td th:text="${food.state}">22</td>
-              <td width="150px;">
-
-                <!--                <a onclick="add(this)" th:data-id="${food.id}" class="ui teal basic add button"-->
-                <!--                                   th:classappend="${#lists.contains(foods, food)} ? 'disabled'"-->
-                <!--                th:text="${#lists.contains(foods, food)} ? 'update' : 'add cart'">-->
-                <!--                  加入点餐车</a>-->
-
-                <a onclick="handleCartAction(this)" th:data-id="${food.id}" th:data-in-cart="${#lists.contains(foods, food)}" th:data-cart-id="${food.cartId}" class="ui mini teal basic button">
-                  <span th:text="${#lists.contains(foods, food)} ? 'Update' : 'Add to Cart'">Add to Cart</span>
-                </a>
-                <a onclick="handleCartAction(this)"  th:data-href="@{/detail/{id}(id=${food.id})}" class="ui mini teal basic button">
-                  <span>Check</span>
-                </a>
-
-
-              </td>
-
-
-              <!--<div id="phoneNumberDropdown" style="display: none;">
-                <label for="phoneNumber">请选择手机号码:</label>
-                <select id="phoneNumber" name="phoneNumber">
-                  <option value="">请选择</option>
-                  <option value="1234567890">1234567890</option>
-                  <option value="9876543210">9876543210</option>
-                  &lt;!&ndash; 添加更多选项 &ndash;&gt;
-                </select>
-                <button onclick="handlePhoneNumber()">确认</button>
-                <button onclick="handlePhoneNumber()">确认</button>
-
-              </div>-->
-
-            </tr>
-            </tbody>
-          </table>
-
-          <!--footer-->
-          <div class="ui bottom" th:if="${page.totalPages}>1">
-            <div class="ui middle aligned three column grid">
-              <div class="column">
-                <a onclick="page(this)" th:attr="data-page=${page.number}-1" th:unless="${page.first}"
-                   class="ui blue inverted labeled icon button">
-                  <i class="arrow left icon"></i>上一页</a>
-              </div>
-              <div class="center aligned column">
-                <span class="m-margin-lr-small" th:text="|${page.number+1} / ${page.totalPages}|">2 / 7</span>
-              </div>
-              <div class="right aligned column">
-                <a onclick="page(this)" th:attr="data-page=${page.number}+1" th:unless="${page.last}"
-                   class="ui blue inverted right labeled icon button">
-                  下一页<i class="arrow right icon"></i></a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-
       </div>
-    </div>
+      <br>
+      <br>
+      <center><h1>Today's Special</h1></center>
+      <div class="ui three stackable cards m-margin-top-big">
+        <div class="card" th:each="special:${special}" th:data-href="@{/detail/{id}(id=${special.id})}" style="cursor:pointer">
+          <div class="image">
+            <img src="../static/images/jiachang/01.jpg" th:src="@{${special.picture}}">
+          </div>
+          <div class="content">
+            <div class="header" th:text="${special.name}">Sichuan Hot and Sour Noodles</div>
+            <div class="meta">
+              <span class="price" th:text="${special.price}+' ¥' "></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <br>
+      <center><h1>Chef's Recommendation</h1></center>
+      <div class="ui three stackable cards m-margin-top-big">
+        <div class="card" th:each="recommend:${recommend}" th:data-href="@{/detail/{id}(id=${recommend.id})}" style="cursor:pointer">
+          <div class="image">
+            <img src="../static/images/jiachang/01.jpg" th:src="@{${recommend.picture}}">
+          </div>
+          <div class="content">
+            <div class="header" th:text="${recommend.name}">Sichuan Hot and Sour Noodles</div>
+            <div class="meta">
+              <span class="price" th:text="${recommend.price+' ¥'}"></span>
+            </div>
+          </div>
+        </div>
+      </div>
 
+    </div>
   </div>
 
-  <!--底部footer-->
-  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
-  </footer>
+</div>
 
-  <div class="ui mini modal" id="myModal">
-    <i class="close icon"></i>
-    <div class="header">选择菜品规格</div>
-    <div class="content">
-      <form class="ui form">
-        <div class="field">
-          <label>数量</label>
-          <input type="number" id="quantity" value="1" min="1">
-        </div>
-        <div class="field">
-          <label>大小</label>
-          <select id="size" class="ui dropdown">
-            <option value="Small" selected>Small</option>
-            <option value="Medium">Medium</option>
-            <option value="Large">Large</option>
-          </select>
-        </div>
-        <div class="field">
-          <label>配料</label>
-          <input type="text" id="toppings">
-        </div>
-      </form>
-    </div>
-    <div class="actions">
-      <div class="ui primary button" onclick="submitData()">确定</div>
-      <div class="ui button" onclick="$('.ui.modal').modal('hide')">取消</div>
-    </div>
-  </div>
+<!--Footer-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
+</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
-  <!--/*/<th:block th:replace="user/_fragments :: myScript">/*/-->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-  <!--/*/</th:block>/*/-->
-  <script>
-    $('.message .close').on('click', function () {
-      $(this).closest('.message').transition('fade');
-    });
+<script>
+  $('.message .close').on('click', function () {
+    $(this).closest('.message').transition('fade');
+  });
 
-    $('.ui.dropdown').dropdown({
-      on: 'click'
-    });
-
-    var typeId = 0;
-    var name = '';
-    var stateId = 0;
-    var state = '';
-
-    function page(obj) {
-      $("[name='page']").val($(obj).data("page"));
-      loadData();
-    }
-
-    $("#search-btn").click(function () {
-      $("[name='page']").val(0);
-      name = $("[name='name']").val();
-      typeId = $("[name='typeId']").val();
-      state = $("[name='state']").val();
-      loadData();
-    });
-
-    function loadData() {
-      $("#table-container").load(/*[[@{/search}]]*/"/search", {
-        name: name,
-        typeId: typeId,
-        state:state,
-        page: $("[name='page']").val()
-      });
-    }
-    var objId = '';
-    // function add(obj) {
-    //   objId = $(obj).attr('data-id');
-    //   // 显示模态框
-    //   $('#myModal').modal('show');
-    // }
-    function handleCartAction(obj) {
-      window.location.href = '/login';
-      // var isInCart = $(obj).attr('data-in-cart') === 'true';
-      // var cartId = $(obj).attr('data-cart-id'); // Get the cart ID
-      // objId = $(obj).attr('data-id');  // Assuming objId is globally defined for simplicity
-      //
-      // if (isInCart) {
-      //   // Logic to handle update
-      //   // Assuming modal is pre-filled with existing item details for update
-      //   // // Fetch existing cart data
-      //   $.post("/user/getCartDetails", {
-      //     "cartId": cartId
-      //   }, function (result) {
-      //     alert(result.message);
-      //
-      //     $('#quantity').val(result.quantity);  // Reset quantity to 1 or default
-      //     $('#size').val(result.size);  // Reset size to 'Small' or default
-      //     $('#toppings').val(result.toppings);  // Clear toppings
-      //   }, "json");
-      //   $('#myModal').data('action', 'update');
-      //   $('#myModal').data('cartId', cartId);
-      //   $('#myModal').modal('show');
-      // } else {
-      //   // Logic to handle add
-      //   // Clear existing data in modal or set defaults
-      //   $('#quantity').val(1);  // Reset quantity to 1 or default
-      //   $('#size').val('Small');  // Reset size to 'Small' or default
-      //   $('#toppings').val('');  // Clear toppings
-      //   $('#myModal').data('action', 'add');
-      //   $('#myModal').modal('show');
-      // }var isInCart = $(obj).attr('data-in-cart') === 'true';
-      // var cartId = $(obj).attr('data-cart-id'); // Get the cart ID
-      // objId = $(obj).attr('data-id');  // Assuming objId is globally defined for simplicity
-      //
-      // if (isInCart) {
-      //   // Logic to handle update
-      //   // Assuming modal is pre-filled with existing item details for update
-      //   // // Fetch existing cart data
-      //   $.post("/user/getCartDetails", {
-      //     "cartId": cartId
-      //   }, function (result) {
-      //     alert(result.message);
-      //
-      //     $('#quantity').val(result.quantity);  // Reset quantity to 1 or default
-      //     $('#size').val(result.size);  // Reset size to 'Small' or default
-      //     $('#toppings').val(result.toppings);  // Clear toppings
-      //   }, "json");
-      //   $('#myModal').data('action', 'update');
-      //   $('#myModal').data('cartId', cartId);
-      //   $('#myModal').modal('show');
-      // } else {
-      //   // Logic to handle add
-      //   // Clear existing data in modal or set defaults
-      //   $('#quantity').val(1);  // Reset quantity to 1 or default
-      //   $('#size').val('Small');  // Reset size to 'Small' or default
-      //   $('#toppings').val('');  // Clear toppings
-      //   $('#myModal').data('action', 'add');
-      //   $('#myModal').modal('show');
-      // }
-    }
-
-    function submitData() {
-      var quantity = $('#quantity').val();
-      var size = $('#size').val();
-      var toppings = $('#toppings').val();
-      var dropdown = document.getElementById("phoneNumberDropdown");
-      dropdown.style.display = "block";
-
-      var action = $('#myModal').data('action');
-      var actionUrl = (action === 'update') ? '/user/update' : '/user/add';
-      if (action == 'update') {
-        objId = $('#myModal').data('cartId')
-      }
-      $.post(actionUrl, {
-        "id": objId,
-        "quantity": quantity,
-        "size": size,
-        "toppings": toppings
-      }, function (result) {
-        if (result.success) {
-          $('#myModal').modal('hide');
-          alert('Cart updated successfully!');
-          location.reload();
-          $(obj).addClass('disabled');
-        } else {
-          alert(result.message);
-        }
-      }, "json");
-    }
-
-    function addV2(obj) {
-      console.log(obj)
-
-    }
-  </script>
-
+  $('.card').click(function () {
+    var url = $(this).attr('data-href');
+    window.open(url);
+  });
+</script>
 </body>
+
 </html>

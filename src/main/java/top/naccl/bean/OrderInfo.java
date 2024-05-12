@@ -36,8 +36,8 @@ public class OrderInfo {
     @Column(name = "delivery_time")
     private String deliveryTime;
 
-    @Column(name = "arrival_time")
-    private String arrivalTime;
+//    @Column(name = "arrival_time")
+//    private String arrivalTime;
 
     @Column(name = "foodId")
     private Integer foodId;

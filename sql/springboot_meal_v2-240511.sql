@@ -104,7 +104,7 @@ INSERT INTO `food` VALUES (35, -1, '特色：牛奶是早餐必不可少的一�
 INSERT INTO `food` VALUES (36, -1, '暂无', 8, '主料：腐竹约100克，鹌鹑蛋8只，雪耳约30克，冰糖约350克，清水6杯。', '腐竹鹑蛋糖水', NULL, '/images/yinpin/06.jpg', NULL, 9, 4, '上架');
 INSERT INTO `food` VALUES (37, -1, '特色：奶香浓郁，茶味清香。', 10, '主料：红茶、红豆汤、面粉 黄油、白糖、鸡蛋黄 炼乳、牛奶.', '红豆相思茶', NULL, '/images/yinpin/07.jpg', NULL, 5, 4, '上架');
 INSERT INTO `food` VALUES (38, 0, '暂无', 16, '主料：鲜牛奶、ＱＱ糖、苹果（你爱吃那种水果就用那种，但最好跟ＱＱ糖口味一致，我觉得这样会比较好', '布丁', NULL, '/images/yinpin/08.jpg', NULL, 6, 4, '上架');
-INSERT INTO `food` VALUES (40, -1, '暂无', 23, '主料：鲜姜一大块，牛奶一袋，白糖，捣蒜缸', '姜撞奶', '调料', '95eef01f3a292df58d644a89911b766d35a873ba.jpeg', '大份', 17, 4, '上架');
+INSERT INTO `food` VALUES (40, -1, '暂无', 23, '主料：鲜姜一大块，牛奶一袋，白糖，捣蒜缸', '姜撞奶', '调料', '/images/yinpin/09.jpg', '大份', 17, 4, '上架');
 
 -- ----------------------------
 -- Table structure for foodtype

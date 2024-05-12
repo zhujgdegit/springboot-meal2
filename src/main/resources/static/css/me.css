@@ -60,6 +60,7 @@ canvas {
 }
 
 body {
+    background-image: url("../img/bg1.png");
     background-color: #eeeeee;
     background-attachment: fixed;
     background-size: cover;
