@@ -23,226 +23,229 @@
 </head>
 <body class="site">
 
-<!-- Navigation -->
-<nav th:replace="admin/_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
-</nav>
-<div class="ui attached pointing menu">
-  <div class="ui container">
-    <div class="right menu">
-      <a href="#" th:href="@{/admin/foods}" class="teal active item">Dish List</a>
-      <a href="#" th:href="@{/admin/foods/input}" class="item">Add Dish</a>
+  <!--导航-->
+  <nav th:replace="admin/_fragments :: menu(1)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+  </nav>
+  <div class="ui attached pointing menu">
+    <div class="ui container">
+      <div class="right menu">
+        <a href="#" th:href="@{/admin/foods}" class="teal active item">菜品列表</a>
+        <a href="#" th:href="@{/admin/foods/input}" class="item">添加菜品</a>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="site-content">
-  <!-- Middle Content -->
-  <div class="m-container-small m-padded-tb-big">
-    <div class="ui container">
+  <div class="site-content">
+    <!--中间内容-->
+    <div class="m-container-small m-padded-tb-big">
+      <div class="ui container">
 
-      <!-- Display message if not empty -->
-      <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
-        <i class="close icon"></i>
-        <div class="header">Notice:</div>
-        <p th:text="${message}">Operation successful!</p>
-      </div>
+        <!-- message不为空时显示 -->
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+          <i class="close icon"></i>
+          <div class="header">提示：</div>
+          <p th:text="${message}">操作成功！</p>
+        </div>
 
-      <!-- Search -->
-      <div class="ui secondary segment form">
-        <!-- Used to pass 'page' for previous and next page -->
-        <input type="hidden" name="page">
+        <!-- 搜索 -->
+        <div class="ui secondary segment form">
+          <!-- 用于上一页下一页传递page -->
+          <input type="hidden" name="page">
 
-        <div class="inline fields">
-          <div class="field">
-            <div class="ui labeled action input">
-              <div class="ui type selection dropdown">
-                <input type="hidden" name="typeId" value="0">
+          <div class="inline fields">
+            <div class="field">
+              <div class="ui labeled action input">
+                <div class="ui type selection dropdown">
+                  <input type="hidden" name="typeId" value="0">
 
-                <i class="dropdown icon"></i>
-                <div class="default text">All</div>
-                <div class="menu">
-                  <div class="item" data-value="0">All</div>
-                  <div class="item" data-value="1" th:each="type:${types}" th:data-value="${type.id}" th:text="${type.name}">All</div>
+                  <i class="dropdown icon"></i>
+                  <div class="default text">全部</div>
+                  <div class="menu">
+                    <div class="item" data-value="0">全部</div>
+                    <div class="item" data-value="1" th:each="type:${types}" th:data-value="${type.id}" th:text="${type.name}">全部</div>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            <div class="field">
+              <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>按分类查询</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div id="table-container" th:fragment="foodList">
+
+          <table class="ui celled teal table m-text" style="text-align:center;">
+            <thead>
+            <tr>
+              <th>NO</th>
+              <th>DISH NAME</th>
+              <th>PRICE</th>
+              <th>TYPE</th>
+              <th>ORDER RATE: TIMES</th>
+              <th>REMARKS</th>
+              <th>STATUS</th>
+              <th>STATE</th>
+              <th>OPERATE</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="food,iterStat : ${page.content}" >
+              <td th:text="${iterStat.count}">1</td>
+              <td th:text="${food.name}" width="100px;" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">Leek Stir-Fried with Eggs</td>
+              <td th:text="${food.price}">9</td>
+              <td th:text="${food.type.name}">家常</td>
+              <td th:text="${food.hits}">3</td>
+              <td th:switch="${food.comment}">
+                <th:block th:case="-1">Popular dishes</th:block>
+                <th:block th:case="0">厨师推荐</th:block>
+                <th:block th:case="*">今日特价</th:block>
+              </td>
+                <td th:text="${food.state}">在售</td>
+              <td style="padding:5px">
+                <a onclick="onShelf(this)" th:data-id="${food.id}" class="ui mini green basic button" style="padding:8px 10px">上架</a>
+                <a onclick="offShelf(this)" th:data-id="${food.id}" class="ui mini yellow basic button" style="padding:8px 10px">下架</a>
+                <a onclick="selling(this)" th:data-id="${food.id}" class="ui mini blue basic button" style="padding:8px 10px">售空</a>
+              </td>
+              <td style="padding:5px">
+                <a href="#" th:href="@{/admin/foods/{id}/input(id=${food.id})}" class="ui mini teal basic button" style="padding:8px 10px">修改</a>
+                <a onclick="del(this)" th:data-href="@{/admin/foods/{id}/delete(id=${food.id})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <!--footer-->
+          <div class="ui bottom" th:if="${page.totalPages}>1">
+            <div class="ui middle aligned three column grid">
+              <div class="column">
+                <a onclick="page(this)" th:attr="data-page=${page.number}-1" th:unless="${page.first}"
+                   class="ui blue inverted labeled icon button">
+                  <i class="arrow left icon"></i>上一页</a>
+              </div>
+              <div class="center aligned column">
+                <span class="m-margin-lr-small" th:text="|${page.number+1} / ${page.totalPages}|">2 / 7</span>
+              </div>
+              <div class="right aligned column">
+                <a onclick="page(this)" th:attr="data-page=${page.number}+1" th:unless="${page.last}"
+                   class="ui blue inverted right labeled icon button">
+                  下一页<i class="arrow right icon"></i></a>
               </div>
             </div>
           </div>
 
-          <div class="field">
-            <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>Search by Category</button>
-          </div>
-        </div>
-      </div>
-
-      <div id="table-container" th:fragment="foodList">
-
-        <table class="ui celled teal table m-text" style="text-align:center;">
-          <thead>
-          <tr>
-            <th>NO</th>
-            <th>DISH NAME</th>
-            <th>PRICE</th>
-            <th>TYPE</th>
-            <th>ORDER RATE: TIMES</th>
-            <th>REMARKS</th>
-            <th>STATUS</th>
-            <th>STATE</th>
-            <th>OPERATE</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <tr th:each="food,iterStat : ${page.content}" >
-            <td th:text="${iterStat.count}">1</td>
-            <td th:text="${food.name}" width="100px;" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">Leek Stir-Fried with Eggs</td>
-            <td th:text="${food.price}">9</td>
-            <td th:text="${food.type.name}">Home Cooking</td>
-            <td th:text="${food.hits}">3</td>
-            <td th:switch="${food.comment}">
-              <th:block th:case="-1">Popular dishes</th:block>
-              <th:block th:case="0">Chef's Recommendation</th:block>
-              <th:block th:case="*">Today's Special</th:block>
-            </td>
-            <td th:text="${food.state}">On Sale</td>
-            <td style="padding:5px">
-              <a onclick="onShelf(this)" th:data-id="${food.id}" class="ui mini green basic button" style="padding:8px 10px">On Shelf</a>
-              <a onclick="offShelf(this)" th:data-id="${food.id}" class="ui mini yellow basic button" style="padding:8px 10px">Off Shelf</a>
-              <a onclick="selling(this)" th:data-id="${food.id}" class="ui mini blue basic button" style="padding:8px 10px">Sold Out</a>
-            </td>
-            <td style="padding:5px">
-              <a href="#" th:href="@{/admin/foods/{id}/input(id=${food.id})}" class="ui mini teal basic button" style="padding:8px 10px">Modify</a>
-              <a onclick="del(this)" th:data-href="@{/admin/foods/{id}/delete(id=${food.id})}" class="ui mini red basic button" style="padding:8px 10px">Delete</a>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-
-        <!-- Footer -->
-        <div class="ui bottom" th:if="${page.totalPages}>1">
-          <div class="ui middle aligned three column grid">
-            <div class="column">
-              <a onclick="page(this)" th:attr="data-page=${page.number}-1" th:unless="${page.first}"
-                 class="ui blue inverted labeled icon button">
-                <i class="arrow left icon"></i>Previous Page</a>
-            </div>
-            <div class="center aligned column">
-              <span class="m-margin-lr-small" th:text="|${page.number+1} / ${page.totalPages}|">2 / 7</span>
-            </div>
-            <div class="right aligned column">
-              <a onclick="page(this)" th:attr="data-page=${page.number}+1" th:unless="${page.last}"
-                 class="ui blue inverted right labeled icon button">
-                Next Page<i class="arrow right icon"></i></a>
-            </div>
-          </div>
         </div>
 
       </div>
-
     </div>
+
+    <!-- 确认框 -->
+    <div class="ui basic modal">
+      <div class="ui icon header"><i class="trash alternate outline icon"></i>删除</div>
+      <div class="content"><h1>确定要删除该菜品吗？</h1></div>
+      <div class="actions">
+        <div class="ui basic cancel inverted button"><i class="remove icon"></i>取消</div>
+        <div id="ok" class="ui red ok inverted button"><i class="checkmark icon"></i>删除</div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- Confirmation Modal -->
-  <div class="ui basic modal">
-    <div class="ui icon header"><i class="trash alternate outline icon"></i>Delete</div>
-    <div class="content"><h1>Are you sure you want to delete this dish?</h1></div>
-    <div class="actions">
-      <div class="ui basic cancel inverted button"><i class="remove icon"></i>Cancel</div>
-      <div id="ok" class="ui red ok inverted button"><i class="checkmark icon"></i>Delete</div>
-    </div>
-  </div>
+  <!--底部footer-->
+  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
+  </footer>
 
-</div>
+  <!--/*/<th:block th:replace="admin/_fragments :: myScript">/*/-->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <!--/*/</th:block>/*/-->
+  <script>
+      $('.message .close').on('click', function () {
+          $(this).closest('.message').transition('fade');
+      });
 
-<!-- Footer -->
-<footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
-</footer>
+      var url;
 
-<!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script>
-  $('.message .close').on('click', function () {
-    $(this).closest('.message').transition('fade');
-  });
-
-  var url;
-
-  /* jQuery cannot directly operate on elements generated by 'load', so we use JS */
-  function del(obj){
-    url = $(obj).attr('data-href');
-    $('.ui.basic.modal').modal('show');
-  }
-
-  function onShelf(obj){
-    $.post("/admin/updateState", {
-      "foodId": $(obj).attr('data-id'),
-      "state":"On Shelf"
-    }, function (result) {
-      console.log(result,"result---")
-      if (result.success) {
-        alert(result.message);
-        loadData();
-      } else {
-        alert(result.message);
+      /* jquery默认不能直接操作load生成的元素，改用JS */
+      function del(obj){
+          url = $(obj).attr('data-href');
+          $('.ui.basic.modal').modal('show');
       }
-    }, "json");
-  }
-  function offShelf(obj){
-    $.post("/admin/updateState", {
-      "foodId": $(obj).attr('data-id'),
-      "state":"Off Shelf"
-    }, function (result) {
-      console.log(result,"result---")
-      if (result.success) {
-        alert(result.message);
-        loadData();
-      } else {
-        alert(result.message);
+
+      function onShelf(obj){
+        $.post("/admin/updateState", {
+          "foodId": $(obj).attr('data-id'),
+          "state":"上架"
+        }, function (result) {
+          console.log(result,"result---")
+          if (result.success) {
+            alert(result.message);
+            loadData();
+          } else {
+            alert(result.message);
+          }
+        }, "json");
       }
-    }, "json");
-  }
-  function selling(obj){
-    $.post("/admin/updateState", {
-      "foodId": $(obj).attr('data-id'),
-      "state":"Sold Out"
-    }, function (result) {
-      console.log(result,"result---")
-      if (result.success) {
-        alert(result.message);
-        loadData();
-      } else {
-        alert(result.message);
+      function offShelf(obj){
+          $.post("/admin/updateState", {
+              "foodId": $(obj).attr('data-id'),
+              "state":"下架"
+          }, function (result) {
+              console.log(result,"result---")
+              if (result.success) {
+                  alert(result.message);
+                  loadData();
+              } else {
+                  alert(result.message);
+              }
+          }, "json");
       }
-    }, "json");
-  }
+      function selling(obj){
+          $.post("/admin/updateState", {
+              "foodId": $(obj).attr('data-id'),
+              "state":"售空"
+          }, function (result) {
+              console.log(result,"result---")
+              if (result.success) {
+                  alert(result.message);
+                  loadData();
+              } else {
+                  alert(result.message);
+              }
+          }, "json");
+      }
 
-  $('#ok').click(function () {
-    window.location.href = url;
-  });
+      $('#ok').click(function () {
+          window.location.href = url;
+      });
 
-  $('.ui.dropdown').dropdown({
-    on: 'click'
-  });
+      $('.ui.dropdown').dropdown({
+          on: 'click'
+      });
 
-  var typeId = 0;
+      var typeId = 0;
 
-  function page(obj) {
-    $("[name='page']").val($(obj).data("page"));
-    loadData();
-  }
+      function page(obj) {
+          $("[name='page']").val($(obj).data("page"));
+          loadData();
+      }
 
-  $("#search-btn").click(function () {
-    $("[name='page']").val(0);
-    typeId = $("[name='typeId']").val();
-    loadData();
-  });
+      $("#search-btn").click(function () {
+          $("[name='page']").val(0);
+          typeId = $("[name='typeId']").val();
+          loadData();
+      });
 
-  function loadData() {
-    $("#table-container").load("/admin/foods/search", {
-      typeId: typeId,
-      page: $("[name='page']").val()
-    });
-  }
-</script>
+      function loadData() {
+          $("#table-container").load(/*[[@{/admin/foods/search}]]*/"/admin/foods/search", {
+              typeId: typeId,
+              page: $("[name='page']").val()
+          });
+      }
+  </script>
 </body>
 </html>

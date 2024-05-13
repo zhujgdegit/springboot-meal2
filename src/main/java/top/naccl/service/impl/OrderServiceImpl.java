@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 检查订单是否处于状态pending
 
-    @Scheduled(fixedRate = 30000) // 每20秒执行一次
+    @Scheduled(fixedRate = 70000) // 每20秒执行一次
     public void updateOrderStatus() {
         List<OrderInfo> orders = orderRepository.findAll(); // 假设这里简单地获取所有订单
         for (OrderInfo order : orders) {
