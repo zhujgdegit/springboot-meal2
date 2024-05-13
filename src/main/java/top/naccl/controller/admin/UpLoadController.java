@@ -25,11 +25,11 @@ public class UpLoadController {
     @PostMapping("")
     public String uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            // 获取文件名
+            // get file name
             String fileName = file.getOriginalFilename();
-            // 指定保存路径
+            // Specify save path
             String filePath = uploadPath + "/" + fileName;
-            // 保存文件到本地
+            // Save the file locally
             file.transferTo(new File(filePath));
             return "Upload successfully";
         } catch (IOException e) {

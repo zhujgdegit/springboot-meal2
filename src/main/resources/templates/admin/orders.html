@@ -1,52 +1,39 @@
-<!--
-                ___           ___           ___           ___           ___
-               /\__\         /\  \         /\  \         /\  \         /\__\
-              /::|  |       /::\  \       /::\  \       /::\  \       /:/  /
-             /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/  /
-            /:/|:|  |__   /::\~\:\  \   /:/  \:\  \   /:/  \:\  \   /:/  /
-           /:/ |:| /\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/
-           \/__|:|/:/  / \/__\:\/:/  / \:\  \  \/__/ \:\  \  \/__/ \:\  \
-               |:/:/  /       \::/  /   \:\  \        \:\  \        \:\  \
-               |::/  /        /:/  /     \:\  \        \:\  \        \:\  \
-               /:/  /        /:/  /       \:\__\        \:\__\        \:\__\
-               \/__/         \/__/         \/__/         \/__/         \/__/
--->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="admin/_fragments :: head(~{::title})">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>查看用户点餐</title>
+    <title>View user orders</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/github-badge.min.css">
 </head>
 <body class="site">
 
-<!--导航-->
+<!--Navigation-->
 <nav th:replace="admin/_fragments :: menu(4)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
 </nav>
 
 <div class="site-content">
 
-    <!--中间内容-->
+    <!--Portlet Main Content-->
     <div class="m-container-small m-padded-tb-big">
         <div class="ui container">
 
-            <!-- message不为空时显示 -->
+            <!-- Displayed if message is not empty-->
             <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
                 <i class="close icon"></i>
-                <div class="header">提示：</div>
-                <p th:text="${message}">操作成功！</p>
+                <div class="header">prompt：</div>
+                <p th:text="${message}">operate successfully</p>
             </div>
-            <!-- 搜索 -->
+            <!-- search -->
             <div class="ui secondary segment form">
-                <!-- 用于上一页下一页传递page -->
+                <!-- Used for previous page next page transfer page -->
                 <input type="hidden" name="page">
 
                 <div class="inline fields">
                     <div class="field">
-                        <input type="text" name="ordCode" placeholder="请输入订单编号">
+                        <input type="text" name="ordCode" placeholder="Please enter the order number">
                         <!--                      <div class="ui labeled action input">-->
                         <!--                          <div class="ui type selection dropdown">-->
                         <!--                              <input type="hidden" name="typeId" value="0">-->
@@ -62,7 +49,7 @@
                     </div>
 
                     <div class="field">
-                        <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>搜索</button>
+                        <button type="button" id="search-btn" class="ui teal basic button"><i class="search icon"></i>search</button>
                     </div>
                 </div>
             </div>
@@ -72,13 +59,13 @@
                     <thead>
                     <!--          <th colspan="2"><h1 class="ui header" align="center" th:text="${item.key.username}">user1</h1></th>-->
                     <tr>
-                        <!--            <th>用户名</th>-->
-                        <!--            <th>菜品名称</th>-->
+                        <!--            <th>username</th>-->
+                        <!--            <th>dish name</th>-->
                         <th>USER NAME</th>
-                        <th>PHONE</th><!--用户电话号码-->
+                        <th>PHONE</th><!--user telephone-->
                         <th>DISH NAME</th>
-                        <th>ORDER CODE</th><!--订单号-->
-                        <th>CREAT TIME</th><!--下单时间-->
+                        <th>ORDER CODE</th><!--order number-->
+                        <th>CREAT TIME</th><!--order time-->
                         <th>STATE</th>
                         <th>APPRAISE</th>
                         <th>OPERATE</th>
@@ -89,16 +76,16 @@
                     </tbody>
                     <tbody>
                     <tr th:each="item : ${orderMap}">
-                        <td th:text="${item[0]}"></td> <!-- 第一个字段是用户名 -->
-                        <td th:text="${item[1]}"></td> <!-- 用户电话 -->
-                        <td th:text="${item[2]}"></td> <!-- 第二个字段是菜品名称 -->
-                        <td th:text="${item[3]}"></td> <!-- 订单号 -->
-                        <td th:text="${item[4]}"></td> <!-- 下单时间 -->
-                        <td th:text="${item[5]}"></td> <!-- 第二个字段是订单状态 -->
-                        <td th:text="${item[6]}"></td> <!-- 菜品评价 -->
+                        <td th:text="${item[0]}"></td> <!-- The first field is the user name -->
+                        <td th:text="${item[1]}"></td> <!-- User tel -->
+                        <td th:text="${item[2]}"></td> <!-- The second field is the dish name -->
+                        <td th:text="${item[3]}"></td> <!-- order number -->
+                        <td th:text="${item[4]}"></td> <!-- order time -->
+                        <td th:text="${item[5]}"></td> <!-- The second field is the order status -->
+                        <td th:text="${item[6]}"></td> <!-- dish review -->
                         <td style="padding:5px">
-                            <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">删除</a>
-                            <a th:if="${item[5] == 'PENDING'}" onclick="update(this)" th:data-href="@{/admin/orders/updateByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">接单</a>
+                            <a onclick="del(this)" th:data-href="@{/admin/orders/deleteByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">delete</a>
+                            <a th:if="${item[5] == 'PENDING'}" onclick="update(this)" th:data-href="@{/admin/orders/updateByCode(ordCode=${item[3]})}" class="ui mini red basic button" style="padding:8px 10px">accept</a>
                         </td>
                     </tr>
                     </tbody>
@@ -108,11 +95,11 @@
     </div>
     <!-- 确认框 -->
     <div class="ui basic modal">
-        <div class="ui icon header"><i class="trash alternate outline icon"></i>删除</div>
-        <div class="content"><h1>确定要删除该订单吗？</h1></div>
+        <div class="ui icon header"><i class="trash alternate outline icon"></i>delete</div>
+        <div class="content"><h1>Are you sure you want to delete this order?</h1></div>
         <div class="actions">
-            <div class="ui basic cancel inverted button"><i class="remove icon"></i>取消</div>
-            <div id="ok" class="ui red ok inverted button"><i class="checkmark icon"></i>删除</div>
+            <div class="ui basic cancel inverted button"><i class="remove icon"></i>cancel</div>
+            <div id="ok" class="ui red ok inverted button"><i class="checkmark icon"></i>delete</div>
         </div>
     </div>
 </div>

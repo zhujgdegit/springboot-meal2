@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * 订单评论相关接口——admin操作
+ * Order comment related interface -- admin operation
  */
 @Controller
 @RequestMapping("/admin/reviews")
@@ -41,7 +41,7 @@ public class OrderReviewsController {
     }
 
     /**
-     * 评论删除
+     * delete review
      * @param id
      * @return
      */

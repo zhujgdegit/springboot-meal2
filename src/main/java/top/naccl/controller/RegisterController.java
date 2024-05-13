@@ -16,7 +16,7 @@ import top.naccl.service.UserService;
 import javax.validation.Valid;
 
 /**
- * @Description: 注册
+ * @Description: register
  * @Author: Naccl
  * @Date: 2020-05-17
  */
@@ -27,7 +27,7 @@ public class RegisterController {
 	private UserService userService;
 
 	/**
-	 * 注册页
+	 * register page
 	 */
 	@GetMapping("/register")
 	public String registerPage(Model model) {
@@ -36,7 +36,7 @@ public class RegisterController {
 	}
 
 	/**
-	 * 验证、保存注册信息
+	 * Verify and save registration information
 	 */
 	@PostMapping("/register")
 	public String register(@Valid User user, BindingResult bindingResult,
@@ -56,12 +56,12 @@ public class RegisterController {
 			return "register";
 		}
 
-		user.setIdent(0);//用户注册页面只能是普通用户
+		user.setIdent(0);//The user registration page can only be for regular users
 		User user1 = userService.saveUser(user);
-		if (user1 == null) {//没保存成功
+		if (user1 == null) {//failed to save
 			bindingResult.rejectValue("username", "nameError", "Exception, registration failed");
 			return "register";
-		} else {//保存成功
+		} else {//save successfully
 			redirectAttributes.addFlashAttribute("message", "Registration successful, please login");
 			return "redirect:/login";
 		}

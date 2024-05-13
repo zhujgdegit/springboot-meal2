@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @Description: 普通用户权限拦截器
+ * @Description: Common user rights blocker
  * @Author: Naccl
  * @Date: 2020-05-19
  */

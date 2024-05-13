@@ -12,7 +12,7 @@ import top.naccl.service.UserService;
 import javax.servlet.http.HttpSession;
 
 /**
- * @Description: 登录
+ * @Description: login
  * @Author: Naccl
  * @Date: 2020-05-17
  */
@@ -23,7 +23,7 @@ public class LoginController {
 	private UserService userService;
 
 	/**
-	 * 登录页
+	 * login page
 	 */
 	@GetMapping("/login")
 	public String loginPage() {
@@ -32,7 +32,7 @@ public class LoginController {
 
 
 	/**
-	 * 管理员登陆页
+	 * Administrator landing page
 	 */
 
 	@GetMapping("/adminLogin")
@@ -41,7 +41,7 @@ public class LoginController {
 	}
 
 	/**
-	 * 验证登录
+	 * Two-Step Verification
 	 */
 	@PostMapping("/login")
 	public String login(@RequestParam String username, @RequestParam String password, HttpSession session, RedirectAttributes redirectAttributes) {

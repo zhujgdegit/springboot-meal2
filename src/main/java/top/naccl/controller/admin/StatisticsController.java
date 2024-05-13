@@ -29,8 +29,8 @@ public class StatisticsController {
 
     @GetMapping("/statistics")
     public String statistics(Model model) {
-        // 可以添加模型属性，例如统计数据
-        return "admin/statistics";  // 指向统计页面的Thymeleaf模板
+        // You can add model attributes, such as statistics
+        return "admin/statistics";  // The Thymeleaf template points to the statistics page
     }
     @GetMapping("/statistics/sales")
     public ResponseEntity<StatisticsDTO> getSalesData() {

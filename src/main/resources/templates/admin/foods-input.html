@@ -1,17 +1,4 @@
 
-<!--
-                ___           ___           ___           ___           ___
-               /\__\         /\  \         /\  \         /\  \         /\__\
-              /::|  |       /::\  \       /::\  \       /::\  \       /:/  /
-             /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/  /
-            /:/|:|  |__   /::\~\:\  \   /:/  \:\  \   /:/  \:\  \   /:/  /
-           /:/ |:| /\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/
-           \/__|:|/:/  / \/__\:\/:/  / \:\  \  \/__/ \:\  \  \/__/ \:\  \
-               |:/:/  /       \::/  /   \:\  \        \:\  \        \:\  \
-               |::/  /        /:/  /     \:\  \        \:\  \        \:\  \
-               /:/  /        /:/  /       \:\__\        \:\__\        \:\__\
-               \/__/         \/__/         \/__/         \/__/         \/__/
--->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="admin/_fragments :: head(~{::title})">
@@ -110,9 +97,9 @@
               <input type="hidden" name="state" th:value="*{state}">
               <i class="dropdown icon"></i>
               <div class="menu">
-                <div class="item" data-value="上架">上架</div>
-                <div class="item" data-value="下架">下架</div>
-                <div class="item" data-value="售空">售空</div>
+                <div class="item" data-value="food shelf">food shelf</div>
+                <div class="item" data-value="off shelves">off shelves</div>
+                <div class="item" data-value="sold out">sold out</div>
               </div>
             </div>
           </div>

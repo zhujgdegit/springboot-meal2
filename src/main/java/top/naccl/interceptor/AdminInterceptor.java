@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @Description: 管理员权限拦截器
+ * @Description: Administrator rights interceptor
  * @Author: Naccl
  * @Date: 2020-05-19
  */

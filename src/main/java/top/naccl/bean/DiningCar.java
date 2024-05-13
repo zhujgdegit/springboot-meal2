@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.persistence.*;
 
 /**
- * @Description: 点餐车实体类
+ * @Description: Order food truck entity class
  * @Author: Naccl
  * @Date: 2020-05-17
  */
@@ -22,19 +22,19 @@ import javax.persistence.*;
 @ToString
 public class DiningCar {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)//设置MySQL的自增策略
+	@GeneratedValue(strategy = GenerationType.IDENTITY)//Example Set the auto-increment policy for MySQL
 	private Integer id;
 
 	@ManyToOne
-	private User user;//点餐车所属用户
+	private User user;//The user of the ordering car
 
 	@ManyToOne
-	private Food food;//点餐车中的食品，按照项目设计文档，逻辑是否有问题？
+	private Food food;//Order the food in the dining car according to the project design document, is there any problem with the logic?
 
-	private String quantity;// 点餐数量
+	private String quantity;// Quantity ordered
 
-	private String size; // 分量
+	private String size; // component
 
-	private String toppings; // 调料
+	private String toppings; // flavour
 
 }

@@ -28,7 +28,7 @@ public interface DiningCarService {
 
 	void deleteDiningCarByUserIdAndFoodId(Integer userId, Integer foodId);
 
-	// 根据 foodId 删除所有相关的 diningcar 行
+	// Delete all relevant diningcar rows based on foodId
 	void deleteByFoodId(Integer foodId);
 
 	DiningCar getDriverCarByFoodId(Integer foodId, Integer userId);

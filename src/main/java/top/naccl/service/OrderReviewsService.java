@@ -6,12 +6,12 @@ import top.naccl.bean.User;
 import java.util.List;
 
 /**
- * 订单评价相关接口
+ * Order reviews related interface
  */
 public interface OrderReviewsService {
 
     /**
-     * 添加评论
+     * add reviews
      * @param user
      * @param rating
      * @param comment
@@ -22,7 +22,7 @@ public interface OrderReviewsService {
 
 
     /**
-     * 查询订单评价信息
+     * Query order evaluation information
      * @param Id
      * @return
      */
@@ -30,7 +30,7 @@ public interface OrderReviewsService {
 
 
     /**
-     * 订单评价条件查询
+     * Order reviews condition query
      * @param reviews
      * @return
      */
@@ -38,7 +38,7 @@ public interface OrderReviewsService {
 
 
     /**
-     * 删除
+     * delete
      * @param id
      * @return
      */
@@ -46,7 +46,7 @@ public interface OrderReviewsService {
 
 
     /**
-     * 根据商品ID查询评论
+     * Query reviews based on product ID
      * @param foodId
      * @return
      */

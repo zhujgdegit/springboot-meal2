@@ -38,7 +38,7 @@ public class OrderController {
     OrderRepository orderRepository;
 
     /**
-     * 查看用户点餐情况
+     * View user orders
      */
     @GetMapping("/orders")
     public String orders(Model model) {
@@ -66,7 +66,7 @@ public class OrderController {
     }
     //
     /**
-     * 按分类查询菜品
+     * Search dishes by category
      */
     @PostMapping("/orders/search")
     public String search(@RequestParam String ordCode, Model model) {
@@ -80,7 +80,7 @@ public class OrderController {
     }
 
     /**
-     * 订单删除
+     * delete order
      */
     @RequestMapping("/orders/deleteByCode")
     public String deleteByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
@@ -90,7 +90,7 @@ public class OrderController {
     }
 
     /**
-     * 订单删除
+     * delete order
      */
     @RequestMapping("/orders/updateByCode")
     public String updateByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {

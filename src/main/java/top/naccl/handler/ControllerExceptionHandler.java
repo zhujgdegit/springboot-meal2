@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @Description: 记录异常
+ * @Description: record exception
  * @Author: Naccl
  * @Date: 2020-05-17
  */
@@ -25,7 +25,7 @@ public class ControllerExceptionHandler {
 	public ModelAndView exceptionHandler(HttpServletRequest request, Exception e) throws Exception {
 		logger.error("Request URL : {}, Exception : {}", request.getRequestURL(), e);
 
-		//如果有注解标识过这个异常，则让对应的注解处理此异常
+		//If an annotation identifies the exception, let the annotation handle the exception
 		if (AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null) {
 			throw e;
 		}

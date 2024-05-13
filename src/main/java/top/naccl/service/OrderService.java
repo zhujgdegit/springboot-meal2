@@ -9,20 +9,20 @@ public interface OrderService {
     List<OrderInfo> getTopCommentsByFoodId(Integer foodId, int limit);
 
     /**
-     * 订单删除 ——持久化删除
-     * @param ordCode 订单编码
+     * Order deletion - persistent deletion
+     * @param ordCode order code
      */
     void deleteByCode(String ordCode);
 
     /**
-     * 获取订单信息
+     * gain order information
      * @param orderId
      * @return
      */
     OrderInfo getOrderInfoById(Integer orderId);
 
     /**
-     * 接单
+     * accept orders
      * @param ordCode
      */
     void updateByCode(String ordCode);

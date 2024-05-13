@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * @Description: 设置404异常
+ * @Description: set 404 exception
  * @Author: Naccl
  * @Date: 2020-05-17
  */

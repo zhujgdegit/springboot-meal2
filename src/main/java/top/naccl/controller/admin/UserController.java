@@ -19,7 +19,7 @@ import top.naccl.service.UserService;
 import javax.validation.Valid;
 
 /**
- * @Description: 用户管理
+ * @Description: user management
  * @Author: Naccl
  * @Date: 2020-05-18
  */
@@ -32,7 +32,7 @@ public class UserController {
 	UserService userService;
 
 	/**
-	 * 获取用户列表页面
+	 * Get the user list page
 	 */
 	@GetMapping("/users")
 	public String users(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
@@ -41,7 +41,7 @@ public class UserController {
 	}
 
 	/**
-	 * 跳转添加用户页面
+	 * jump to The Add User page
 	 */
 	@GetMapping("/users/input")
 	public String input(Model model) {
@@ -50,7 +50,7 @@ public class UserController {
 	}
 
 	/**
-	 * 跳转修改用户页面
+	 * jump to The Modify User page
 	 */
 	@GetMapping("/users/{id}/input")
 	public String edit(@PathVariable Integer id, Model model) {
@@ -59,7 +59,7 @@ public class UserController {
 	}
 
 	/**
-	 * POST提交 添加、修改用户
+	 * POST submits to add and modify users
 	 */
 	@PostMapping("/users")
 	public String post(@Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -73,28 +73,28 @@ public class UserController {
 		}
 
 		User user1 = userService.getUserByUsername(user.getUsername());
-		if (user.getId() == null) {//添加
-			if (user1 != null) {//不能添加同名用户
+		if (user.getId() == null) {//add
+			if (user1 != null) {//unable to add users with the same name
 				bindingResult.rejectValue("username", "nameError", "User already exists");
 				return "admin/users-input";
 			}
 
 			User u = userService.saveUser(user);
-			if (u == null) {//没保存成功
+			if (u == null) {//failed to save
 				redirectAttributes.addFlashAttribute("message", "Fail to add");
-			} else {//保存成功
+			} else {//save successfully
 				redirectAttributes.addFlashAttribute("message", "Add successfully");
 			}
-		} else {//修改
-			if (user1 != null && user1.getId() != user.getId()) {//不能修改成已存在的同名用户
+		} else {//modify
+			if (user1 != null && user1.getId() != user.getId()) {//unable to modify to other users with the same name
 				bindingResult.rejectValue("username", "nameError", "User already exists");
 				return "admin/users-input";
 			}
 
 			User u = userService.updateUser(user.getId(), user);
-			if (u == null) {//没保存成功
+			if (u == null) {//failed to save
 				redirectAttributes.addFlashAttribute("message", "Fail to modify");
-			} else {//保存成功
+			} else {//save successfully
 				redirectAttributes.addFlashAttribute("message", "Modify successfully");
 			}
 		}
@@ -102,7 +102,7 @@ public class UserController {
 	}
 
 	/**
-	 * 删除用户
+	 * delete user
 	 */
 	@GetMapping("/users/{id}/delete")
 	public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {

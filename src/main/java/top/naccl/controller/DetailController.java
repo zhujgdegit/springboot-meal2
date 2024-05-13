@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @Description: 菜品详情
+ * @Description: menu deatils page
  * @Author: Naccl
  * @Date: 2020-05-17
  */
@@ -37,15 +37,15 @@ public class DetailController {
 
 
     /**
-     * 菜品详情页
+     * Menu details page
      */
     @GetMapping("/detail/{id}")
     public String detail(@PathVariable Integer id, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
 
         model.addAttribute("food", foodService.getFood(id));
-        model.addAttribute("averageRating", orderService.getAverageRatingByFoodId(id).intValue()); // 将平均评分取整后传递
-        model.addAttribute("comments", orderService.getTopCommentsByFoodId(id, 5)); // 获取最多5条评论
+        model.addAttribute("averageRating", orderService.getAverageRatingByFoodId(id).intValue()); // Round up the average score and pass it on
+        model.addAttribute("comments", orderService.getTopCommentsByFoodId(id, 5)); // Get up to 5 reviews
 
 
         List<OrderReviews> reviewss = orderReviewsService.getReviewsInfosByFoodId(id);
@@ -57,12 +57,12 @@ public class DetailController {
                 }
             });
         }
-        model.addAttribute("reviewsLst", reviewss); // 获取最多5条评论
+        model.addAttribute("reviewsLst", reviewss); // Get up to 5 reviews
         return "detail";
     }
 
     /**
-     * 评论删除
+     * delete comment
      *
      * @param id
      * @return

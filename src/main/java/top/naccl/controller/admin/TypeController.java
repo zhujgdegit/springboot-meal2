@@ -27,7 +27,7 @@ public class TypeController {
 	TypeService typeService;
 
 	/**
-	 * 获取分类列表页面
+	 * Get the category list page
 	 */
 	@GetMapping("/types")
 	public String types(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable, Model model){
@@ -36,7 +36,7 @@ public class TypeController {
 	}
 
 	/**
-	 * 跳转添加分类页面
+	 * Jump to Add category page
 	 */
 	@GetMapping("types/input")
 	public String input(Model model) {
@@ -45,7 +45,7 @@ public class TypeController {
 	}
 
 	/**
-	 * 跳转修改分类页面
+	 * Jump to Modify category page
 	 */
 	@GetMapping("/types/{id}/input")
 	public String edit(@PathVariable Integer id, Model model) {
@@ -54,12 +54,12 @@ public class TypeController {
 	}
 
 	/**
-	 * POST提交 添加、修改分类
+	 * POST submit add, modify category
 	 */
 	@PostMapping("/types")
 	public String post(@Valid Type type, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		Type type1 = typeService.getTypeByName(type.getName());
-		if (type1 != null) {//不能添加同名分类，也不能不修改分类名称
+		if (type1 != null) {//You cannot add a category with the same name or change the category name
 			bindingResult.rejectValue("name", "nameError", "Category already exists");
 		}
 
@@ -67,19 +67,19 @@ public class TypeController {
 			return "admin/types-input";
 		}
 
-		//保存添加、修改分类
-		if (type.getId() == null) {//添加
+		//Save adding and modifying categories
+		if (type.getId() == null) {//add
 			Type t = typeService.saveType(type);
-			if (t == null) {//没保存成功
+			if (t == null) {//failed to save
 				redirectAttributes.addFlashAttribute("message", "Fail to add");
-			} else {//保存成功
+			} else {//save successfully
 				redirectAttributes.addFlashAttribute("message", "Add successfully");
 			}
-		} else {//修改
+		} else {//modify
 			Type t = typeService.updateType(type.getId(), type);
-			if (t == null) {//没保存成功
+			if (t == null) {//failed to save
 				redirectAttributes.addFlashAttribute("message", "Fail to modify");
-			} else {//保存成功
+			} else {//save successfully
 				redirectAttributes.addFlashAttribute("message", "Modify successfully");
 			}
 		}
@@ -89,7 +89,7 @@ public class TypeController {
 	}
 
 	/**
-	 * 删除分类
+	 * delete category
 	 */
 	@GetMapping("/types/{id}/delete")
 	public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {

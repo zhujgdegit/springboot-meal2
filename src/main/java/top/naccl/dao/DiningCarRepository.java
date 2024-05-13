@@ -43,7 +43,7 @@ public interface DiningCarRepository extends JpaRepository<DiningCar, Integer> {
 	void deleteByUserIdAndFoodId(Integer userId, Integer foodId);
 
 
-	// 根据 foodId 删除所有相关的 diningcar 行
+	// Delete all relevant diningcar rows based on foodId
 	@Transactional
 	@Modifying
 	@Query("DELETE FROM diningcar d WHERE d.food.id = ?1")
@@ -52,7 +52,7 @@ public interface DiningCarRepository extends JpaRepository<DiningCar, Integer> {
 	@Query("SELECT d FROM diningcar d WHERE d.user.id = :userId AND d.food.id = :foodId")
 	DiningCar findByUserIdAndFoodId(Integer foodId, Integer userId);
 
-	// 新方法，基于用户ID查找所有购物车条目
+	// New way to find all shopping cart entries based on user ID
 	@Query("SELECT d FROM diningcar d WHERE d.user.id = :userId")
 	List<DiningCar> findAllByUserId(Integer userId);
 }

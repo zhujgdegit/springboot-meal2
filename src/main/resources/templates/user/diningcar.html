@@ -1,16 +1,3 @@
-<!--
-                ___           ___           ___           ___           ___
-               /\__\         /\  \         /\  \         /\  \         /\__\
-              /::|  |       /::\  \       /::\  \       /::\  \       /:/  /
-             /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/  /
-            /:/|:|  |__   /::\~\:\  \   /:/  \:\  \   /:/  \:\  \   /:/  /
-           /:/ |:| /\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/
-           \/__|:|/:/  / \/__\:\/:/  / \:\  \  \/__/ \:\  \  \/__/ \:\  \
-               |:/:/  /       \::/  /   \:\  \        \:\  \        \:\  \
-               |::/  /        /:/  /     \:\  \        \:\  \        \:\  \
-               /:/  /        /:/  /       \:\__\        \:\__\        \:\__\
-               \/__/         \/__/         \/__/         \/__/         \/__/
--->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="user/_fragments :: head(~{::title})">
@@ -22,12 +9,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/github-badge.min.css">
 </head>
 <body class="site">
-<!--导航-->
+<!--navigation-->
 <nav th:replace="user/_fragments :: menu(2)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
 </nav>
 
 <div class="site-content">
-    <!--中间内容-->
+    <!--Portlet Main Content-->
     <div class="m-padded-tb-big">
         <div class="ui container user">
 
@@ -56,7 +43,7 @@
                     <tr th:each="food,iterStat : ${page.content}">
                         <td th:text="${iterStat.count}">1</td>
                         <td th:text="${food.name}" width="100px;" th:data-href="@{/detail/{id}(id=${food.id})}" style="cursor:pointer" onclick="window.location.href=this.getAttribute('data-href')">Scrambled eggs with Chinese chives</td>
-                        <!--              <td th:text="${food.material}">主料：韭菜4两（约160克）</td>-->
+                        <!--              <td th:text="${food.material}">Ingredients: 4 leeks (about 160g)</td>-->
                         <td th:text="${food.price}">8</td>
                         <td th:text="${!#strings.isEmpty(food.toppings) ? food.toppings + ' (+1)' : food.toppings}">
                             Process: Fried  Taste: clear flavor
@@ -92,7 +79,7 @@
                         <div class="column">
                             <a onclick="page(this)" th:attr="data-page=${page.number}-1" th:unless="${page.first}"
                                class="ui blue inverted labeled icon button">
-                                <i class="arrow left icon"></i>上一页</a>
+                                <i class="arrow left icon"></i>last page</a>
                         </div>
                         <div class="center aligned column">
                             <span class="m-margin-lr-small" th:text="|${page.number+1} / ${page.totalPages}|">2 / 7</span>
@@ -109,107 +96,107 @@
     </div>
     <div class="ui modal" id="orderModal">
         <i class="close icon"></i>
-        <div class="header">订单信息</div>
+        <div class="header">Order information</div>
         <div class="content">
             <form class="ui form" id="orderForm">
                 <div class="field">
-                    <label>配送方式</label>
+                    <label>delivery method</label>
                     <select class="ui dropdown" name="deliveryMethod" id="deliveryMethod" onchange="toggleAddressField()">
-                        <option value="">请选择配送方式</option>
-                        <option value="express">快递</option>
-                        <option value="pickup">自取</option>
+                        <option value="">Please choose the delivery method</option>
+                        <option value="express">express delivery</option>
+                        <option value="pickup">self pick-up</option>
                     </select>
                 </div>
                 <div class="field" id="addressField" style="display: none;">
-                    <label>配送地址</label>
+                    <label>delivery address</label>
                     <select class="ui dropdown" name="address" id="selectElement">
-                        <option value="">请选择配送地址</option>
+                        <option value="">Please choose the delivery address</option>
                     </select>
                 </div>
                 <div class="field" id="deliveryTime" style="display: none;">
-                    <label>配送时间</label>
+                    <label>delivery time</label>
                     <input type="time" name="deliveryTime">
                 </div>
                 <div class="field" id="arrivalTime" style="display: none;">
-                    <label>到店时间</label>
+                    <label>arrival time</label>
                     <input type="time" name="arrivalTime">
                 </div>
                 <div class="field">
-                    <label>支付方式</label>
+                    <label>payment method</label>
                     <select class="ui dropdown" name="paymentMethod">
-                        <option value="">请选择支付方式</option>
-                        <option value="zfb">支付宝</option>
-                        <option value="wx">微信</option>
-                        <option value="cash">现金</option>
+                        <option value="">Please choose the payment method</option>
+                        <option value="zfb">Alipay</option>
+                        <option value="wx">WeChat</option>
+                        <option value="cash">Cash</option>
                     </select>
                 </div>
                 <div class="field">
-                    <label>配送费</label>
+                    <label>delivery fee</label>
                     <input type="text" name="deliveryFee" value="5" readonly>
                 </div>
                 <div class="field">
-                    <label>备注</label>
-                    <input type="text" name="remark" value="备注">
+                    <label>remark</label>
+                    <input type="text" name="remark" value="remark">
                 </div>
-                <button class="ui button" type="submit">提交订单</button>
+                <button class="ui button" type="submit">submit order</button>
             </form>
         </div>
     </div>
 </div>
 <div class="ui segment">
-    <h3 id="totalAmount">总计金额: ¥0</h3>
-    <!-- 全部下单按钮和模态窗口 -->
-    <button class="ui button primary" onclick="$('#allOrderModal').modal('show')">全部下单</button>
+    <h3 id="totalAmount">total amount: ¥0</h3>
+    <!-- All order buttons and modal Windows -->
+    <button class="ui button primary" onclick="$('#allOrderModal').modal('show')">Full Order</button>
 
     <div class="ui modal" id="allOrderModal">
         <i class="close icon"></i>
-        <div class="header">批量订单信息</div>
+        <div class="header">bulk order information</div>
         <div class="content">
             <form class="ui form" id="allOrdersForm">
                 <div class="field">
-                    <label>配送方式</label>
+                    <label>delivery method</label>
                     <select class="ui dropdown" name="deliveryMethod"  id="deliveryMethodAll" onchange="toggleAddressFieldAll()">
-                        <option value="">请选择配送方式</option>
-                        <option value="express">快递</option>
-                        <option value="pickup">自取</option>
+                        <option value="">Please choose the delivery method</option>
+                        <option value="express">express delivery</option>
+                        <option value="pickup">self pick-up</option>
                     </select>
                 </div>
                 <div class="field" id="addressFieldAll" style="display: none;">
-                    <label>配送地址</label>
+                    <label>delivery address</label>
                     <select class="ui dropdown" name="address" id="selectElementAll">
-                        <option value="">请选择配送地址</option>
+                        <option value="">Please choose the delivery address</option>
                         <!--                  <option value="cash">  </option>-->
                     </select>
                     <!--            <input type="text" name="address" placeholder="请输入配送地址">-->
                 </div>
                 <div class="field" id="deliveryTimeAll" style="display: none;">
-                    <label>配送时间</label>
+                    <label>delivery time</label>
                     <input type="time" name="deliveryTime">
                 </div>
                 <div class="field" id="arrivalTimeAll" style="display: none;">
-                    <label>到店时间</label>
+                    <label>arrival time</label>
                     <input type="time" name="arrivalTime">
                 </div>
                 <div class="field">
-                    <label>支付方式</label>
+                    <label>payment method</label>
                     <select class="ui dropdown" name="paymentMethod">
-                        <option value="">请选择支付方式</option>
-                        <option value="alipay">支付宝</option>
-                        <option value="wechat">微信</option>
-                        <option value="cash">现金</option>
+                        <option value="">Please choose the payment method</option>
+                        <option value="zfb">Alipay</option>
+                        <option value="wx">WeChat</option>
+                        <option value="cash">Cash</option>
                     </select>
                 </div>
                 <div class="field">
-                    <label>配送费</label>
+                    <label>delivery fee</label>
                     <input type="text" name="deliveryFee" value="10" readonly>
                 </div>
                 <div class="field">
-                    <label>备注</label>
-                    <input type="text" name="remark" value="备注">
+                    <label>remark</label>
+                    <input type="text" name="remark" value="remark">
                 </div>
                 <div class="actions">
-                    <button class="ui button green" type="submit">提交全部订单</button>
-                    <div class="ui button" onclick="$('#allOrderModal').modal('hide')">取消</div>
+                    <button class="ui button green" type="submit">submit all orders</button>
+                    <div class="ui button" onclick="$('#allOrderModal').modal('hide')">Cancel</div>
                 </div>
             </form>
         </div>
@@ -292,7 +279,7 @@
                 }
                 $('#selectElement').append(selectOpions)
             } else {
-                alert("稍后试试！");
+                alert("Try it later!");
             }
         }, "json");
 
@@ -300,7 +287,7 @@
     function calculateTotalAmount() {
         let total = 0;
         $('#table-container table tbody tr').each(function() {
-            const price = parseFloat($(this).find('td:nth-last-child(4)').text()); // 假设总价在倒数第三列
+            const price = parseFloat($(this).find('td:nth-last-child(4)').text()); // Let's say the total price is in the penultimate column
             total += price;
         });
         $('#totalAmount').text('Total amount: ¥' + total.toFixed(2));
@@ -348,11 +335,11 @@
 
 
     $(document).ready(function () {
-        // 初始化模态框
+        // Initializes the modal box
         $('.ui.modal').modal();
-        calculateTotalAmount(); // 初始页面加载时计算总金额
+        calculateTotalAmount(); // The total amount is calculated when the initial page loads
         $.get("/user/getAddr", function (result) {
-            console.log(result, '输出')
+            console.log(result, 'output')
             if (result) {
                 var options = result;
                 var selectOpions = "";
@@ -361,13 +348,13 @@
                 }
                 $('#selectElementAll').append(selectOpions)
             } else {
-                alert("稍后试试！");
+                alert("Try it later!");
             }
         }, "json");
-        // 表单提交事件
+        // Form submission event
         $('#orderForm').submit(function (event) {
-            event.preventDefault(); // 阻止表单默认提交行为
-            // 获取表单数据
+            event.preventDefault(); // Prevents form default submission behavior
+            // Get form data
             var formDataArray = $(this).serializeArray();
             var formData = {};
             formDataArray.forEach(function(item) {
@@ -380,54 +367,60 @@
                 return;  // Stop the function if validation fails
             }
 
-            // 获取表单数据
+            // Get form data
             formDataArray.push({ name: 'foodId', value: foodId});
             var formData = $.param(formDataArray);
-            // 发送 AJAX 请求
+            // send AJAX request
             $.ajax({
-                url: '/user/order', // 替换为实际的后台接口地址
+                url: '/user/order', // Replace with the actual background interface address
                 method: 'POST',
                 data: formData,
                 success: function (response) {
-                    alert("下单成功")
+                    alert("Order submitted successfully");
                     $('.ui.modal').modal('hide');
-                    // 重新加载页面
+                    // reload page
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    console.error('请求出错:', error);
-                    alert('订单提交失败，请重试！');
+                    console.error('Request error:', error);
+                    alert('Order submission failed, please try again!');
                 }
             });
         });
     });
     var foodId = "";
     function opens(obj) {
-        // 获取点击按钮对应的food id
+        // Get the food id for clicking the button
         foodId = $(obj).attr('data-id');
-        // 显示模态框
+        // Display mode box
         $('#orderModal').modal('show');
     }
 
     $('#allOrdersForm').submit(function(event) {
         event.preventDefault();
 
-        // 创建 JSON 对象来存储表单数据
+        // Create a JSON object to store the form data
         var formData = {};
         $(this).serializeArray().forEach(function(item) {
-            formData[item.name] = item.value;  // 将每个表单元素添加到 formData 对象中
+            formData[item.name] = item.value;  // Add each form element to the formData object
         });
 
-        // 发送 AJAX 请求
+        // Check if all required fields are filled
+        if (!formData.address || !formData.deliveryMethod || !formData.paymentMethod || formData.deliveryFee === '') {
+            alert('Please fill in all required fields.');
+            return;  // Stop the function if validation fails
+        }
+
+        // send AJAX request
         $.ajax({
             url: '/user/submitAllOrders',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(formData),  // 使用 JSON.stringify() 将对象转换为 JSON 字符串
+            data: JSON.stringify(formData),  // Convert an object to a JSON string using json.stringify ()
             success: function(response) {
                 alert("Successful order")
                 $('#allOrderModal').modal('hide');
-                // 重新加载页面
+                // reload page
                 location.reload();
             },
             error: function(xhr, status, error) {

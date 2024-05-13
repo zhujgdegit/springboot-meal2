@@ -1,22 +1,9 @@
-<!--
-                ___           ___           ___           ___           ___
-               /\__\         /\  \         /\  \         /\  \         /\__\
-              /::|  |       /::\  \       /::\  \       /::\  \       /:/  /
-             /:|:|  |      /:/\:\  \     /:/\:\  \     /:/\:\  \     /:/  /
-            /:/|:|  |__   /::\~\:\  \   /:/  \:\  \   /:/  \:\  \   /:/  /
-           /:/ |:| /\__\ /:/\:\ \:\__\ /:/__/ \:\__\ /:/__/ \:\__\ /:/__/
-           \/__|:|/:/  / \/__\:\/:/  / \:\  \  \/__/ \:\  \  \/__/ \:\  \
-               |:/:/  /       \::/  /   \:\  \        \:\  \        \:\  \
-               |::/  /        /:/  /     \:\  \        \:\  \        \:\  \
-               /:/  /        /:/  /       \:\__\        \:\__\        \:\__\
-               \/__/         \/__/         \/__/         \/__/         \/__/
--->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head th:replace="_fragments :: head(~{::title})">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>登录</title>
+  <title>login</title>
   <link rel="stylesheet" href="../static/css/semantic.min.css" th:href="@{/css/semantic.min.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
 </head>
@@ -34,13 +21,13 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="user icon"></i>
-                    <input type="text" name="username" placeholder="用户名">
+                    <input type="text" name="username" placeholder="User name">
                   </div>
                 </div>
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="lock icon"></i>
-                    <input type="password" name="password" placeholder="密码">
+                    <input type="password" name="password" placeholder="password">
                   </div>
                 </div>
                 <button class="ui fluid large teal submit button">LOGIN</button>
@@ -50,9 +37,9 @@
                 NEWUSER？ <a href="#" th:href="@{/register}">REGISTER</a>
               </div>
 
-              <!-- 表单验证提示 -->
+              <!-- Form validation prompt -->
               <div class="ui error message"></div>
-              <!-- 后台验证错误提示 -->
+              <!-- Background verification error message -->
               <div class="ui negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
             </form>
 
@@ -74,14 +61,14 @@
                   identifier: 'username',
                   rules: [{
                       type: 'empty',
-                      prompt: '请输入用户名'
+                      prompt: 'Please enter your username'
                   }]
               },
               password: {
                   identifier: 'password',
                   rules: [{
                       type: 'empty',
-                      prompt: '请输入密码'
+                      prompt: 'Please enter your password'
                   }]
               }
           }
