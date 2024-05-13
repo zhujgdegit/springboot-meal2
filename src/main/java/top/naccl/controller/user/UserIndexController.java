@@ -356,7 +356,22 @@ public class UserIndexController {
             orderInfo.setDeliveryMethod(orderDetails.getDeliveryMethod());
             orderInfo.setPaymentMethod(orderDetails.getPaymentMethod());
             orderInfo.setDeliveryFee(orderDetails.getDeliveryFee());
+
+            //查询订单
+            List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
+            long l = 0;
+            if (!CollectionUtils.isEmpty(select) && !Objects.isNull(select.get(0))) {
+                l = orderNumberUtil.splitCode(select.get(0).getOrdCode());
+            }
+
+            //生成订单编号
+            orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber(l, "insert"));
+            //设置下单时间
+            orderInfo.setCreatTime(new Date());
             OrderInfo savedOrder = orderRepository.save(orderInfo);
+            orderInfo.setArrivalTime(orderDetails.getArrivalTime());
+            orderInfo.setDeliveryTime(orderDetails.getDeliveryTime());
+            orderInfo.setRemark(orderDetails.getRemark());
             if (savedOrder == null) {
                 allSuccess = false;  // 如果有任何订单保存失败，则标记失败
             } else {

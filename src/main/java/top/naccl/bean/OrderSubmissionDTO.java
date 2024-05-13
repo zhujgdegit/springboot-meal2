@@ -14,4 +14,10 @@ public class OrderSubmissionDTO {
 
     private String address;
 
+    private String deliveryTime;
+
+    private String arrivalTime;
+
+    private String remark;
+
 }
