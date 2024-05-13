@@ -309,7 +309,11 @@ public class UserIndexController {
             List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
             long l = 0;
             if (!CollectionUtils.isEmpty(select) && !Objects.isNull(select.get(0))) {
-                l = orderNumberUtil.splitCode(select.get(0).getOrdCode());
+                String ordCode = select.get(0).getOrdCode();
+                if (ordCode.contains("-")) {
+                    ordCode = ordCode.substring(0, 14);
+                }
+                l = orderNumberUtil.splitCode(ordCode);
             }
 
             // Generate order number
@@ -331,6 +335,7 @@ public class UserIndexController {
 
     /**
      * Batch orders
+     *
      * @param orderDetails
      * @param session
      * @return
@@ -348,6 +353,21 @@ public class UserIndexController {
         JSONObject result = new JSONObject();
         boolean allSuccess = true;
 
+        //查询订单
+        List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
+        long l = 0;
+        if (!CollectionUtils.isEmpty(select) && !Objects.isNull(select.get(0))) {
+            String ordCode = select.get(0).getOrdCode();
+            if (ordCode.contains("-")) {
+                ordCode = ordCode.substring(0, 14);
+            }
+            l = orderNumberUtil.splitCode(ordCode);
+        }
+
+        //生成订单编号
+        String code = orderNumberUtil.generateOrderNumber(l, "insert");
+
+        int i = 0;
         for (DiningCar cartItem : cartItems) {
             OrderInfo orderInfo = new OrderInfo();
             orderInfo.setUserId(user.getId());
@@ -361,15 +381,7 @@ public class UserIndexController {
             orderInfo.setPaymentMethod(orderDetails.getPaymentMethod());
             orderInfo.setDeliveryFee(orderDetails.getDeliveryFee());
 
-            //查询订单
-            List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
-            long l = 0;
-            if (!CollectionUtils.isEmpty(select) && !Objects.isNull(select.get(0))) {
-                l = orderNumberUtil.splitCode(select.get(0).getOrdCode());
-            }
-
-            //生成订单编号
-            orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber(l, "insert"));
+            orderInfo.setOrdCode(code + "-" + (i + 1));
             //设置下单时间
             orderInfo.setCreatTime(new Date());
             OrderInfo savedOrder = orderRepository.save(orderInfo);
@@ -381,6 +393,7 @@ public class UserIndexController {
             } else {
                 diningCarService.deleteByFoodId(savedOrder.getFoodId());
             }
+            i++;
         }
 
         if (allSuccess) {
