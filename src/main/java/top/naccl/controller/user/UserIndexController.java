@@ -373,7 +373,7 @@ public class UserIndexController {
             //设置下单时间
             orderInfo.setCreatTime(new Date());
             OrderInfo savedOrder = orderRepository.save(orderInfo);
-            orderInfo.setArrivalTime(orderDetails.getArrivalTime());
+//            orderInfo.setArrivalTime(orderDetails.getArrivalTime());
             orderInfo.setDeliveryTime(orderDetails.getDeliveryTime());
             orderInfo.setRemark(orderDetails.getRemark());
             if (savedOrder == null) {
