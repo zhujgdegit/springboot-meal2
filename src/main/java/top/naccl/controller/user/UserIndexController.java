@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Description: 用户点餐页
+ * @Description: User Ordering Page
  * @Author: Naccl
  * @Date: 2020-05-18
  */
@@ -46,7 +46,7 @@ public class UserIndexController {
     OrderRepository orderRepository;
 
     /**
-     * 查看菜品列表
+     * View the list of dishes
      */
     @GetMapping("/index")
     public String index(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -83,7 +83,7 @@ public class UserIndexController {
                     .ifPresent(diningCar -> dto.setCartId(diningCar.getId()));
 
             return dto;
-        }).filter(foodDTO -> !"下架".equals(foodDTO.getState())).collect(Collectors.toList());
+        }).filter(foodDTO -> !"Off shelves".equals(foodDTO.getState())).collect(Collectors.toList());
         // Create a PageImpl with the DTO list while retaining original page information
         Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
 
@@ -92,7 +92,7 @@ public class UserIndexController {
     }
 
     /**
-     * 查询菜品
+     * Query dishes
      */
     @PostMapping("/index/search")
     public String search(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -131,7 +131,7 @@ public class UserIndexController {
                     .ifPresent(diningCar -> dto.setCartId(diningCar.getId()));
 
             return dto;
-        }).filter(foodDTO -> !"下架".equals(foodDTO.getState())).collect(Collectors.toList());
+        }).filter(foodDTO -> !"Off shelves".equals(foodDTO.getState())).collect(Collectors.toList());
 
         // Create a PageImpl with the DTO list while retaining original page information
         Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
@@ -153,6 +153,8 @@ public class UserIndexController {
 
 				return dto;
 			}).collect(Collectors.toList());
+
+
 
 			// Create a PageImpl with the DTO list while retaining original page information
 			Page<FoodDTO> dtos = new PageImpl<>(dtoList, pageable, foodPage.getTotalElements());
@@ -187,12 +189,12 @@ public class UserIndexController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login is invalid, please login again!");
         } else {
             Optional<DiningCar> cart = diningCarService.findById(cartId);
             if (cart == null) {
                 result.put("success", false);
-                result.put("message", "加入点餐车失败！");
+                result.put("message", "Join the order truck failed!");
             } else {
                 result.put("success", true);
                 DiningCar car = cart.get();
@@ -206,7 +208,7 @@ public class UserIndexController {
 
 
     /**
-     * 添加菜品到点餐车
+     * Add dishes to the dining car
      */
     @PostMapping("/add")
     @ResponseBody
@@ -218,7 +220,7 @@ public class UserIndexController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login expired, please log in again!");
         } else {
             DiningCar diningCar = new DiningCar();
             diningCar.setSize(size);
@@ -226,9 +228,9 @@ public class UserIndexController {
             diningCar.setQuantity(quantity);
             diningCar.setUser(user);
             Food food = foodService.getFood(id);
-            if ("售空".equals(food.getState())) {
+            if ("Sold out".equals(food.getState())) {
                 result.put("success", false);
-                result.put("message", "该商品已售空！");
+                result.put("message", "This item is sold out!");
                 return result;
             }
             diningCar.setFood(foodService.getFood(id));
@@ -236,17 +238,17 @@ public class UserIndexController {
             DiningCar d = diningCarService.saveDiningCar(diningCar);
             if (d == null) {
                 result.put("success", false);
-                result.put("message", "加入点餐车失败！");
+                result.put("message", "Failed to add to dining car!");
             } else {
                 result.put("success", true);
-                result.put("message", "加入点餐车成功！");
+                result.put("message", "Successfully added to dining car!");
             }
         }
         return result;
     }
 
     /**
-     * 更新点餐车中的菜品
+     * Update dishes in the dining car
      */
     @PostMapping("/update")
     @ResponseBody
@@ -258,13 +260,13 @@ public class UserIndexController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login expired, please log in again!");
         } else {
             // Attempt to find the dining cart entry
             Optional<DiningCar> optionalDiningCar = diningCarService.findById(id);
             if (!optionalDiningCar.isPresent()) {
                 result.put("success", false);
-                result.put("message", "未找到指定的点餐车条目！");
+                result.put("message", "The specified dining cart entry was not found!");
             } else {
                 DiningCar diningCar = optionalDiningCar.get();
                 // Update properties
@@ -274,10 +276,10 @@ public class UserIndexController {
                 DiningCar updatedDiningCar = diningCarService.saveDiningCar(diningCar);
                 if (updatedDiningCar == null) {
                     result.put("success", false);
-                    result.put("message", "更新点餐车失败！");
+                    result.put("message", "Failed to update dining car!");
                 } else {
                     result.put("success", true);
-                    result.put("message", "更新点餐车成功！");
+                    result.put("message", "Successfully updated dining car!");
                 }
             }
         }
@@ -288,7 +290,7 @@ public class UserIndexController {
     private OrderNumberUtil orderNumberUtil;
 
     /**
-     * 用户提交订单
+     * User submits order
      */
     @PostMapping("/order")
     public String submitOrder(OrderInfo orderInfo, HttpSession session) {
@@ -296,31 +298,31 @@ public class UserIndexController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login expired, please log in again!");
         } else {
             orderInfo.setUserId(user.getId());
             DiningCar driverCarByFoodId = diningCarService.getDriverCarByFoodId(orderInfo.getFoodId(), user.getId());
             orderInfo.setQuantity(Integer.valueOf(driverCarByFoodId.getQuantity()));
             orderInfo.setSize(driverCarByFoodId.getSize());
             orderInfo.setToppings(driverCarByFoodId.getToppings());
-            //查询订单
+            // Query order
             List<OrderInfo> select = orderRepository.getNumByCodeLike(orderNumberUtil.generateOrderNumber(0L, "select"), PageRequest.of(0, 1));
             long l = 0;
             if (!CollectionUtils.isEmpty(select) && !Objects.isNull(select.get(0))) {
                 l = orderNumberUtil.splitCode(select.get(0).getOrdCode());
             }
 
-            //生成订单编号
+            // Generate order number
             orderInfo.setOrdCode(orderNumberUtil.generateOrderNumber(l, "insert"));
-            //设置下单时间
+            // Set order time
             orderInfo.setCreatTime(new Date());
             OrderInfo order = orderRepository.save(orderInfo);
             if (order == null) {
                 result.put("success", false);
-                result.put("message", "下单失败！");
+                result.put("message", "Failed to place order!");
             } else {
                 result.put("success", true);
-                result.put("message", "下单成功！");
+                result.put("message", "Order placed successfully!");
             }
             diningCarService.deleteByFoodId(order.getFoodId());
         }
@@ -328,7 +330,7 @@ public class UserIndexController {
     }
 
     /**
-     * 批量下单
+     * Batch orders
      * @param orderDetails
      * @param session
      * @return
@@ -337,7 +339,9 @@ public class UserIndexController {
     public ResponseEntity<?> submitAllOrders(@RequestBody OrderSubmissionDTO orderDetails, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("登录已失效，请重新登录！");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login expired, please log in again!");
+
+
         }
 
         List<DiningCar> cartItems = diningCarService.findAllByUserId(user.getId());
@@ -373,7 +377,7 @@ public class UserIndexController {
             orderInfo.setDeliveryTime(orderDetails.getDeliveryTime());
             orderInfo.setRemark(orderDetails.getRemark());
             if (savedOrder == null) {
-                allSuccess = false;  // 如果有任何订单保存失败，则标记失败
+                allSuccess = false;  // If any order fails to save, mark as failed
             } else {
                 diningCarService.deleteByFoodId(savedOrder.getFoodId());
             }
@@ -381,11 +385,11 @@ public class UserIndexController {
 
         if (allSuccess) {
             result.put("success", true);
-            result.put("message", "所有订单提交成功！");
+            result.put("message", "All orders submitted successfully!");
             return ResponseEntity.ok(result.toString());
         } else {
             result.put("success", false);
-            result.put("message", "部分或所有订单提交失败！");
+            result.put("message", "Partial or all orders failed to submit!");
             return ResponseEntity.badRequest().body(result.toString());
         }
     }
@@ -398,7 +402,7 @@ public class UserIndexController {
 
 
     /**
-     * 用户提交评价
+     * User submits review
      */
     @PostMapping("/rating")
     @ResponseBody
@@ -411,20 +415,20 @@ public class UserIndexController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login expired, please log in again!");
         } else {
-            //原有功能弃用
+            // Original function deprecated
 //            Integer i = orderRepository.updateById(rating, comment, orderId);
 
-            //功能扩展
+            // Function expansion
             user = userService.getUser(user.getId());
             Integer res = orderReviewsService.addReviews(user, rating, comment, orderId, reviewsId);
             if (res <= 0) {
                 result.put("success", false);
-                result.put("message", "评价失败！");
+                result.put("message", "Failed to review!");
             } else {
                 result.put("success", true);
-                result.put("message", "评价成功！");
+                result.put("message", "Reviewed successfully!");
             }
         }
         return result;

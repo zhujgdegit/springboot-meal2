@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import top.naccl.annotation.OnlyAdmin;
 import top.naccl.bean.User;
+import top.naccl.dao.OrderRepository;
 import top.naccl.service.DiningCarService;
 import top.naccl.service.OrderService;
 
@@ -32,6 +34,9 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    OrderRepository orderRepository;
+
     /**
      * 查看用户点餐情况
      */
@@ -50,6 +55,16 @@ public class OrderController {
         return "admin/orders";
     }
 
+    @PostMapping("/updateOrderStatus")
+    public ResponseEntity<?> updateOrderStatus(@RequestParam("orderId") Integer orderId, @RequestParam("status") String status) {
+        try {
+            orderRepository.updateStatusById(status, orderId);
+            return ResponseEntity.ok().body("Status updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error updating status.");
+        }
+    }
+    //
     /**
      * 按分类查询菜品
      */
@@ -70,7 +85,17 @@ public class OrderController {
     @RequestMapping("/orders/deleteByCode")
     public String deleteByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
         orderService.deleteByCode(ordCode);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Delete successfully.");
+        return "redirect:/admin/orders";
+    }
+
+    /**
+     * 订单删除
+     */
+    @RequestMapping("/orders/updateByCode")
+    public String updateByCode(@RequestParam String ordCode, RedirectAttributes redirectAttributes) {
+        orderService.updateByCode(ordCode);
+        redirectAttributes.addFlashAttribute("message", "Delete successfully.");
         return "redirect:/admin/orders";
     }
 }

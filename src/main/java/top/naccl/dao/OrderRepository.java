@@ -42,4 +42,9 @@ public interface OrderRepository extends JpaRepository<OrderInfo, Integer> {
 
     @Query("select o from OrderInfo o  where o.ordCode like  %:code% order by o.ordCode desc")
     List<OrderInfo> getNumByCodeLike(@Param("code") String code, Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE OrderInfo o SET o.status = :status WHERE o.id = :orderId")
+    void updateStatusById(String status, Integer orderId);
 }

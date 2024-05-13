@@ -60,7 +60,7 @@ public class TypeController {
 	public String post(@Valid Type type, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		Type type1 = typeService.getTypeByName(type.getName());
 		if (type1 != null) {//不能添加同名分类，也不能不修改分类名称
-			bindingResult.rejectValue("name", "nameError", "分类已存在");
+			bindingResult.rejectValue("name", "nameError", "Category already exists");
 		}
 
 		if (bindingResult.hasErrors()) {
@@ -71,16 +71,16 @@ public class TypeController {
 		if (type.getId() == null) {//添加
 			Type t = typeService.saveType(type);
 			if (t == null) {//没保存成功
-				redirectAttributes.addFlashAttribute("message", "添加失败");
+				redirectAttributes.addFlashAttribute("message", "Fail to add");
 			} else {//保存成功
-				redirectAttributes.addFlashAttribute("message", "添加成功");
+				redirectAttributes.addFlashAttribute("message", "Add successfully");
 			}
 		} else {//修改
 			Type t = typeService.updateType(type.getId(), type);
 			if (t == null) {//没保存成功
-				redirectAttributes.addFlashAttribute("message", "修改失败");
+				redirectAttributes.addFlashAttribute("message", "Fail to modify");
 			} else {//保存成功
-				redirectAttributes.addFlashAttribute("message", "修改成功");
+				redirectAttributes.addFlashAttribute("message", "Modify successfully");
 			}
 		}
 
@@ -94,7 +94,7 @@ public class TypeController {
 	@GetMapping("/types/{id}/delete")
 	public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
 		typeService.deleteType(id);
-		redirectAttributes.addFlashAttribute("message", "删除成功");
+		redirectAttributes.addFlashAttribute("message", "Delete successfully");
 		return "redirect:/admin/types";
 	}
 }

@@ -49,7 +49,7 @@ public class LoginController {
 		if (user != null) {
 			user.setPassword(null);
 			session.setAttribute("user", user);
-			redirectAttributes.addFlashAttribute("message", "登录成功");
+			redirectAttributes.addFlashAttribute("message", "Login Successfully");
 			if (user.getIdent() == 0) {
 				return "redirect:/user/index";
 			} else if (user.getIdent() == 1) {
@@ -57,7 +57,7 @@ public class LoginController {
 			}
 			return "redirect:/";
 		} else {
-			redirectAttributes.addFlashAttribute("message", "用户名或密码错误");
+			redirectAttributes.addFlashAttribute("message", "The user name or password is incorrect");
 			return "redirect:/login";
 		}
 	}
@@ -65,7 +65,7 @@ public class LoginController {
 	@GetMapping("/logout")
 	public String logout(HttpSession session, RedirectAttributes redirectAttributes) {
 		session.removeAttribute("user");
-		redirectAttributes.addFlashAttribute("message", "已退出");
+		redirectAttributes.addFlashAttribute("message", "Already logged out");
 		return "redirect:/";
 	}
 }

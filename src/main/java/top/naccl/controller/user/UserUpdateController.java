@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.Objects;
 
 /**
- * @Description: 修改用户资料
+ * @Description: Modify user information
  * @Author: Naccl
  * @Date: 2020-05-18
  */
@@ -53,8 +53,8 @@ public class UserUpdateController {
 
         User u = (User) session.getAttribute("user");
         User user1 = userService.getUserByUsername(user.getUsername());
-        if (user1 != null && user1.getId() != u.getId()) {//存在其它同名用户
-            bindingResult.rejectValue("username", "nameError", "用户已存在");
+        if (user1 != null && user1.getId() != u.getId()) {//exist other users with the same name
+            bindingResult.rejectValue("username", "nameError", "User already exists");
             return "user/user-input";
         }
         u.setUsername(user.getUsername());
@@ -68,17 +68,17 @@ public class UserUpdateController {
         u.setIntroduction(user.getIntroduction());
         User user2 = userService.updateUser(u.getId(), u);
         u.setPassword(null);
-        if (user2 == null) {//没保存成功
-            redirectAttributes.addFlashAttribute("message", "修改失败");
-        } else {//保存成功
-            redirectAttributes.addFlashAttribute("message", "修改成功");
+        if (user2 == null) {//failed to save
+            redirectAttributes.addFlashAttribute("message", "Modification failed");
+        } else {//successfully saved
+            redirectAttributes.addFlashAttribute("message", "Modification successful");
         }
         return "redirect:/user/index";
     }
 
 
     /**
-     * 拆分地址
+     * Split addresses
      *
      * @param user
      * @return
@@ -97,13 +97,13 @@ public class UserUpdateController {
 
     public static void setFieldValue(Object obj, String fieldName, String value) throws Exception {
         Field field1 = obj.getClass().getDeclaredField(fieldName);
-//        field.setAccessible(true); // 设置为可访问，即使是私有字段也可以访问
-//        field.set(obj, value); // 设置字段的值
+//        field.setAccessible(true); // Set accessible, even private fields can be accessed
+//        field.set(obj, value); // Set the value of the field
         Field[] fields = obj.getClass().getDeclaredFields();
         for (Field field : fields) {
             if (field.getName().equals(fieldName)) {
-                field.setAccessible(true); // 设置为可访问，即使是私有字段也可以访问
-                field.set(obj, value); // 设置字段的值
+                field.setAccessible(true); // Set accessible, even private fields can be accessed
+                field.set(obj, value); // Set the value of the field
                 return;
             }
         }
@@ -146,7 +146,7 @@ public class UserUpdateController {
     }
 
     /**
-     * 合并地址
+     * Merge addresses
      *
      * @param user
      * @return
@@ -173,6 +173,8 @@ public class UserUpdateController {
             return stringBuilder.toString();
         } else {
             stringBuilder.append(",").append(address2);
+
+
         }
         String address3 = user.getAddress3();
         if (StringUtils.isEmpty(address3)) {

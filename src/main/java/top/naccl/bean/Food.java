@@ -22,7 +22,7 @@ public class Food {
 	private Integer id;
 
 	@Column(nullable = false)
-	@NotBlank(message = "名称不能为空")
+	@NotBlank(message = "Name cannot be empty")
 	private String name;
 
 	private String feature;//特色
@@ -31,7 +31,7 @@ public class Food {
 	private String state;//状态：上架、下架、售空
 
 	@Column(nullable = false)
-	@NotNull(message = "价格不能为空")
+	@NotNull(message = "Price cannot be empty")
 	private Integer price;//价格
 
 	@ManyToOne

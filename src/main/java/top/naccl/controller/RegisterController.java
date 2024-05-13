@@ -46,23 +46,23 @@ public class RegisterController {
 		}
 
 		if (passwordAgain == null || !user.getPassword().equals(passwordAgain)) {
-			bindingResult.rejectValue("password", "Error", "密码输入有误");
+			bindingResult.rejectValue("password", "Error", "incorrect password range or syntax");
 			return "register";
 		}
 
 		User u = userService.getUserByUsername(user.getUsername());
 		if (u != null) {
-			bindingResult.rejectValue("username", "nameError", "用户名不可用");
+			bindingResult.rejectValue("username", "nameError", "The user name is unavailable");
 			return "register";
 		}
 
 		user.setIdent(0);//用户注册页面只能是普通用户
 		User user1 = userService.saveUser(user);
 		if (user1 == null) {//没保存成功
-			bindingResult.rejectValue("username", "nameError", "异常，注册失败");
+			bindingResult.rejectValue("username", "nameError", "Exception, registration failed");
 			return "register";
 		} else {//保存成功
-			redirectAttributes.addFlashAttribute("message", "注册成功，请登录");
+			redirectAttributes.addFlashAttribute("message", "Registration successful, please login");
 			return "redirect:/login";
 		}
 	}
@@ -74,10 +74,10 @@ public class RegisterController {
 		User u = userService.getUserByUsername(username);
 		if (u != null) {
 			result.put("success", false);
-			result.put("message", "用户名不可用");
+			result.put("message", "The user name is unavailable");
 		} else {
 			result.put("success", true);
-			result.put("message", "可用");
+			result.put("message", "Avialable");
 		}
 		System.out.println(result);
 		return result;

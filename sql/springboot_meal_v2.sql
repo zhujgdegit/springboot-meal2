@@ -4,6 +4,7 @@
 -- ------------------------------------------------------
 -- Server version	8.3.0
 
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -71,6 +72,9 @@ CREATE TABLE `food` (
   CONSTRAINT `FK5uq6egy0y1jhbme9r7yfi0r7n` FOREIGN KEY (`type_id`) REFERENCES `foodtype` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
 
 --
 -- Dumping data for table `food`

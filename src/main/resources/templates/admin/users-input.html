@@ -16,194 +16,196 @@
 <head th:replace="admin/_fragments :: head(~{::title})">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>用户管理</title>
+  <title>User Management</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
   <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Naccl/blog-resource/github-badge.min.css">
 </head>
 <body class="site">
 
-  <!--导航-->
-  <nav th:replace="admin/_fragments :: menu(3)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
-  </nav>
-  <div class="ui attached pointing menu">
+<!--Navigation-->
+<nav th:replace="admin/_fragments :: menu(3)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+</nav>
+<div class="ui attached pointing menu">
+  <div class="ui container">
+    <div class="right menu">
+      <a href="#" th:href="@{/admin/users}" class="item">User List</a>
+      <a href="#" th:href="@{/admin/users/input}" class="teal active item">Add User</a>
+    </div>
+  </div>
+</div>
+
+<div class="site-content">
+  <!--Middle Content-->
+  <div class="m-login-in-center m-container-small m-padded-tb-big">
     <div class="ui container">
-      <div class="right menu">
-        <a href="#" th:href="@{/admin/users}" class="item">用户列表</a>
-        <a href="#" th:href="@{/admin/users/input}" class="teal active item">添加用户</a>
-      </div>
-    </div>
-  </div>
 
-  <div class="site-content">
-    <!--中间内容-->
-    <div class="m-login-in-center m-container-small m-padded-tb-big">
-      <div class="ui container">
+      <!-- Form for adding or editing users -->
+      <form method="post" action="#" th:object="${user}" th:action="@{/admin/users}" class="ui form">
+        <div class="ui segment">
 
-        <!-- 有id传来时为编辑，否则为添加 -->
-        <form method="post" action="#" th:object="${user}" th:action="@{/admin/users}" class="ui form">
-          <div class="ui segment">
+          <input type="hidden" name="id" th:value="*{id}">
 
-            <input type="hidden" name="id" th:value="*{id}">
-
-            <div class="required field">
-              <div class="ui left icon input">
-                <i class="user icon"></i>
-                <input type="text" name="username" placeholder="用户名" th:value="*{username}">
-              </div>
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" name="username" placeholder="Username" th:value="*{username}">
             </div>
+          </div>
 
-            <div class="required field">
-              <div class="ui left icon input">
-                <i class="lock icon"></i>
-                <input type="text" name="password" placeholder="密码" th:value="*{password}">
-              </div>
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="lock icon"></i>
+              <input type="text" name="password" placeholder="Password" th:value="*{password}">
             </div>
+          </div>
 
-            <div class="required field">
-              <div class="inline fields">
-                <label class="ui basic label"><i class="user plus icon"></i>角色</label>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="ident" value="1" id="admin" th:attr="checked=*{ident}==1 ? true">
-                    <label for="admin">管理员</label>
-                  </div>
+          <div class="required field">
+            <div class="inline fields">
+              <label class="ui basic label"><i class="user plus icon"></i>Role</label>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="ident" value="1" id="admin" th:attr="checked=*{ident}==1 ? true">
+                  <label for="admin">Administrator</label>
                 </div>
-                <div class="field">
-                  <div class="ui radio checkbox">
-                    <input type="radio" name="ident" value="0" id="common" th:attr="checked=*{ident}==0 ? true">
-                    <label for="common">普通用户</label>
-                  </div>
+              </div>
+              <div class="field">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="ident" value="0" id="common" th:attr="checked=*{ident}==0 ? true">
+                  <label for="common">Ordinary User</label>
                 </div>
               </div>
             </div>
-
-            <div class="required field">
-              <div class="ui left icon input">
-                <i class="phone icon"></i>
-                <input type="tel" name="telephone" placeholder="电话" th:value="*{telephone}">
-              </div>
-            </div>
-
-            <div class="required field">
-              <div class="ui left icon input">
-                <i class="home icon"></i>
-                <input type="text" name="address" placeholder="地址" th:value="*{address}">
-              </div>
-            </div>
-
-            <button class="ui fluid large teal submit button" th:text="*{id}==null ? '添 加' : '修 改'">修 改</button>
           </div>
 
-          <!-- 表单验证提示 -->
-          <div class="ui error message"></div>
-
-          <!-- 后台验证错误提示 -->
-          <!--/*/
-          <div class="ui negative message" th:if="${#fields.hasErrors('*')}"  >
-            <i class="close icon"></i>
-            <div class="header">错误</div>
-            <p th:each="err:${#fields.errors('*')}" th:text="${err}">提交信息不符合规则</p>
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="phone icon"></i>
+              <input type="tel" name="telephone" placeholder="Phone" th:value="*{telephone}">
+            </div>
           </div>
-          /*/-->
 
-        </form>
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="home icon"></i>
+              <input type="text" name="address" placeholder="Address" th:value="*{address}">
+            </div>
+          </div>
+
+          <button class="ui fluid large teal submit button" th:text="*{id}==null ? 'Add' : 'Edit'">Edit</button>
+        </div>
+
+        <!-- Form validation prompt -->
+        <div class="ui error message"></div>
+
+        <!-- Backend validation error prompt -->
+        <!--/*/
+        <div class="ui negative message" th:if="${#fields.hasErrors('*')}"  >
+          <i class="close icon"></i>
+          <div class="header">Error</div>
+          <p th:each="err:${#fields.errors('*')}" th:text="${err}">Submitted information does not meet the rules</p>
+        </div>
+        /*/-->
+
+      </form>
 
 
-      </div>
     </div>
-
   </div>
 
-  <!--底部footer-->
-  <footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
-  </footer>
+</div>
 
-  <!--/*/<th:block th:replace="admin/_fragments :: myScript">/*/-->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-  <!--/*/</th:block>/*/-->
-  <script>
-      $('.message .close').on('click', function () {
-          $(this).closest('.message').transition('fade');
-      });
+<!--Footer-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment">
+</footer>
 
-      $('.submit').click(function () {
-          $('.negative.message').hide();
-      });
+<!--/*/<th:block th:replace="admin/_fragments :: myScript">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script>
+  $('.message .close').on('click', function () {
+    $(this).closest('.message').transition('fade');
+  });
 
-      $('.ui.form').form({
-          fields: {
-              username: {
-                  identifier: 'username',
-                  rules: [
-                      {
-                          type: 'empty',
-                          prompt: '请输入用户名'
-                      },
-                      {
-                          type: 'minLength[5]',
-                          prompt: '用户名至少5个字符'
-                      },
-                      {
-                          type: 'maxLength[20]',
-                          prompt: '用户名最多20个字符'
-                      }
-                  ]
-              },
-              password: {
-                  identifier: 'password',
-                  rules: [
-                      {
-                          type: 'empty',
-                          prompt: '请输入密码'
-                      },
-                      {
-                          type: 'minLength[6]',
-                          prompt: '密码至少6个字符'
-                      },
-                      {
-                          type: 'maxLength[20]',
-                          prompt: '密码最多20字符'
-                      }
-                  ]
-              },
-              telephone: {
-                  identifier: 'telephone',
-                  rules: [
-                      {
-                          type: 'empty',
-                          prompt: '请输入电话'
-                      },
-                      {
-                          type: 'minLength[5]',
-                          prompt: '电话至少5个字符'
-                      },
-                      {
-                          type: 'maxLength[20]',
-                          prompt: '电话最多20个字符'
-                      }
-                  ]
-              },
-              address: {
-                  identifier: 'address',
-                  rules: [
-                      {
-                          type: 'empty',
-                          prompt: '请输入地址'
-                      },
-                      {
-                          type: 'minLength[5]',
-                          prompt: '地址至少5个字符'
-                      },
-                      {
-                          type: 'maxLength[50]',
-                          prompt: '地址最多50个字符'
-                      }
-                  ]
-              },
+  $('.submit').click(function () {
+    $('.negative.message').hide();
+  });
+
+  $('.ui.form').form({
+    fields: {
+      username: {
+        identifier: 'username',
+        rules: [
+          {
+            type: 'empty',
+            prompt: 'Please enter a username'
+          },
+          {
+            type: 'minLength[5]',
+            prompt: 'Username must be at least 5 characters'
+          },
+          {
+            type: 'maxLength[20]',
+            prompt: 'Username must be at most 20 characters'
           }
-      });
-  </script>
+        ]
+      },
+      password: {
+        identifier
+
+                : 'password',
+        rules: [
+          {
+            type: 'empty',
+            prompt: 'Please enter a password'
+          },
+          {
+            type: 'minLength[6]',
+            prompt: 'Password must be at least 6 characters'
+          },
+          {
+            type: 'maxLength[20]',
+            prompt: 'Password must be at most 20 characters'
+          }
+        ]
+      },
+      telephone: {
+        identifier: 'telephone',
+        rules: [
+          {
+            type: 'empty',
+            prompt: 'Please enter a phone number'
+          },
+          {
+            type: 'minLength[5]',
+            prompt: 'Phone number must be at least 5 characters'
+          },
+          {
+            type: 'maxLength[20]',
+            prompt: 'Phone number must be at most 20 characters'
+          }
+        ]
+      },
+      address: {
+        identifier: 'address',
+        rules: [
+          {
+            type: 'empty',
+            prompt: 'Please enter an address'
+          },
+          {
+            type: 'minLength[5]',
+            prompt: 'Address must be at least 5 characters'
+          },
+          {
+            type: 'maxLength[50]',
+            prompt: 'Address must be at most 50 characters'
+          }
+        ]
+      },
+    }
+  });
+</script>
 </body>
 </html>

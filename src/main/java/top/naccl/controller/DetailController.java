@@ -70,7 +70,7 @@ public class DetailController {
     @RequestMapping("/deleteInfo")
     public String deleteInfo(@RequestParam("id") Integer id, @RequestParam("foodId") Integer foodId, RedirectAttributes redirectAttributes) {
         Integer i = orderReviewsService.deleteInfo(id);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Delete Successfully");
         return "redirect:/detail/" + foodId;
     }
 }

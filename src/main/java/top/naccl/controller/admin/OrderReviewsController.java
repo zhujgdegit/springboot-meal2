@@ -48,7 +48,7 @@ public class OrderReviewsController {
     @RequestMapping("/deleteInfo")
     public String deleteInfo(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
         Integer i = orderReviewsService.deleteInfo(id);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Delete Successfully");
         return "redirect:/admin/orderReviews";
     }
 

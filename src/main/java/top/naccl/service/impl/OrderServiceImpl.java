@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -46,9 +48,17 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getOrderInfoById(orderId);
     }
 
+    @Override
+    public void updateByCode(String ordCode) {
+        OrderInfo orderInfoByCode = orderRepository.getOrderInfoByCode(ordCode);
+        orderInfoByCode.setStatus("ACCEPTED");
+    }
+
     private static final String[] STATUSES = {"PENDING", "ACCEPTED", "PREPARING", "SHIPPING", "DELIVERED", "COMPLETED"};
 
-    @Scheduled(fixedRate = 10000) // 每20秒执行一次
+    // 检查订单是否处于状态pending
+
+    @Scheduled(fixedRate = 70000) // 每20秒执行一次
     public void updateOrderStatus() {
         List<OrderInfo> orders = orderRepository.findAll(); // 假设这里简单地获取所有订单
         for (OrderInfo order : orders) {
@@ -60,4 +70,5 @@ public class OrderServiceImpl implements OrderService {
             }
         }
     }
+
 }

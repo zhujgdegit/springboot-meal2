@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @Description: 菜品管理
+ * @Description: Dish Management
  * @Author: Naccl
  * @Date: 2020-05-17
  */
@@ -43,7 +43,7 @@ public class FoodController {
     private String uploadPath;
 
     /**
-     * 菜品管理页面
+     * Dish Management Page
      */
     @GetMapping("/foods")
     public String foods(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable, Model model) {
@@ -60,12 +60,12 @@ public class FoodController {
         food.setState(state);
         Food food1 = foodService.updateFood(foodId, food);
         result.put("success", true);
-        result.put("message", state + "成功！");
+        result.put("message", state + " succeeded!");
         return result;
     }
 
     /**
-     * 按分类查询菜品
+     * Query Dishes by Category
      */
     @PostMapping("/foods/search")
     public String search(@PageableDefault(size = 10, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -79,7 +79,7 @@ public class FoodController {
     }
 
     /**
-     * 跳转菜品添加页面
+     * Redirect to Dish Addition Page
      */
     @GetMapping("/foods/input")
     public String input(Model model) {
@@ -89,7 +89,7 @@ public class FoodController {
     }
 
     /**
-     * 跳转菜品修改页面
+     * Redirect to Dish Modification Page
      */
     @GetMapping("/foods/{id}/input")
     public String edit(@PathVariable Integer id, Model model) {
@@ -99,12 +99,12 @@ public class FoodController {
     }
 
     /**
-     * POST提交 添加、修改菜品
+     * POST Submit Adding/Modifying Dish
      */
     @PostMapping("/foods")
     public String post(@Valid Food food, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
         if (food.getType().getId() == null) {
-            bindingResult.rejectValue("name", "nameError", "分类不能为空");
+            bindingResult.rejectValue("name", "nameError", "Type cannot be empty");
         }
 
         if (bindingResult.hasErrors()) {
@@ -113,31 +113,31 @@ public class FoodController {
         }
 
         Food food1 = foodService.getFoodByName(food.getName());
-        if (food.getId() == null) {//添加
-            if (food1 != null) {//不能添加已存在的菜品名称
-                bindingResult.rejectValue("name", "nameError", "菜品已存在");
+        if (food.getId() == null) {//Adding
+            if (food1 != null) {//Cannot add existing dish names
+                bindingResult.rejectValue("name", "nameError", "Dish already exists");
                 model.addAttribute("types", typeService.listType());
                 return "admin/foods-input";
             }
 
             Food f = foodService.saveFood(food);
-            if (f == null) {//没保存成功
-                redirectAttributes.addFlashAttribute("message", "添加失败");
-            } else {//保存成功
-                redirectAttributes.addFlashAttribute("message", "添加成功");
+            if (f == null) {//Not saved successfully
+                redirectAttributes.addFlashAttribute("message", "Adding failed");
+            } else {//Saved successfully
+                redirectAttributes.addFlashAttribute("message", "Added successfully");
             }
-        } else {//修改
-            if (food1 != null && food1.getId() != food.getId()) {//不能修改成其它已存在的菜品名称
-                bindingResult.rejectValue("name", "nameError", "菜品已存在");
+        } else {//Modification
+            if (food1 != null && food1.getId() != food.getId()) {//Cannot modify to other existing dish names
+                bindingResult.rejectValue("name", "nameError", "Dish already exists");
                 model.addAttribute("types", typeService.listType());
                 return "admin/foods-input";
             }
 
             Food f = foodService.updateFood(food.getId(), food);
-            if (f == null) {//没保存成功
-                redirectAttributes.addFlashAttribute("message", "修改失败");
-            } else {//保存成功
-                redirectAttributes.addFlashAttribute("message", "修改成功");
+            if (f == null) {//Not saved successfully
+                redirectAttributes.addFlashAttribute("message", "Modification failed");
+            } else {//Saved successfully
+                redirectAttributes.addFlashAttribute("message", "Modified successfully");
             }
         }
         return "redirect:/admin/foods";
@@ -145,14 +145,14 @@ public class FoodController {
 
 
     /**
-     * 删除菜品
+     * Delete Dish
      */
     @GetMapping("/foods/{id}/delete")
     public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        // 首先删除引用该 food_id 的所有 diningcar 表中的行
+        // First delete all rows in the diningcar table that reference the food_id
         diningCarService.deleteByFoodId(id);
         foodService.deleteFood(id);
-        redirectAttributes.addFlashAttribute("message", "删除成功");
+        redirectAttributes.addFlashAttribute("message", "Deleted successfully");
         return "redirect:/admin/foods";
     }
 

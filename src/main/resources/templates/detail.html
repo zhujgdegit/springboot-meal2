@@ -120,7 +120,7 @@
                     <td width="230" style="text-align: left; font-weight: bold; " th:text="${reviews.creatTime}">User1</td>
                     <td width="170" class="star-rating">
                       <span th:each="i : ${#numbers.sequence(1, averageRating)}">&#9733;</span>
-                      <span th:each="i : ${#numbers.sequence(averageRating + 1, 4)}">&#9734;</span>
+                      <span th:each="i : ${#numbers.sequence(averageRating + 1, 5)}">&#9734;</span>
                     </td>
                     <td style="text-align: left;" th:text="${reviews.comment}">这是一条评论。</td>
                     <td th:if="${reviews.isDelete}">

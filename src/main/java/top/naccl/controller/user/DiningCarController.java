@@ -44,7 +44,7 @@ public class DiningCarController {
     UserService userService;
 
     /**
-     * 查看点餐车，接收GET和POST(分页load方法需要POST)
+     * View Dining Car, accept GET and POST (paging load method needs POST)
      */
     @RequestMapping("/diningcar")
     public String DiningCar(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
@@ -113,7 +113,7 @@ public class DiningCarController {
 
         for (int i = 0; i < split.length; i++) {
             Map<Integer, String> addressMap = new HashMap<>();
-            addressMap.put(i, split[i].trim()); // 去除空格并存储地址部分
+            addressMap.put(i, split[i].trim()); // Remove spaces and store address parts
             addressList.add(addressMap);
         }
 
@@ -138,8 +138,6 @@ public class DiningCarController {
         }
         //Collections.sort(dtoList, Comparator.comparing(OrderInfoDTO::getFoodName));
         Collections.sort(dtoList, Comparator.comparingInt(OrderInfoDTO::getId).reversed());
-
-
         model.addAttribute("page", dtoList);
         if ("POST".equals(request.getMethod())) {
             return "user/diningcar :: foodList";
@@ -147,9 +145,64 @@ public class DiningCarController {
         return "user/orderInfo";
     }
 
+    @RequestMapping("/orderInfoNew")
+    public String OrderNew(@PageableDefault(size = 5, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable,
+                           Model model, HttpSession session, HttpServletRequest request) {
+        User user = (User) session.getAttribute("user");
+        List<OrderInfo> orderInfoAll = orderRepository.getOrderInfoAll(user.getId());
+        List<List<OrderInfoDTO>> groupedOrders = new ArrayList<>();
+
+        List<OrderInfoDTO> currentGroup = new ArrayList<>();
+        Date lastOrderTime = null;
+
+        for (OrderInfo orderInfo : orderInfoAll) {
+            Food food = foodService.getFood(orderInfo.getFoodId());
+            OrderInfoDTO orderInfoDTO = new OrderInfoDTO();
+            orderInfoDTO.setFoodName(food.getName());
+            orderInfoDTO.setFoodId(food.getId());
+            BeanUtils.copyProperties(orderInfo, orderInfoDTO);
+
+            int price = orderInfo.getQuantity() * food.getPrice();
+            if (!StringUtils.isEmpty(orderInfo.getToppings())) {
+                price += 1;
+            }
+            if ("Medium".equals(orderInfo.getSize())) {
+                price += 1;
+            }
+            if ("Large".equals(orderInfo.getSize())) {
+                price += 2;
+            }
+            if ("pickup".equals(orderInfoDTO.getDeliveryMethod())) {
+                orderInfo.setDeliveryFee("0");
+                orderInfoDTO.setDeliveryFee("0");
+            }
+            price += Integer.parseInt(orderInfo.getDeliveryFee());
+            orderInfoDTO.setPrice(price);
+
+            //todo: Why do this? Because we need to add fields to the database, temporarily commented out
+            /*if (lastOrderTime != null && Math.abs(orderInfo.getCreatedAt().getTime() - lastOrderTime.getTime()) > 5000) {
+                groupedOrders.add(new ArrayList<>(currentGroup));
+                currentGroup.clear();
+            }
+
+            currentGroup.add(orderInfoDTO);
+            lastOrderTime = orderInfo.getCreatedAt();*/
+        }
+
+        if (!currentGroup.isEmpty()) {
+            groupedOrders.add(currentGroup);
+        }
+
+        model.addAttribute("groupedOrders", groupedOrders);
+        if ("POST".equals(request.getMethod())) {
+            return "user/diningcar :: food List";
+        }
+        return "user/orderInfo";
+    }
+
 
     /**
-     * 从点餐车删除菜品
+     * Remove dishes from the dining car
      */
     @PostMapping("/del")
     @ResponseBody
@@ -158,11 +211,11 @@ public class DiningCarController {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             result.put("success", false);
-            result.put("message", "登录已失效，请重新登录！");
+            result.put("message", "Login expired, please log in again!");
         } else {
             diningCarService.deleteDiningCarByUserIdAndFoodId(user.getId(), id);
             result.put("success", true);
-            result.put("message", "移出点餐车成功！");
+            result.put("message", "Successfully removed from dining car!");
         }
         return result;
     }
