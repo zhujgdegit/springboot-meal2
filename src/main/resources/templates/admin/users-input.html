@@ -36,7 +36,28 @@
           <div class="required field">
             <div class="ui left icon input">
               <i class="user icon"></i>
-              <input type="text" name="username" placeholder="Username" th:value="*{username}">
+              <input type="text" name="username" placeholder="User Name" th:value="*{username}">
+            </div>
+          </div>
+
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" name="nackname" placeholder="Nickname" th:value="*{nackname}">
+            </div>
+          </div>
+
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="time icon"></i>
+              <input type="text" name="birthday" placeholder="Birthday" th:value="*{birthday}">
+            </div>
+          </div>
+
+          <div class="required field">
+            <div class="ui left icon input">
+              <i class="user icon"></i>
+              <input type="text" name="introduction" placeholder="Introduction" th:value="*{introduction}">
             </div>
           </div>
 
@@ -78,7 +99,15 @@
               <input type="text" name="address" placeholder="Address" th:value="*{address}">
             </div>
           </div>
-
+          <div class="required field">
+            <button id="addAddress" class="ui add button teal basic">Add Address</button>
+          </div>
+          <div class="required field addressList">
+            <div class="ui left icon input" style="margin-bottom: 10px">
+              <i class="home icon"></i>
+              <input type="text" id="addAddress1" name="address" placeholder="Address" th:value="*{address}">
+            </div>
+          </div>
           <button class="ui fluid large teal submit button" th:text="*{id}==null ? 'Add' : 'Edit'">Edit</button>
         </div>
 
@@ -111,6 +140,56 @@
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <!--/*/</th:block>/*/-->
 <script>
+  $(document).ready(function() {
+    $.get("/user/getAddr", function (result) {
+      if (result) {
+        var options = result;
+        var selectOpions = [];
+        var val = [];
+        for(var i=1; i<options.length;i++){
+          val.push(options[i][i])
+          selectOpions.push($(`
+                          <div class="ui left icon input" style="margin-bottom:10px">
+                            <i class="home icon"></i>
+                            <input id="addressVal${i}" name="address${i}" type="text" placeholder="Address">
+                            <button class='ui delete button teal basic'><i class='fa fa-trash'></i>Delete</button>
+                          </div>`))
+        }
+        console.log(selectOpions,'---',val)
+        $('.addressList').append(selectOpions
+
+        )
+        $("#addressVal1").val(val[0]);
+        $("#addressVal2").val(val[1]);
+        $("#addressVal3").val(val[2]);
+        $("#addressVal4").val(val[3]);
+        $("#addressVal5").val(val[4]);
+        $("#addressVal6").val(val[5]);
+        $("#addressVal7").val(val[6]);
+        $("#addressVal8").val(val[7]);
+        $("#addressVal9").val(val[8]);
+        $("#addressVal10").val(val[9]);
+      } else {
+        alert("Please try again later!");
+      }
+    }, "json");
+  })
+  // $(document).ready(function() {
+  let addressCount = 0;
+  $('#addAddress').click(function(e) {
+    e.preventDefault();
+    addressCount++;
+    const addressGroup = $(`
+              <div class="ui left icon input">
+                <i class="home icon"></i>
+                <input type="text" id="address${addressCount}" name="address${addressCount}" placeholder="Address" th:value="*{address+addressCount}">
+              <button class='ui delete button teal basic'><i class='fa fa-trash'></i>Delete</button>
+              </div>`);
+    $('.addressList').append(addressGroup);
+  });
+  $(document).on('click','.delete',function(){
+    $(this).parent().remove();
+  })
   $('.message .close').on('click', function () {
     $(this).closest('.message').transition('fade');
   });
@@ -191,8 +270,54 @@
           }
         ]
       },
+      address1: {
+        identifier: 'address1',
+        rules: [
+          {
+            type: 'empty',
+            prompt: 'Please enter an address'
+          },
+          {
+            type: 'minLength[5]',
+            prompt: 'Address must be at least 5 characters'
+          },
+          {
+            type: 'maxLength[50]',
+            prompt: 'Address cannot exceed 50 characters'
+          }
+        ]
+      },
+      address2: {
+        identifier: 'address2',
+        rules: [
+          {
+            type: 'empty',
+            prompt: 'Please enter an address'
+          },
+          {
+            type: 'minLength[5]',
+            prompt: 'Address must be at least 5 characters'
+          },
+          {
+            type: 'maxLength[50]',
+            prompt: 'Address cannot exceed 50 characters'
+          }
+        ]
+      },
     }
   });
 </script>
+<style>
+  .site-content{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+  .m-container-small{
+    position: absolute;
+    top: 56%;
+  }
+</style>
 </body>
 </html>

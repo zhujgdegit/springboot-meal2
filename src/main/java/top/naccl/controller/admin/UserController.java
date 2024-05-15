@@ -1,5 +1,6 @@
 package top.naccl.controller.admin;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import top.naccl.bean.User;
 import top.naccl.service.UserService;
 
 import javax.validation.Valid;
+import java.lang.reflect.Field;
 
 /**
  * @Description: user management
@@ -54,8 +56,45 @@ public class UserController {
 	 */
 	@GetMapping("/users/{id}/input")
 	public String edit(@PathVariable Integer id, Model model) {
-		model.addAttribute("user", userService.getUser(id));
+		User user = userService.getUser(id);
+		User user1 = new User();
+		BeanUtils.copyProperties(user, user1);
+		splitAddresses(user1);
+		model.addAttribute("user", user1);
 		return "admin/users-input";
+	}
+
+	/**
+	 * Split addresses
+	 *
+	 * @param user
+	 * @return
+	 */
+	private void splitAddresses(User user) {
+		try {
+			String[] split = user.getAddress().split(",");
+			user.setAddress(split[0]);
+			for (int i = 1; i < split.length; i++) {
+				setFieldValue(user, "address" + (i), split[i]);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void setFieldValue(Object obj, String fieldName, String value) throws Exception {
+		Field field1 = obj.getClass().getDeclaredField(fieldName);
+//        field.setAccessible(true); // Set accessible, even private fields can be accessed
+//        field.set(obj, value); // Set the value of the field
+		Field[] fields = obj.getClass().getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getName().equals(fieldName)) {
+				field.setAccessible(true); // Set accessible, even private fields can be accessed
+				field.set(obj, value); // Set the value of the field
+				return;
+			}
+		}
+		throw new NoSuchFieldException(fieldName);
 	}
 
 	/**
